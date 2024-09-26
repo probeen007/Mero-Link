@@ -1,0 +1,45 @@
+{
+  "name": "pero-link",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/mongodb-adapter": "^3.5.0",
+    "@aws-sdk/client-s3": "^3.654.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "autoprefixer": "^10.4.20",
+    "clone-deep": "^4.0.1",
+    "date-fns": "^4.1.0",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.6.3",
+    "next": "^14.2.13",
+    "next-auth": "^4.24.7",
+    "object-copy": "^1.0.0",
+    "plain-object-clone": "^2.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
+    "react-responsive": "^10.0.0",
+    "react-sortablejs": "^6.1.4",
+    "react-toastify": "^10.0.5",
+    "recharts": "^2.13.0-alpha.5",
+    "sortablejs": "^1.15.3",
+    "uniqid": "^5.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
