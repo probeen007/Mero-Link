@@ -39,8 +39,8 @@ export default function Chart({ data }) {
       <ResponsiveContainer width="100%" aspect={3}>
         <LineChart width={730} height={250} data={dataWithoutGaps}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid horizontal={true} strokeWidth="2" stroke="#f5f5f5" />
-          <XAxis dataKey="date" axisLine={true} tickLine={false} tickMargin={10} tick={{ fill: '#aaa' }} />
+          <CartesianGrid horizontal={true} vertical={true} strokeWidth="2" stroke="#f5f5f5" />
+          <XAxis dataKey="date" axisLine={true} tickLine={true} tickMargin={10} tick={{ fill: '#aaa' }} />
           <YAxis axisLine={true} tickLine={false} tickMargin={10} tick={{ fill: '#aaa' }} />
           <Tooltip />
           <Line
