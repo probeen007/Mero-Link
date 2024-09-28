@@ -1,9 +1,11 @@
 'use client';
 
-import { savePageButtons } from "@/actions/pageActions";
-import SubmitButton from "@/components/buttons/SubmitButton";
-import SectionBox from "@/components/layout/SectionBox";
-import { ReactSortable } from "react-sortablejs";
+import { savePageButtons } from "@/actions/pageActions"; // Custom action for saving buttons
+import SubmitButton from "@/components/buttons/SubmitButton"; // Custom button component
+import SectionBox from "@/components/layout/SectionBox"; // Custom layout component
+import { ReactSortable } from "react-sortablejs"; // Drag and drop library
+
+// Font Awesome icons for buttons
 import {
   faDiscord,
   faFacebook,
@@ -12,58 +14,90 @@ import {
   faTelegram,
   faTiktok,
   faWhatsapp,
-  faYoutube
+  faYoutube,
+  faTwitter,
+  faLinkedin,
+  faSnapchat,
+  faPinterest,
+  faReddit,
+  faTwitch,
+  faSpotify,
+  faSoundcloud,
+  faMedium,
+  faTumblr
 } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faGripLines, faMobile, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import toast from "react-hot-toast";
 
+import {
+  faEnvelope,
+  faGripLines,
+  faMobile,
+  faPlus,
+  faSave,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // For Font Awesome icons
+import { useState } from "react"; // React hook for managing state
+import toast from "react-hot-toast"; // Library for showing toast notifications
+
+// List of all available buttons with icons, labels, and placeholders
 export const allButtons = [
   { key: 'email', 'label': 'e-mail', icon: faEnvelope, placeholder: 'test@example.com' },
-  { key: 'mobile', 'label': 'mobile', icon: faMobile, placeholder: '+46 123 123 123' },
-  { key: 'instagram', 'label': 'instagram', icon: faInstagram, placeholder: 'https://facebook.com/profile/...' },
-  { key: 'facebook', 'label': 'facebook', icon: faFacebook },
-  { key: 'discord', 'label': 'discord', icon: faDiscord },
-  { key: 'tiktok', 'label': 'tiktok', icon: faTiktok },
-  { key: 'youtube', 'label': 'youtube', icon: faYoutube },
-  { key: 'whatsapp', 'label': 'whatsapp', icon: faWhatsapp },
-  { key: 'github', 'label': 'github', icon: faGithub },
-  { key: 'telegram', 'label': 'telegram', icon: faTelegram },
+  { key: 'mobile', 'label': 'mobile', icon: faMobile, placeholder: '' },
+  { key: 'instagram', 'label': 'instagram', icon: faInstagram, placeholder: 'https://instagram.com/yourprofile' },
+  { key: 'facebook', 'label': 'facebook', icon: faFacebook, placeholder: 'https://facebook.com/yourprofile' },
+  { key: 'discord', 'label': 'discord', icon: faDiscord, placeholder: 'https://discord.gg/invitecode' },
+  { key: 'tiktok', 'label': 'tiktok', icon: faTiktok, placeholder: 'https://tiktok.com/@yourusername' },
+  { key: 'youtube', 'label': 'youtube', icon: faYoutube, placeholder: 'https://youtube.com/channel/yourchannelid' },
+  { key: 'whatsapp', 'label': 'whatsapp', icon: faWhatsapp, placeholder: 'https://wa.me/yourphonenumber' },
+  { key: 'github', 'label': 'github', icon: faGithub, placeholder: 'https://github.com/yourusername' },
+  { key: 'telegram', 'label': 'telegram', icon: faTelegram, placeholder: 'https://t.me/yourusername' },
+  { key: 'twitter', 'label': 'twitter', icon: faTwitter, placeholder: 'https://twitter.com/yourprofile' },
+  { key: 'linkedin', 'label': 'linkedin', icon: faLinkedin, placeholder: 'https://linkedin.com/in/yourprofile' },
+  { key: 'snapchat', 'label': 'snapchat', icon: faSnapchat, placeholder: 'https://snapchat.com/add/yourusername' },
+  { key: 'pinterest', 'label': 'pinterest', icon: faPinterest, placeholder: 'https://pinterest.com/yourprofile' },
+  { key: 'reddit', 'label': 'reddit', icon: faReddit, placeholder: 'https://reddit.com/user/yourusername' },
+  { key: 'twitch', 'label': 'twitch', icon: faTwitch, placeholder: 'https://twitch.tv/yourchannel' },
+  { key: 'spotify', 'label': 'spotify', icon: faSpotify, placeholder: 'https://spotify.com/user/yourprofile' },
+  { key: 'soundcloud', 'label': 'soundcloud', icon: faSoundcloud, placeholder: 'https://soundcloud.com/yourprofile' },
+  { key: 'medium', 'label': 'medium', icon: faMedium, placeholder: 'https://medium.com/@yourprofile' },
+  { key: 'tumblr', 'label': 'tumblr', icon: faTumblr, placeholder: 'https://yourprofile.tumblr.com' },
 ];
 
+// Helper function to capitalize the first letter of each label
 function upperFirst(str) {
   return str.slice(0, 1).toUpperCase() + str.slice(1);
 }
 
 export default function PageButtonsForm({ user, page }) {
-  // Ensure page is defined and has a buttons property
   const pageButtons = page?.buttons || {};
   const pageSavedButtonsKeys = Object.keys(pageButtons);
 
+  // Get saved buttons info based on the keys
   const pageSavedButtonsInfo = pageSavedButtonsKeys
     .map(k => allButtons.find(b => b.key === k));
 
   const [activeButtons, setActiveButtons] = useState(pageSavedButtonsInfo);
 
+  // Function to add a button to the profile
   function addButtonToProfile(button) {
-    setActiveButtons(prevButtons => {
-      return [...prevButtons, button];
-    });
+    setActiveButtons(prevButtons => [...prevButtons, button]);
   }
 
+  // Function to save buttons
   async function saveButtons(formData) {
     await savePageButtons(formData);
     toast.success('Settings saved!');
   }
 
+  // Function to remove a button from the profile
   function removeButton({ key: keyToRemove }) {
-    setActiveButtons(prevButtons => {
-      return prevButtons
-        .filter(button => button.key !== keyToRemove);
-    });
+    setActiveButtons(prevButtons =>
+      prevButtons.filter(button => button.key !== keyToRemove)
+    );
   }
 
+  // Get available buttons that haven't been added yet
   const availableButtons = allButtons.filter(b1 => !activeButtons.find(b2 => b1.key === b2.key));
 
   return (
@@ -73,13 +107,15 @@ export default function PageButtonsForm({ user, page }) {
         <ReactSortable
           handle=".handle"
           list={activeButtons}
-          setList={setActiveButtons}>
+          setList={setActiveButtons}
+        >
           {activeButtons.map(b => (
             <div key={b.key} className="mb-4 md:flex items-center">
               <div className="w-56 flex h-full text-gray-700 p-2 gap-2 items-center">
                 <FontAwesomeIcon
                   icon={faGripLines}
-                  className="cursor-pointer text-gray-400 handle p-2" />
+                  className="cursor-pointer text-gray-400 handle p-2"
+                />
                 <FontAwesomeIcon icon={b.icon} />
                 <span>{upperFirst(b.label)}:</span>
               </div>
@@ -88,11 +124,14 @@ export default function PageButtonsForm({ user, page }) {
                   placeholder={b.placeholder}
                   name={b.key}
                   defaultValue={pageButtons[b.key]}
-                  type="text" style={{ marginBottom: '0' }} />
+                  type="text"
+                  style={{ marginBottom: '0' }}
+                />
                 <button
                   onClick={() => removeButton(b)}
                   type="button"
-                  className="py-2 px-4 bg-gray-300 cursor-pointer">
+                  className="py-2 px-4 bg-gray-300 cursor-pointer"
+                >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
@@ -105,11 +144,10 @@ export default function PageButtonsForm({ user, page }) {
               key={b.key}
               type="button"
               onClick={() => addButtonToProfile(b)}
-              className="flex items-center gap-1 p-2 bg-gray-200">
+              className="flex items-center gap-1 p-2 bg-gray-200"
+            >
               <FontAwesomeIcon icon={b.icon} />
-              <span className="">
-                {upperFirst(b.label)}
-              </span>
+              <span>{upperFirst(b.label)}</span>
               <FontAwesomeIcon icon={faPlus} />
             </button>
           ))}

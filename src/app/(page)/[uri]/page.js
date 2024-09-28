@@ -2,7 +2,10 @@ import {Page} from "@/models/Page";
 import {User} from "@/models/User";
 import {Event} from "@/models/Event";
 import {
-  faDiscord, faFacebook, faGithub, faInstagram, faTelegram, faTiktok, 
+  faDiscord, faFacebook, faGithub, faInstagram, faLinkedin, faMedium, faPinterest, faReddit, faSnapchat, faSoundcloud, faSpotify, faTelegram, faTiktok, 
+  faTumblr, 
+  faTwitch, 
+  faTwitter, 
   faWhatsapp, faYoutube
 } from "@fortawesome/free-brands-svg-icons";
 import {faEnvelope, faLink, faLocationDot, faMobile, faPhone} from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +26,16 @@ export const buttonsIcons = {
   whatsapp: faWhatsapp,
   github: faGithub,
   telegram: faTelegram,
+  twitter: faTwitter,
+  linkedin: faLinkedin,
+  snapchat: faSnapchat,
+  pinterest: faPinterest,
+  reddit: faReddit,
+  twitch: faTwitch,
+  spotify: faSpotify,
+  soundcloud: faSoundcloud,
+  medium: faMedium,
+  tumblr: faTumblr,
 };
 
 function buttonLink(key, value) {
