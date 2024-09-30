@@ -15,7 +15,7 @@ export default function PageSettingsForm({ page, user }) {
   const [bgColor, setBgColor] = useState(page.bgColor);
   const [bgImage, setBgImage] = useState(page.bgImage);
   const [avatar, setAvatar] = useState(user?.image);
-  const [setUploadingAvatar] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false); // Fixed this line
   const [uploadingCover, setUploadingCover] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -52,7 +52,7 @@ export default function PageSettingsForm({ page, user }) {
 
   async function handleAvatarImageChange(ev) {
     try {
-      setUploadingAvatar(true);
+      setUploadingAvatar(true); // This now correctly uses the setter function
       await upload(ev, link => setAvatar(link));
     } catch (error) {
       toast.error('Failed to upload avatar.');

@@ -5,7 +5,11 @@ import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 import Footer from '@/components/footer';
 import { Suspense } from 'react';
 
-const lato = Lato({ subsets: ['latin'], weight: ['400', '700'] });
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  
+});
 
 export const metadata = {
   title: 'Mero Link - Unify Your Online Presence with Ease',
@@ -35,6 +39,7 @@ export default function RootLayout({ children }) {
                   <p>🌈 We're weaving together all the colorful threads of your experience. 🧵</p>
                   <p>⏳ Just a moment while we sprinkle some stardust! 🌌</p>
                   <p>🎩 Prepare to be amazed! Your journey is almost here! 🎉</p>
+                  {/* Consider adding a spinner or skeleton loader here */}
                 </div>
               }>
                 {children}

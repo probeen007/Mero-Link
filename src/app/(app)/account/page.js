@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+// Cache the connection globally
 let cached = global.mongoose;
 
 if (!cached) {
@@ -15,18 +16,21 @@ if (!cached) {
 }
 
 async function connectToDatabase() {
+  // Check if we already have a connection
   if (cached.conn) {
     return cached.conn;
   }
+
+  // If no connection, initiate one
   if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
-    cached.promise = mongoose.connect(process.env.MONGO_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(process.env.MONGO_URI)
+      .then((mongoose) => mongoose)
+      .catch((error) => {
+        console.error("MongoDB connection error:", error);
+        throw error;
+      });
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }
@@ -35,6 +39,7 @@ export default async function AccountPage({ searchParams }) {
   const session = await getServerSession(authOptions);
   const desiredUsername = searchParams?.desiredUsername;
 
+  // Redirect if no session
   if (!session) {
     return redirect('/');
   }
