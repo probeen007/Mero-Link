@@ -36,7 +36,7 @@ export default function HeroForm({ user }) {
       className="flex flex-col md:flex-row items-center shadow-lg bg-white shadow-gray-500/20 w-full max-w-xl rounded p-4"
     >
       <span className="bg-white py-4 pl-4">
-        MeroLink.to/
+        merolink.me/
       </span>
       <input
         type="text"
