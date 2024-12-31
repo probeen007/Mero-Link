@@ -55,7 +55,7 @@ export default function ContactPage() {
             <FontAwesomeIcon icon={faLinkedinIn} className="text-blue-700 text-3xl mb-2" />
             <h2 className="text-2xl font-bold mb-2">LinkedIn 💼</h2>
             <p className="text-gray-600">Connect with us professionally.</p>
-            <a href="#" className="block mt-3 text-blue-600 hover:underline">
+            <a href="https://www.linkedin.com/company/merolink/" className="block mt-3 text-blue-600 hover:underline">
               Mero Link
             </a>
           </div>

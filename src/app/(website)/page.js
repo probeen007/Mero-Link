@@ -6,18 +6,19 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   return (
     <main>
-      <section className="pt-32">
-        <div className="max-w-md mb-8">
-          <h1 className="text-6xl font-bold">
-            Excel your digital presence
-          </h1>
+  <section className="pt-16 sm:pt-24 md:pt-32 px-4 sm:px-6 md:px-8">
+    <div className="max-w-md md:max-w-lg lg:max-w-xl mb-8">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+        Excel your digital presence
+      </h1>
 
-          <h2 className="text-gray-500 text-xl mt-6">
-            Making connections easy, elegant, and impactful
-          </h2>
-        </div>
-        <HeroForm user={session?.user} />
-      </section>
-    </main>
+      <h3 className="text-gray-500 text-base sm:text-lg md:text-xl mt-4 sm:mt-5 md:mt-6">
+        Making connections easy, elegant, and impactful
+      </h3>
+    </div>
+    <HeroForm user={session?.user} />
+  </section>
+</main>
+
   )
 }
