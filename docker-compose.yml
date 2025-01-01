@@ -1,0 +1,15 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .  # Path to the Dockerfile (current directory)
+    working_dir: /var/www/app/Mero-Link  # Inside the container
+    volumes:
+      - .:/var/www/app/Mero-Link  # Mount the current directory
+    ports:
+      - "3000:3000"  # Expose port 3000
+    command: npm run start  # Command to start the app
+    environment:
+      - NODE_ENV=production  # Set production environment
+    restart: always  # Restart on failure
+
