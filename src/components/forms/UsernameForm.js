@@ -2,43 +2,49 @@
 import grabUsername from "@/actions/grabUsername";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import RightIcon from "@/components/icons/RightIcon";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation"; // Import useRouter for client-side navigation
 import { useState } from "react";
 
 export default function UsernameForm({ desiredUsername }) {
   const [taken, setTaken] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [buttonClicked, setButtonClicked] = useState(false); // State to track button click
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const router = useRouter(); // Initialize useRouter
 
   async function handleSubmit(ev) {
-    ev.preventDefault(); // Prevent default form submission behavior
-    const formData = new FormData(ev.target); // Create FormData from the form
-    const username = formData.get('username').trim(); // Trim whitespace
+    ev.preventDefault();
+    const formData = new FormData(ev.target);
+    const username = formData.get('username').trim();
 
-    // Basic validation
     if (!username) {
       setError('Username cannot be empty.');
       return;
-    } else {
-      setError(''); // Reset error if valid
     }
 
-    setLoading(true); // Set loading state
-    setButtonClicked(true); // Set button clicked state
+    setLoading(true);
+    setError('');
+    setTaken(false);
 
     try {
       const result = await grabUsername(formData);
-      setTaken(result === false);
+
+      if (result === false) {
+        setTaken(true); // If the username is taken
+        return;
+      }
 
       if (result) {
-        redirect('/account?created=' + encodeURIComponent(username));
+        // Use router.push for client-side redirection
+        router.push(`/account?created=${encodeURIComponent(username)}`);
+        window.location.reload();
       }
     } catch (err) {
-      setError('An error occurred. Please try again.'); // Handle error
+      console.error("Error during username submission:", err);
+      setError('An error occurred. Please try again.');
     } finally {
-      setLoading(false); // Reset loading state
-      setTimeout(() => setButtonClicked(false), 200); // Reset button clicked state after 200ms
+      setLoading(false);
+      setTimeout(() => setButtonClicked(false), 100);
     }
   }
 
@@ -59,7 +65,7 @@ export default function UsernameForm({ desiredUsername }) {
               defaultValue={desiredUsername}
               type="text"
               placeholder="Enter your username"
-              disabled={loading} // Disable input during loading
+              disabled={loading}
             />
             {taken && (
               <div className="bg-red-200 border border-red-500 p-2 mt-2 text-center rounded-lg text-red-600">
