@@ -1,26 +1,39 @@
-# Use Node.js 18 slim base image
-FROM node:18-slim
+# Production-optimized Dockerfile for Mero Link
 
-# Set the working directory
-WORKDIR /Mero-Link
+# Use a lightweight Node.js base image
+FROM node:20-alpine AS base
 
-# Copy only package files first for dependency installation
+# Set working directory
+WORKDIR /app
+
+# Install dependencies only when needed
+FROM base AS deps
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the app code
+# Build the app
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm run build
 
-# Build the production version of the app
-RUN npm run build --verbose
+# Production image
+FROM base AS runner
+WORKDIR /app
+
+# Copy built app and dependencies
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/public ./public
 
 # Expose port 3000
 EXPOSE 3000
 
-# Start the app
+# Run Next.js in production mode
 CMD ["npm", "start"]
+
 
 
 

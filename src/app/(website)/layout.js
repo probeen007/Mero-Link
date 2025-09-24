@@ -3,7 +3,9 @@ import '../globals.css';
 import HeaderServer from "@/components/headerserver";
 import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 import Footer from '@/components/footer';
+import PWAInstaller from '@/components/PWAInstaller';
 import { Suspense } from 'react';
+import { LoadingSkeleton } from '@/components/LoadingStates';
 
 const lato = Lato({
   subsets: ['latin'],
@@ -17,6 +19,17 @@ export const metadata = {
   keywords: 'Mero Link, custom link tree, online presence, social media, digital identity, startup Nepal, share links, unify profiles',
   author: 'Prabin Bhattarai',
   robots: 'index, follow',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg'
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Mero Link'
+  },
   og: {
     title: 'Mero Link - Simplify Your Digital Presence with Custom Link Trees',
     description: 'Join Mero Link, a startup from Nepal, to effortlessly combine your social media and essential links into one shareable tree. Perfect for individuals and businesses alike!',
@@ -25,30 +38,28 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#2563eb',
+};
+
+export default function WebsiteLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={lato.className}>
-        <SessionProviderWrapper>
-          <main>
-            <HeaderServer />
-            <div className="max-w-4xl mx-auto p-6">
-              <Suspense fallback={
-                <div style={{ textAlign: 'center', padding: '40px' }}>
-                  <h2>🔮 A little magic is happening... ✨</h2>
-                  <p>🌈 We're weaving together all the colorful threads of your experience. 🧵</p>
-                  <p>⏳ Just a moment while we sprinkle some stardust! 🌌</p>
-                  <p>🎩 Prepare to be amazed! Your journey is almost here! 🎉</p>
-                  {/* Consider adding a spinner or skeleton loader here */}
-                </div>
-              }>
-                {children}
-              </Suspense>
-            </div>
-            <Footer />
-          </main>
-        </SessionProviderWrapper>
-      </body>
-    </html>
+    <SessionProviderWrapper>
+      <main className={lato.className}>
+        <HeaderServer />
+        <div className="max-w-8xl mx-auto">
+          <Suspense fallback={<LoadingSkeleton />}>
+            {children}
+          </Suspense>
+        </div>
+  <Footer />
+        <PWAInstaller />
+      </main>
+    </SessionProviderWrapper>
   );
 }

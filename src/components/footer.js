@@ -1,60 +1,103 @@
-"use client"
-export default function Footer() {
-    return (
+import Link from 'next/link';
+import Image from 'next/image';
 
-        <footer className="bg-blue-600 text-white py-8 font-sans mt-10">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Navigation Links */}
-                <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base mb-6">
-                    <a
-                        href="/about"
-                        className="hover:text-blue-300 transition duration-200 ease-in-out"
-                    >
-                        About Us
-                    </a>
-                    <a
-                        href="/pricing"
-                        className="hover:text-blue-300 transition duration-200 ease-in-out"
-                    >
-                        Pricing
-                    </a>
-                    <a
-                        href="/contact"
-                        className="hover:text-blue-300 transition duration-200 ease-in-out"
-                    >
-                        Contact
-                    </a>
-                    <a
-                        href="/privacy"
-                        className="hover:text-blue-300 transition duration-200 ease-in-out"
-                    >
-                        Privacy Policy
-                    </a>
+export default function Footer() {
+    const currentYear = new Date().getFullYear();
+
+    return (
+        <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+            <div className="max-w-7xl mx-auto px-6">
+                {/* Main Footer Content */}
+                <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {/* Brand Section */}
+                    <div className="lg:col-span-2">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Image
+                                src="https://i.ibb.co/HNVDd6R/merolinklogo.png"
+                                alt="Mero Link Logo"
+                                width={40}
+                                height={40}
+                                className="w-10 h-10 rounded-lg shadow-md"
+                            />
+                            <span className="font-bold text-2xl bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                                Mero Link
+                            </span>
+                        </div>
+                        <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-md">
+                            Connect effortlessly in the digital realm. Create your personalized link hub and share your digital presence with the world.
+                        </p>
+                        <div className="flex items-center gap-2 text-gray-400">
+                            <span>📧</span>
+                            <a
+                                href="mailto:prootech123@gmail.com"
+                                className="hover:text-blue-400 transition-colors"
+                            >
+                                prootech123@gmail.com
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-4 text-white">Quick Links</h3>
+                        <ul className="space-y-3">
+                            <li>
+                                <Link href="/about" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                    About Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/pricing" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                    Pricing
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/contact" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                    Contact
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Legal & Support */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-4 text-white">Legal & Support</h3>
+                        <ul className="space-y-3">
+                            <li>
+                                <Link href="/privacy" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                    Privacy Policy
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/terms" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                    Terms of Service
+                                </Link>
+                            </li>
+                            <li>
+                                <a 
+                                    href="mailto:prootech123@gmail.com" 
+                                    className="text-gray-300 hover:text-blue-400 transition-colors text-base"
+                                >
+                                    Get Verified
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-center text-sm md:text-base mb-2 leading-relaxed">
-                    Mero Link connects you effortlessly in the digital realm.
-                </p>
-
-                {/* Contact Info */}
-                <p className="text-center text-sm md:text-base mb-4">
-                    Contact :
-                    <a
-                        href="mailto:pro.victus07@gmail.com"
-                        className="hover:text-blue-300 transition duration-200 ease-in-out ml-2"
-                    >
-                        pro.victus07@gmail.com
-                    </a>
-                </p>
-
-                {/* Copyright */}
-                <p className="text-center text-xs md:text-sm mt-6 leading-loose">
-                    &copy; {new Date().getFullYear()} Mero🔗Link. All rights reserved.
-                </p>
+                {/* Bottom Section */}
+                <div className="border-t border-gray-700 py-6">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p className="text-gray-400 text-sm">
+                            &copy; {currentYear} Mero Link. All rights reserved.
+                        </p>
+                        <div className="flex items-center gap-6">
+                            <span className="text-gray-400 text-sm">Made with ❤️ for creators</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </footer>
-
     );
 }
 

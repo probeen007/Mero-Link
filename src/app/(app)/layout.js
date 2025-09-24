@@ -7,20 +7,16 @@ export const metadata = {
   author: 'Prabin Bhattarai',
 };
 
-export default function RootLayout({ children }) {
+export default function AppLayout({ children }) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <Suspense fallback={<div style={{ textAlign: 'center', padding: '20px' }}>
-          <h2>🚀 Just a moment...</h2>
-          <p>We're preparing something amazing for you! 🌟</p>
-          <p>Please hang tight while we get things ready. ⏳</p>
-          <p>✨ Your experience is just loading... ✨</p>
-        </div>
-        }>
-          {children}
-        </Suspense>
-      </body>
-    </html>
+    <Suspense fallback={<div style={{ textAlign: 'center', padding: '20px' }}>
+      <h2>🚀 Just a moment...</h2>
+      <p>We're preparing something amazing for you! 🌟</p>
+      <p>Please hang tight while we get things ready. ⏳</p>
+      <p>✨ Your experience is just loading... ✨</p>
+    </div>
+    }>
+      {children}
+    </Suspense>
   );
 }

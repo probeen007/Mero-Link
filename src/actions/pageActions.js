@@ -1,23 +1,28 @@
 'use server';
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
-import {Page} from "@/models/Page";
-import {User} from "@/models/User";
-import mongoose from "mongoose";
+import { Page } from "@/models/Page";
+import { User } from "@/models/User";
+import dbConnect from "@/libs/mongoClient";
 import {getServerSession} from "next-auth";
 
 export async function savePageSettings(formData) {
-  mongoose.connect(process.env.MONGO_URI);
+  await dbConnect();
   const session = await getServerSession(authOptions);
   if (session) {
     const dataKeys = [
       'displayName','location',
-      'bio', 'bgType', 'bgColor', 'bgImage',
+      'bio', 'bgType', 'bgColor', 'bgImage', 'adaptBackground',
     ];
 
     const dataToUpdate = {};
     for (const key of dataKeys) {
       if (formData.has(key)) {
-        dataToUpdate[key] = formData.get(key);
+        // Handle boolean conversion for adaptBackground
+        if (key === 'adaptBackground') {
+          dataToUpdate[key] = formData.get(key) === 'true';
+        } else {
+          dataToUpdate[key] = formData.get(key);
+        }
       }
     }
 
@@ -41,7 +46,7 @@ export async function savePageSettings(formData) {
 }
 
 export async function savePageButtons(formData) {
-  mongoose.connect(process.env.MONGO_URI);
+  await dbConnect();
   const session = await getServerSession(authOptions);
   if (session) {
     const buttonsValues = {};
@@ -59,7 +64,7 @@ export async function savePageButtons(formData) {
 }
 
 export async function savePageLinks(links) {
-  mongoose.connect(process.env.MONGO_URI);
+  await dbConnect();
   const session = await getServerSession(authOptions);
   if (session) {
     await Page.updateOne(

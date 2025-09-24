@@ -1,13 +1,19 @@
 // app/components/HeaderServer.js
-"use server"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
+"use server";
 import Header from "./Header";
 
 export default async function HeaderServer() {
-  const session = await getServerSession(authOptions);
+  try {
+    // Lazy import to avoid crashing on missing env/config during SSR
+    const [{ authOptions }, { getServerSession }] = await Promise.all([
+      import("@/app/api/auth/[...nextauth]/route"),
+      import("next-auth")
+    ]);
 
-  //  console.log('Session in HeaderServer:', session); // Check if session is being retrieved properly
-
-  return <Header session={session} />;
+    const session = await getServerSession(authOptions);
+    return <Header session={session} />;
+  } catch (err) {
+    console.error("HeaderServer: failed to resolve session, rendering without session.", err);
+    return <Header session={null} />;
+  }
 }

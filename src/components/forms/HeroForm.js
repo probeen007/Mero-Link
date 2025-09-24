@@ -33,20 +33,20 @@ export default function HeroForm({ user }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col md:flex-row items-center shadow-lg bg-white shadow-gray-500/20 w-full max-w-xl rounded p-4"
+      className="flex flex-row items-center shadow-lg bg-white shadow-gray-500/20 w-full max-w-2xl rounded-lg p-2 gap-2"
     >
-      <span className="bg-white py-4 pl-4">
+      <div className="flex items-center bg-gray-50 rounded-md h-11 px-3 text-gray-600 font-medium text-sm whitespace-nowrap">
         merolink.me/
-      </span>
+      </div>
       <input
         type="text"
-        ref={inputRef} // Attach the ref to the input
-        className="flex-grow border border-gray-300 rounded  mt-2 p-2 mb-2 md:mb-0 md:ml-2" // Add margin and padding
+        ref={inputRef}
+        className="flex-grow border border-gray-300 rounded-md px-1 h-11  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
         placeholder="username"
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded whitespace-nowrap md:ml-2"
+        className="h-11 bg-gradient-to-r from-blue-600 to-blue-700 text-white  px-3 rounded-md hover:from-blue-700 hover:to-blue-800 transition-all whitespace-nowrap font-medium text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
       >
         Join for Free
       </button>
