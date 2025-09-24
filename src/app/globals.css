@@ -2,38 +2,3357 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    @apply bg-gray-100;
+/* =======================
+   GENERAL STYLES
+   ======================= */
+html {
+    overflow-x: hidden;
 }
 
-input[type="text"], textarea{
-    @apply bg-gray-100 w-full block py-2 px-2 mb-2;
+body {
+    @apply bg-gray-100;
+    overflow-x: hidden;
 }
-label.input-label{
+
+input[type="text"], textarea {
+    @apply bg-gray-100 w-full block py-1 px-1 mb-1;
+}
+
+label.input-label {
     @apply uppercase text-gray-400 text-xs mb-2 font-semibold;
 }
 
-.radio-togglers{
+.radio-togglers {
     @apply p-1 bg-gray-200 inline-flex cursor-pointer;
 }
-.radio-togglers div{
+.radio-togglers div {
     @apply p-2 px-4 text-gray-500 block flex items-center gap-2 cursor-pointer;
 }
-.radio-togglers input[type="radio"]{
+.radio-togglers input[type="radio"] {
     @apply hidden;
 }
-.radio-togglers input[type="radio"]:checked + div{
+.radio-togglers input[type="radio"]:checked + div {
     @apply bg-white text-blue-600;
 }
 
-.sortable-ghost{
+.sortable-ghost {
     opacity: .2;
 }
 
-
-input#navCb:checked ~ aside{
+input#navCb:checked ~ aside {
     left:0;
 }
-input#navCb:checked ~ .backdrop{
+input#navCb:checked ~ .backdrop {
     display: block;
+}
+
+/* =======================
+   HOMEPAGE ANIMATIONS
+   ======================= */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-fadeInDelay {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.animate-fadeInDelay2 {
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+/* =======================
+   THEME 1 - Default Simple
+   ======================= */
+.theme-default {
+  background-color: #0f172a;
+  min-height: 100vh;
+}
+
+.btn-default {
+  background-color: white;
+  color: #0f172a;
+  transition: all 0.2s ease;
+}
+.btn-default:hover {
+  background-color: #e2e8f0;
+}
+
+.card-default {
+  background-color: #1e293b;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.img-default {
+  border: 4px solid white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+/* =======================
+   THEME 2 - Aurora Flow
+   ======================= */
+.theme-aurora {
+  background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43);
+  background-size: 400% 400%;
+  animation: auroraMove 15s ease infinite;
+}
+@keyframes auroraMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn-aurora {
+  background-color: #2a5298;
+  color: white;
+  transition: all 0.3s ease;
+}
+.btn-aurora:hover {
+  background-color: #1e3c72;
+  transform: scale(1.05);
+}
+
+.card-aurora {
+  background-color: rgba(41, 63, 125, 0.8);
+  border: 2px solid #778da9;
+  transition: all 0.3s ease;
+}
+.card-aurora:hover {
+  border-color: #415a77;
+  transform: translateY(-3px);
+}
+
+.img-aurora {
+  border: 3px solid #1e3c72;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+.img-aurora:hover {
+  transform: scale(1.05);
+}
+
+/* =======================
+   THEME 3 - Cyber Neon
+   ======================= */
+.theme-neon {
+  background: radial-gradient(circle at 50% 50%, #0f0c29, #302b63, #24243e);
+  position: relative;
+  overflow: hidden;
+}
+.theme-neon::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: repeating-linear-gradient(45deg, #00fff7, #00fff7 2px, transparent 2px, transparent 10px);
+  animation: neonMove 10s linear infinite;
+  z-index: 0;
+  opacity: 0.3;
+}
+@keyframes neonMove {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.btn-neon {
+  background-color: #00fff7;
+  color: #0f0c29;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+}
+.btn-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00fff7, 0 0 40px #00fff7;
+}
+
+.card-neon {
+  background-color: rgba(0, 255, 247, 0.1);
+  border: 2px solid #00fff7;
+  transition: all 0.3s ease;
+}
+.card-neon:hover {
+  border-color: #00fff7;
+  transform: translateY(-3px);
+}
+
+.img-neon {
+  border: 2px solid #00fff7;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* =======================
+   THEME 4 - Minimal Light
+   ======================= */
+.theme-light {
+  background: linear-gradient(120deg, #fdf6e3, #e0f7fa);
+}
+
+.btn-light {
+  background-color: #268bd2;
+  color: white;
+  transition: all 0.3s ease;
+}
+.btn-light:hover {
+  transform: scale(1.03);
+}
+
+.card-light {
+  background-color: white;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+.card-light:hover {
+  transform: translateY(-2px);
+}
+
+.img-light {
+  border: 2px solid #268bd2;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* =======================
+   THEME 5 - Starfield
+   ======================= */
+.theme-starfield {
+  background: black;
+  position: relative;
+  overflow: hidden;
+}
+.theme-starfield::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(white 1px, transparent 1px);
+  background-size: 3px 3px;
+  animation: starsTwinkle 20s linear infinite;
+  opacity: 0.7;
+}
+@keyframes starsTwinkle {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(50px, -30px); }
+  100% { transform: translate(0,0); }
+}
+
+.btn-starfield {
+  background-color: #444;
+  color: white;
+  box-shadow: 0 0 10px #fff;
+}
+.btn-starfield:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #fff;
+}
+
+.card-starfield {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid #fff;
+}
+.card-starfield:hover {
+  transform: translateY(-2px);
+}
+
+.img-starfield {
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* =======================
+   THEME 6 - Gamer Pulse
+   ======================= */
+.theme-gamer {
+  background: linear-gradient(45deg, #0a0a0a, #1a0033, #330066, #660099);
+  background-size: 400% 400%;
+  animation: gamerPulse 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+.theme-gamer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.3), transparent);
+  animation: gamerScan 4s linear infinite;
+}
+@keyframes gamerPulse {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes gamerScan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.btn-gamer {
+  background: linear-gradient(45deg, #ff0066, #cc0099);
+  color: white;
+  border: 2px solid #ff0066;
+  transition: all 0.3s ease;
+  animation: gamerGlow 2s ease-in-out infinite alternate;
+}
+.btn-gamer:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff0066;
+}
+@keyframes gamerGlow {
+  from { box-shadow: 0 0 5px #ff0066; }
+  to { box-shadow: 0 0 15px #ff0066, 0 0 25px #cc0099; }
+}
+
+.card-gamer {
+  background: linear-gradient(135deg, rgba(255, 0, 102, 0.1), rgba(204, 0, 153, 0.1));
+  border: 2px solid #ff0066;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card-gamer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 102, 0.2), transparent);
+  transition: left 0.5s;
+}
+.card-gamer:hover::before {
+  left: 100%;
+}
+
+.img-gamer {
+  border: 3px solid #ff0066;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation: gamerRotate 6s linear infinite;
+}
+@keyframes gamerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* =======================
+   THEME 7 - Coder Matrix
+   ======================= */
+.theme-coder {
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+.theme-coder::after {
+  content: "01001100 01101001 01101110 01101011";
+  position: absolute;
+  color: #00ff41;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  white-space: pre;
+  animation: matrixRain 10s linear infinite;
+  opacity: 0.3;
+}
+@keyframes matrixRain {
+  0% { top: -100%; left: 0%; }
+  25% { top: 100%; left: 25%; }
+  50% { top: -100%; left: 50%; }
+  75% { top: 100%; left: 75%; }
+  100% { top: -100%; left: 100%; }
+}
+
+.btn-coder {
+  background: linear-gradient(90deg, #00ff41, #00cc33);
+  color: #000;
+  border: 2px solid #00ff41;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+}
+.btn-coder:hover {
+  background: #000;
+  color: #00ff41;
+  box-shadow: 0 0 15px #00ff41;
+  transform: scale(1.05);
+}
+
+.card-coder {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid #00ff41;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  animation: coderFlicker 3s ease-in-out infinite;
+}
+@keyframes coderFlicker {
+  0%, 98%, 100% { opacity: 1; }
+  99% { opacity: 0.95; }
+}
+
+.img-coder {
+  border: 2px solid #00ff41;
+  border-radius: 10%;
+  animation: coderScan 4s linear infinite;
+}
+@keyframes coderScan {
+  0%, 100% { border-color: #00ff41; }
+  50% { border-color: #00cc33; }
+}
+
+/* =======================
+   THEME 8 - Hacker Dark
+   ======================= */
+.theme-hacker {
+  background: radial-gradient(circle at center, #1a0000, #000);
+  position: relative;
+  overflow: hidden;
+}
+.theme-hacker::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 0, 0.03) 2px,
+    rgba(255, 0, 0, 0.03) 4px
+  );
+  animation: hackerLines 8s linear infinite;
+}
+@keyframes hackerLines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(20px); }
+}
+
+.btn-hacker {
+  background: linear-gradient(45deg, #ff0000, #cc0000);
+  color: white;
+  border: 2px solid #ff0000;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+.btn-hacker:hover {
+  background: #000;
+  color: #ff0000;
+  box-shadow: 0 0 20px #ff0000;
+  animation: hackerShake 0.5s ease-in-out;
+}
+@keyframes hackerShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.card-hacker {
+  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid #ff0000;
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.card-hacker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ff0000;
+  animation: hackerProgress 3s ease-in-out infinite;
+}
+@keyframes hackerProgress {
+  0%, 100% { width: 0%; }
+  50% { width: 100%; }
+}
+
+.img-hacker {
+  border: 3px solid #ff0000;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+  animation: hackerPulse 2s ease-in-out infinite;
+}
+@keyframes hackerPulse {
+  0%, 100% { border-color: #ff0000; }
+  50% { border-color: #cc0000; box-shadow: 0 0 20px #ff0000; }
+}
+
+/* =======================
+   THEME 9 - Elegant Gold
+   ======================= */
+.theme-elegant {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  position: relative;
+}
+.theme-elegant::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1), transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1), transparent 50%);
+  animation: elegantShimmer 8s ease-in-out infinite;
+}
+@keyframes elegantShimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.btn-elegant {
+  background: linear-gradient(45deg, #ffd700, #ffed4a);
+  color: #1a1a2e;
+  border: 2px solid #ffd700;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn-elegant:hover {
+  background: linear-gradient(45deg, #ffed4a, #ffd700);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.card-elegant {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 237, 74, 0.05));
+  border: 1px solid #ffd700;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+.card-elegant:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.img-elegant {
+  border: 4px solid #ffd700;
+  border-radius: 50%;
+  position: relative;
+  animation: elegantGlow 4s ease-in-out infinite;
+}
+@keyframes elegantGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+}
+
+/* =======================
+   THEME 10 - Funky Pop
+   ======================= */
+.theme-funky {
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd);
+  background-size: 600% 600%;
+  animation: funkyRainbow 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-funky::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(254, 202, 87, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(72, 219, 251, 0.2) 0%, transparent 50%);
+  animation: funkyBubbles 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes funkyRainbow {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 0% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes funkyBubbles {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  33% { opacity: 0.7; transform: scale(1.1); }
+  66% { opacity: 0.5; transform: scale(0.9); }
+}
+
+.btn-funky {
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+  background-size: 300% 300%;
+  color: white;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+  transition: all 0.3s ease;
+  animation: funkyBounce 3s ease-in-out infinite, funkyShimmer 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-funky::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(45deg);
+  animation: funkyGleam 3s ease-in-out infinite;
+}
+
+.btn-funky:hover {
+  transform: scale(1.1) rotate(2deg);
+  background-position: 100% 100%;
+  box-shadow: 0 12px 30px rgba(255, 107, 107, 0.6);
+}
+
+@keyframes funkyBounce {
+  0%, 100% { transform: scale(1) translateY(0px); }
+  50% { transform: scale(1.05) translateY(-5px); }
+}
+
+@keyframes funkyShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes funkyGleam {
+  0% { left: -200%; }
+  100% { left: 200%; }
+}
+
+.card-funky {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 107, 107, 0.15));
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  animation: funkyWobble 6s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-funky::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.card-funky:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.card-funky:hover::before {
+  left: 100%;
+}
+
+@keyframes funkyWobble {
+  0%, 100% { transform: rotate(0deg) translateY(0px); }
+  25% { transform: rotate(0.5deg) translateY(-2px); }
+  50% { transform: rotate(0deg) translateY(-3px); }
+  75% { transform: rotate(-0.5deg) translateY(-2px); }
+}
+
+.img-funky {
+  border: 4px solid rgba(255, 107, 107, 0.8);
+  background: linear-gradient(45deg, #feca57, #48dbfb, #ff9ff3);
+  background-size: 300% 300%;
+  animation: funkyImagePulse 4s ease-in-out infinite, funkyColorShift 6s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  position: relative;
+}
+
+.img-funky::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+  background-size: 400% 400%;
+  animation: funkyBorderFlow 3s ease infinite;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+@keyframes funkyImagePulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 107, 107, 0.8); }
+}
+
+@keyframes funkyColorShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes funkyBorderFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* =======================
+   THEME 11 - Feminine Bloom
+   ======================= */
+.theme-feminine {
+  background: linear-gradient(135deg, #d63384 0%, #e83e8c 30%, #c2185b 60%, #ad1457 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Elegant sparkles */
+.theme-feminine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: feminineSparkle 8s linear infinite;
+  opacity: 0.4;
+}
+
+/* Subtle floating elements */
+.theme-feminine::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(232, 62, 140, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: feminineFlow 12s ease-in-out infinite;
+}
+
+@keyframes feminineSparkle {
+  0%, 100% { transform: translateY(0px); opacity: 0.4; }
+  50% { transform: translateY(-10px); opacity: 0.7; }
+}
+
+@keyframes feminineFlow {
+  0%, 100% { 
+    transform: translateY(0px) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+.btn-feminine {
+  background: linear-gradient(45deg, #c2185b, #e91e63);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(194, 24, 91, 0.3);
+}
+
+.btn-feminine:hover {
+  background: linear-gradient(45deg, #e91e63, #f06292);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(194, 24, 91, 0.4);
+}
+
+.card-feminine {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(232, 62, 140, 0.4);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-feminine:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(232, 62, 140, 0.6);
+  transform: translateY(-2px);
+}
+
+.img-feminine {
+  border: 3px solid #e91e63;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
+}
+
+.img-feminine:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(233, 30, 99, 0.5);
+}
+
+/* =======================
+   THEME 12 - Retro Wave
+   ======================= */
+.theme-retro {
+  background: linear-gradient(180deg, #2d1b69 0%, #11998e 100%);
+  position: relative;
+  overflow: hidden;
+}
+.theme-retro::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 50px,
+    rgba(255, 0, 150, 0.1) 50px,
+    rgba(255, 0, 150, 0.1) 52px
+  );
+  animation: retroGrid 10s linear infinite;
+}
+@keyframes retroGrid {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(52px); }
+}
+
+.btn-retro {
+  background: linear-gradient(45deg, #ff0080, #00ff80);
+  color: white;
+  border: 2px solid #ff0080;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.btn-retro:hover {
+  background: linear-gradient(45deg, #00ff80, #ff0080);
+  box-shadow: 0 0 20px #ff0080;
+  transform: scale(1.1);
+}
+
+.card-retro {
+  background: rgba(255, 0, 128, 0.1);
+  border: 2px solid #ff0080;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  animation: retroPulse 3s ease-in-out infinite;
+}
+@keyframes retroPulse {
+  0%, 100% { border-color: #ff0080; }
+  50% { border-color: #00ff80; }
+}
+
+.img-retro {
+  border: 3px solid #ff0080;
+  border-radius: 50%;
+  animation: retroSpin 6s linear infinite;
+}
+@keyframes retroSpin {
+  from { transform: rotate(0deg); border-color: #ff0080; }
+  50% { border-color: #00ff80; }
+  to { transform: rotate(360deg); border-color: #ff0080; }
+}
+
+/* =======================
+   THEME 13 - Nature Zen
+   ======================= */
+.theme-nature {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 180, 80, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(80, 150, 120, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #1e3c14 0%, #2d5016 30%, #56ab2f 60%, #a8e6cf 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gentle floating leaves */
+.theme-nature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(86, 171, 47, 0.4) 2px, transparent 2px),
+    radial-gradient(circle, rgba(168, 230, 207, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px, 40px 40px;
+  background-position: 0 0, 30px 30px;
+  animation: naturalBreeze 25s linear infinite;
+  opacity: 0.7;
+}
+
+/* Subtle nature sounds visualization */
+.theme-nature::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: 
+    linear-gradient(0deg, 
+      rgba(45, 80, 22, 0.8) 0%, 
+      rgba(86, 171, 47, 0.4) 30%, 
+      transparent 100%);
+  animation: naturalFlow 30s ease-in-out infinite;
+}
+
+@keyframes naturalBreeze {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-10px) translateY(-5px); }
+  50% { transform: translateX(5px) translateY(5px); }
+  75% { transform: translateX(-5px) translateY(-3px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes naturalFlow {
+  0%, 100% { opacity: 0.8; transform: scaleY(1); }
+  50% { opacity: 0.6; transform: scaleY(1.1); }
+}
+
+.btn-nature {
+  background: linear-gradient(45deg, #4a7c2a, #6ba644);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(86, 171, 47, 0.2);
+}
+
+.btn-nature:hover {
+  background: linear-gradient(45deg, #6ba644, #8ac460);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(86, 171, 47, 0.3);
+}
+
+.card-nature {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(86, 171, 47, 0.3);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-nature:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(86, 171, 47, 0.5);
+}
+
+.img-nature {
+  border: 3px solid #56ab2f;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.img-nature:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(86, 171, 47, 0.4);
+}
+
+/* =======================
+   THEME 14 - Corporate Pro
+   ======================= */
+.theme-corporate {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.btn-corporate {
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+.btn-corporate:hover {
+  background: #34495e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
+}
+
+.card-corporate {
+  background: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.card-corporate:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.img-corporate {
+  border: 3px solid #2c3e50;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* =======================
+   THEME 15 - Cosmic Drift
+   ======================= */
+.theme-cosmic {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  position: relative;
+  overflow: hidden;
+}
+.theme-cosmic::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(2px 2px at 20px 30px, white, transparent),
+    radial-gradient(2px 2px at 40px 70px, white, transparent),
+    radial-gradient(1px 1px at 90px 40px, white, transparent),
+    radial-gradient(1px 1px at 130px 80px, white, transparent),
+    radial-gradient(2px 2px at 160px 30px, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: cosmicDrift 50s linear infinite;
+  opacity: 0.5;
+}
+@keyframes cosmicDrift {
+  from { transform: translateX(0px); }
+  to { transform: translateX(-200px); }
+}
+
+.btn-cosmic {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  border: 2px solid #667eea;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+.btn-cosmic:hover {
+  background: linear-gradient(45deg, #764ba2, #667eea);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+  transform: scale(1.05);
+}
+
+.card-cosmic {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid #667eea;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  animation: cosmicFloat 8s ease-in-out infinite;
+}
+@keyframes cosmicFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.img-cosmic {
+  border: 3px solid #667eea;
+  border-radius: 50%;
+  animation: cosmicOrbit 12s linear infinite;
+  position: relative;
+}
+.img-cosmic::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #764ba2;
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: cosmicMoon 3s linear infinite;
+}
+@keyframes cosmicOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes cosmicMoon {
+  from { transform: translateX(-50%) rotate(0deg) translateX(60px) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+
+/* =======================
+   THEME 16 - Nepal Heritage
+   ======================= */
+.theme-nepal {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(220, 20, 60, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(0, 56, 147, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #e94560 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Elegant geometric patterns */
+.theme-nepal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 30%, rgba(220, 20, 60, 0.05) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(0, 56, 147, 0.05) 50%, transparent 70%);
+  background-size: 80px 80px, 60px 60px;
+  animation: nepalPattern 12s linear infinite;
+  opacity: 0.8;
+}
+
+/* Subtle traditional motifs */
+.theme-nepal::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 100px;
+  height: 100px;
+  background: 
+    radial-gradient(circle, rgba(255, 215, 0, 0.3) 2px, transparent 2px),
+    radial-gradient(circle, rgba(220, 20, 60, 0.2) 1px, transparent 1px);
+  background-size: 25px 25px, 15px 15px;
+  background-position: 0 0, 12px 12px;
+  animation: nepalMotif 8s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes nepalPattern {
+  0% { transform: translateX(0px) translateY(0px); }
+  100% { transform: translateX(-80px) translateY(-60px); }
+}
+
+@keyframes nepalMotif {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.btn-nepal {
+  background: linear-gradient(45deg, #e94560, #0f3460);
+  color: white;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-nepal::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: nepalShimmer 4s ease-in-out infinite;
+}
+
+.btn-nepal:hover {
+  background: linear-gradient(45deg, #0f3460, #e94560);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+}
+
+@keyframes nepalShimmer {
+  0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.card-nepal {
+  background: rgba(26, 26, 46, 0.4);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-nepal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, transparent 50%, rgba(15, 52, 96, 0.1) 100%);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.card-nepal:hover {
+  background: rgba(26, 26, 46, 0.6);
+  border-color: rgba(255, 215, 0, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(233, 69, 96, 0.3);
+}
+
+.img-nepal {
+  border: 3px solid #ffd700;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.img-nepal:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
+}
+
+.card-nepal {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 247, 0, 0.6);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3);
+}
+
+.img-nepal {
+  border: 4px solid #fff700;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255, 247, 0, 0.5);
+  position: relative;
+}
+
+.img-nepal::after {
+  content: '🇳🇵';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.2rem;
+  background: white;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+/* =======================
+   THEME 17 - Minecraft World
+   ======================= */
+.theme-minecraft {
+  background: 
+    /* Grass blocks pattern */
+    linear-gradient(90deg, #4a7c59 0%, #4a7c59 25%, #5d8a69 25%, #5d8a69 50%, #4a7c59 50%, #4a7c59 75%, #6b9977 75%),
+    linear-gradient(0deg, #8b4513 0%, #8b4513 30%, #4a7c59 30%);
+  background-size: 32px 32px, 64px 64px;
+  position: relative;
+  animation: minecraftShift 15s linear infinite;
+}
+
+/* Minecraft Steve character (pixel art) */
+.theme-minecraft::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 32px;
+  height: 48px;
+  background: 
+    /* Head - skin color */
+    linear-gradient(0deg, #d4a574 0px, #d4a574 16px, transparent 16px),
+    /* Eyes */
+    linear-gradient(0deg, transparent 4px, #000 4px, #000 6px, transparent 6px),
+    /* Body - blue shirt */
+    linear-gradient(0deg, transparent 16px, #2c5aa0 16px, #2c5aa0 32px, transparent 32px),
+    /* Arms */
+    linear-gradient(90deg, #d4a574 0px, #d4a574 8px, transparent 8px, transparent 24px, #d4a574 24px, #d4a574 32px),
+    /* Legs - dark blue pants */
+    linear-gradient(0deg, transparent 32px, #1e3a8a 32px, #1e3a8a 48px);
+  background-position: 8px 0, 10px 0, 8px 0, 0 16px, 8px 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: minecraftSteve 3s ease-in-out infinite;
+  z-index: 3;
+}
+
+/* Floating Minecraft items */
+.theme-minecraft::after {
+  content: '';
+  position: absolute;
+  bottom: 25%;
+  left: 10%;
+  width: 200px;
+  height: 80px;
+  background: 
+    /* Diamond pickaxe */
+    linear-gradient(45deg, transparent 10px, #4fc3f7 10px, #4fc3f7 14px, transparent 14px),
+    linear-gradient(90deg, transparent 20px, #8b4513 20px, #8b4513 60px, transparent 60px),
+    /* Creeper head */
+    radial-gradient(circle 12px at 80px 20px, #00aa00 40%, transparent 41%),
+    /* TNT block */
+    linear-gradient(0deg, transparent 40px, #ff4444 40px, #ff4444 56px, transparent 56px) 120px 0,
+    linear-gradient(90deg, transparent 120px, #ff4444 120px, #ff4444 136px, transparent 136px) 0 40px,
+    /* Golden apple */
+    radial-gradient(circle 8px at 160px 30px, #ffd700 50%, transparent 51%);
+  background-size: 200px 80px;
+  background-repeat: no-repeat;
+  animation: minecraftItems 4s ease-in-out infinite;
+  image-rendering: pixelated;
+  z-index: 2;
+}
+
+@keyframes minecraftShift {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 32px 32px, 64px 64px; }
+}
+
+@keyframes minecraftSteve {
+  0%, 100% { 
+    transform: translateY(0px) scaleX(1);
+  }
+  25% { 
+    transform: translateY(-2px) scaleX(1);
+  }
+  50% { 
+    transform: translateY(0px) scaleX(-1);
+  }
+  75% { 
+    transform: translateY(-2px) scaleX(-1);
+  }
+}
+
+@keyframes minecraftItems {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.9;
+  }
+  25% { 
+    transform: translateY(-8px) rotate(5deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-5px) rotate(-3deg);
+    opacity: 0.95;
+  }
+  75% { 
+    transform: translateY(-10px) rotate(2deg);
+    opacity: 1;
+  }
+}
+
+.btn-minecraft {
+  background: 
+    linear-gradient(135deg, #8b4513 0%, #8b4513 40%, #654321 40%, #654321 50%, #8b4513 50%);
+  color: white;
+  border: 2px solid #654321;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  text-shadow: 1px 1px 0px #000;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3),
+    2px 2px 4px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+  image-rendering: pixelated;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-minecraft::before {
+  content: '⛏️';
+  position: absolute;
+  top: 50%;
+  left: -25px;
+  transform: translateY(-50%);
+  font-size: 10px;
+  animation: minecraftTool 2.5s ease-in-out infinite;
+}
+
+.btn-minecraft:hover {
+  background: 
+    linear-gradient(135deg, #a0522d 0%, #a0522d 40%, #8b4513 40%, #8b4513 50%, #a0522d 50%);
+  transform: translate(1px, 1px);
+  box-shadow: 
+    inset 1px 1px 0px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+    1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes minecraftTool {
+  0%, 100% { left: -25px; opacity: 0; }
+  50% { left: calc(100% + 10px); opacity: 1; }
+}
+
+.card-minecraft {
+  background: 
+    linear-gradient(135deg, #8b4513 0%, #8b4513 40%, #654321 40%, #654321 50%, #8b4513 50%);
+  border: 3px solid #654321;
+  border-radius: 4px;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3),
+    4px 4px 8px rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+  position: relative;
+}
+
+.card-minecraft::before {
+  content: '🧱';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 14px;
+  background: #8b4513;
+  border: 2px solid #654321;
+  border-radius: 2px;
+  padding: 2px;
+  animation: minecraftBlock 3s ease-in-out infinite;
+}
+
+@keyframes minecraftBlock {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(15deg) scale(1.1); }
+}
+
+.img-minecraft {
+  border: 4px solid #654321;
+  border-radius: 4px;
+  image-rendering: pixelated;
+  filter: contrast(1.2) saturate(1.1);
+  position: relative;
+  box-shadow: 0 0 15px rgba(101, 67, 33, 0.6);
+}
+
+.img-minecraft::before {
+  content: '🗡️';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 16px;
+  animation: minecraftSword 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes minecraftSword {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.9;
+  }
+  50% { 
+    transform: rotate(25deg) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* =======================
+   THEME 18 - Adventure Explorer
+   ======================= */
+.theme-adventure {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(139, 69, 19, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #1a2f1a 0%, #2c5530 20%, #3d6b3d 40%, #5a8a5a 60%, #7ba87b 80%, #a8d8a8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mountain silhouette */
+.theme-adventure::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: 
+    linear-gradient(30deg, transparent 30%, #2c3e2c 30.5%, #2c3e2c 40%, transparent 40.5%),
+    linear-gradient(-30deg, transparent 25%, #1a2f1a 25.5%, #1a2f1a 35%, transparent 35.5%),
+    linear-gradient(45deg, transparent 35%, #415341 35.5%, #415341 45%, transparent 45.5%);
+  background-size: 120px 100%, 100px 100%, 140px 100%;
+  background-position: 0 100%, 60px 100%, 120px 100%;
+  background-repeat: repeat-x;
+  z-index: 1;
+}
+
+/* Compass floating */
+.theme-adventure::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 40px;
+  height: 40px;
+  background: 
+    radial-gradient(circle, #daa520 30%, #8b4513 31%, #8b4513 35%, transparent 36%),
+    linear-gradient(0deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%),
+    linear-gradient(90deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%);
+  border: 3px solid #2f4f2f;
+  border-radius: 50%;
+  animation: adventureCompass 6s ease-in-out infinite;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+@keyframes adventureCompass {
+  0%, 100% { 
+    transform: rotate(0deg) translateY(0px);
+    opacity: 0.9;
+  }
+  25% { 
+    transform: rotate(90deg) translateY(-3px);
+    opacity: 1;
+  }
+  50% { 
+    transform: rotate(180deg) translateY(0px);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: rotate(270deg) translateY(-3px);
+    opacity: 1;
+  }
+}
+
+.btn-adventure {
+  background: linear-gradient(45deg, #8b4513, #cd853f);
+  color: #fff;
+  border: 2px solid #2f4f2f;
+  border-radius: 12px;
+  font-weight: bold;
+  box-shadow: 
+    inset 1px 1px 0 rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(139, 69, 19, 0.4);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-adventure:hover {
+  background: linear-gradient(45deg, #a0522d, #daa520);
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+    0 6px 18px rgba(139, 69, 19, 0.6);
+}
+
+.card-adventure {
+  background: rgba(139, 69, 19, 0.15);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(218, 165, 32, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(139, 69, 19, 0.3);
+  transition: all 0.3s ease;
+}
+
+.card-adventure:hover {
+  background: rgba(139, 69, 19, 0.25);
+  border-color: rgba(218, 165, 32, 0.8);
+  transform: translateY(-2px);
+}
+
+.img-adventure {
+  border: 3px solid #daa520;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(218, 165, 32, 0.4);
+  transition: all 0.3s ease;
+}
+
+.img-adventure:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(218, 165, 32, 0.6);
+}
+
+/* =======================
+   THEME 19 - Anime Aesthetic
+   ======================= */
+.theme-anime {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(147, 51, 234, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4c1d95 50%, #1e40af 75%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Anime energy waves */
+.theme-anime::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 30%, rgba(147, 51, 234, 0.1) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(59, 130, 246, 0.1) 50%, transparent 70%);
+  background-size: 100px 100px, 80px 80px;
+  animation: animeWaves 8s linear infinite;
+  opacity: 0.7;
+}
+
+/* Floating Japanese characters and symbols */
+.theme-anime::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 120px;
+  height: 120px;
+  background: 
+    /* Stylized characters */
+    radial-gradient(circle at 20% 20%, #8b5cf6 2px, transparent 2px),
+    radial-gradient(circle at 60% 30%, #3b82f6 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80% 60%, #a855f7 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, #6366f1 1.5px, transparent 1.5px);
+  background-size: 30px 30px, 25px 25px, 20px 20px, 35px 35px;
+  animation: animeFloat 6s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes animeWaves {
+  0% { transform: translateX(0px) translateY(0px); }
+  25% { transform: translateX(-20px) translateY(-10px); }
+  50% { transform: translateX(0px) translateY(-20px); }
+  75% { transform: translateX(20px) translateY(-10px); }
+  100% { transform: translateX(0px) translateY(0px); }
+}
+
+@keyframes animeFloat {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+  33% { 
+    transform: rotate(120deg) scale(1.1);
+    opacity: 1;
+  }
+  66% { 
+    transform: rotate(240deg) scale(0.9);
+    opacity: 0.9;
+  }
+}
+
+.btn-anime {
+  background: linear-gradient(45deg, #4c1d95, #3b82f6);
+  color: white;
+  border: 2px solid rgba(139, 92, 246, 0.6);
+  border-radius: 16px;
+  font-weight: 600;
+  font-family: 'Noto Sans JP', sans-serif;
+  box-shadow: 0 4px 15px rgba(76, 29, 149, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-anime::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg, 
+    transparent, 
+    rgba(139, 92, 246, 0.3), 
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: animeGlow 3s ease-in-out infinite;
+}
+
+.btn-anime:hover {
+  background: linear-gradient(45deg, #6366f1, #8b5cf6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 29, 149, 0.6);
+}
+
+@keyframes animeGlow {
+  0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.card-anime {
+  background: rgba(30, 27, 75, 0.4);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(76, 29, 149, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-anime::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg, 
+    rgba(139, 92, 246, 0.1) 0%, 
+    transparent 50%, 
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.card-anime:hover {
+  background: rgba(30, 27, 75, 0.6);
+  border-color: rgba(139, 92, 246, 0.7);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(76, 29, 149, 0.4);
+}
+
+.img-anime {
+  border: 3px solid #8b5cf6;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+  animation: animeProfile 4s ease-in-out infinite;
+}
+
+.img-anime::before {
+  content: '⚡';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 18px;
+  color: #fbbf24;
+  animation: animeEnergy 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+.img-anime:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.7);
+}
+
+@keyframes animeProfile {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+  }
+}
+
+@keyframes animeEnergy {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.3) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+/* =======================
+   THEME 20 - Cartoon Fun
+   ======================= */
+.theme-cartoon {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(254, 202, 87, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 40% 80%, rgba(72, 219, 251, 0.5) 0%, transparent 40%),
+    linear-gradient(135deg, #87ceeb 0%, #98fb98 25%, #ffb6c1 50%, #dda0dd 75%, #f0e68c 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cartoon clouds */
+.theme-cartoon::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 80px;
+  height: 40px;
+  background: 
+    radial-gradient(circle at 25% 50%, #fff 25%, transparent 26%),
+    radial-gradient(circle at 50% 50%, #fff 35%, transparent 36%),
+    radial-gradient(circle at 75% 50%, #fff 25%, transparent 26%);
+  background-size: 100% 100%;
+  animation: cartoonCloudDrift 8s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+/* Floating stars */
+.theme-cartoon::after {
+  content: '';
+  position: absolute;
+  top: 30%;
+  right: 15%;
+  width: 100px;
+  height: 100px;
+  background: 
+    radial-gradient(circle, #ffd700 2px, transparent 2px),
+    radial-gradient(circle, #ff69b4 1.5px, transparent 1.5px),
+    radial-gradient(circle, #87ceeb 1px, transparent 1px);
+  background-size: 20px 20px, 30px 30px, 25px 25px;
+  background-position: 0 0, 10px 10px, 15px 5px;
+  animation: cartoonSparkle 4s ease-in-out infinite;
+}
+
+@keyframes cartoonCloudDrift {
+  0%, 100% { 
+    transform: translateX(0px) translateY(0px) scale(1);
+    opacity: 0.9;
+  }
+  25% { 
+    transform: translateX(20px) translateY(-5px) scale(1.1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateX(10px) translateY(5px) scale(0.95);
+    opacity: 0.8;
+  }
+  75% { 
+    transform: translateX(-10px) translateY(-3px) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes cartoonSparkle {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: rotate(90deg) scale(1.2);
+    opacity: 1;
+  }
+  50% { 
+    transform: rotate(180deg) scale(0.9);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.1);
+    opacity: 1;
+  }
+}
+
+.btn-cartoon {
+  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
+  background-size: 200% 200%;
+  color: white;
+  border: 3px solid #fff;
+  border-radius: 25px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 6px 15px rgba(255, 107, 107, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  animation: cartoonShimmer 3s ease-in-out infinite;
+}
+
+.btn-cartoon:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 8px 20px rgba(255, 107, 107, 0.6),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  animation-duration: 1s;
+}
+
+@keyframes cartoonShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.card-cartoon {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border: 3px solid rgba(255, 107, 107, 0.6);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 20px rgba(255, 107, 107, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.card-cartoon:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 107, 107, 0.8);
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 
+    0 12px 25px rgba(255, 107, 107, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.img-cartoon {
+  border: 4px solid #ff6b6b;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.img-cartoon:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 30px rgba(255, 107, 107, 0.7);
+}
+
+@keyframes cartoonFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.img-cartoon {
+  border: 4px solid #feca57;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(254, 202, 87, 0.6);
+  animation: cartoonSpin 6s linear infinite;
+}
+
+@keyframes cartoonSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* =======================
+   RESPONSIVE DESIGN FIXES
+   ======================= */
+
+/* Ensure animations work well on mobile */
+@media (max-width: 768px) {
+  .page-enter {
+    animation-duration: 0.5s;
+  }
+  
+  .profile-enter {
+    animation-duration: 0.7s;
+  }
+  
+  .social-enter {
+    animation-duration: 0.4s;
+  }
+  
+  .links-enter {
+    animation-duration: 0.6s;
+  }
+  
+  /* Reduce motion for better mobile performance */
+  .theme-gamer::before,
+  .theme-aurora,
+  .theme-neon::after,
+  .theme-starfield::after {
+    animation-duration: 6s;
+  }
+  
+  /* Ensure social buttons wrap properly */
+  .social-diamond {
+    transform: rotate(45deg) scale(0.8);
+  }
+  
+  /* Adjust link shapes for mobile */
+  .link-wavy,
+  .link-soft,
+  .link-elegant {
+    border-radius: 1rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .page-enter,
+  .profile-enter,
+  .social-enter,
+  .links-enter {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .theme-elegant .btn-elegant,
+  .theme-feminine .btn-feminine,
+  .theme-nature .btn-nature {
+    border: 2px solid currentColor;
+  }
+  
+  .social-heart::before,
+  .social-heart::after {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Print styles */
+@media print {
+  .theme-gamer,
+  .theme-neon,
+  .theme-aurora,
+  .theme-starfield,
+  .theme-cosmic {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .page-enter,
+  .profile-enter,
+  .social-enter,
+  .links-enter {
+    animation: none;
+  }
+}
+
+/* =======================
+   SHAPE UTILITIES
+   ======================= */
+
+/* Profile shape variations */
+.profile-hexagon {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.profile-diamond {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.profile-star {
+  clip-path: polygon(50% 0%, 59% 30%, 85% 30%, 68% 50%, 76% 85%, 50% 70%, 24% 85%, 32% 50%, 15% 30%, 41% 30%);
+  animation: starRotate 4s ease-in-out infinite;
+}
+
+@keyframes starRotate {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.05); }
+  50% { transform: rotate(0deg) scale(1.1); }
+  75% { transform: rotate(-5deg) scale(1.05); }
+}
+
+.profile-shield {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.profile-leaf {
+  clip-path: ellipse(60% 80% at 50% 40%);
+}
+
+.profile-flower {
+  clip-path: circle(40% at 50% 50%);
+}
+
+.profile-planet {
+  clip-path: circle(50% at 50% 50%);
+}
+
+/* Social icon shape variations */
+.social-square {
+  border-radius: 0.5rem;
+}
+
+.social-diamond {
+  transform: rotate(45deg);
+  border-radius: 0.25rem;
+}
+
+.social-triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.social-heart {
+  position: relative;
+}
+
+.social-heart::before {
+  content: '';
+  width: 26px;
+  height: 40px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  background: currentColor;
+  border-radius: 26px 26px 0 0;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.social-heart::after {
+  content: '';
+  width: 26px;
+  height: 40px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  background: currentColor;
+  border-radius: 26px 26px 0 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.social-blob {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.social-orbit {
+  border-radius: 50%;
+  position: relative;
+}
+
+.social-orbit::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: orbitRing 3s linear infinite;
+}
+
+@keyframes orbitRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Link shape variations */
+.link-gaming {
+  border-left: 4px solid;
+  border-right: 4px solid;
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.link-terminal {
+  border-left: 2px solid;
+  border-radius: 0.125rem;
+  background: rgba(0, 0, 0, 0.3);
+  font-family: 'Courier New', monospace;
+}
+
+.link-hacker {
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+}
+
+.link-elegant {
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.link-wavy {
+  border-radius: 1.5rem;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.link-soft {
+  border-radius: 1rem;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.link-retro {
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.1), rgba(0, 255, 128, 0.1));
+}
+
+.link-organic {
+  border-radius: 50px;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.link-sharp {
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+.link-space {
+  border-radius: 0.75rem;
+  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* =======================
+   PAGE LOAD ANIMATIONS
+   ======================= */
+.page-enter {
+  animation: pageSlideIn 0.8s ease-out;
+}
+
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-enter {
+  animation: profileZoomIn 1s ease-out 0.2s both;
+}
+
+@keyframes profileZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.social-enter {
+  animation: socialSlideIn 0.6s ease-out 0.4s both;
+}
+
+@keyframes socialSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.links-enter {
+  animation: linksSlideUp 0.8s ease-out 0.6s both;
+}
+
+@keyframes linksSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar Styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-blue-500 {
+  scrollbar-color: #3b82f6 transparent;
+}
+
+.scrollbar-track-gray-200 {
+  scrollbar-color: #3b82f6 #e5e7eb;
+}
+
+/* Webkit Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+/* Theme selector specific scrollbar */
+.theme-selector-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-selector-scroll::-webkit-scrollbar-track {
+  background: rgba(229, 231, 235, 0.5);
+  border-radius: 10px;
+}
+
+.theme-selector-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  border-radius: 10px;
+}
+
+.theme-selector-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #2563eb, #7c3aed);
+}
+
+/* =======================
+   THEME 21 - Galaxy Explorer
+   ======================= */
+.theme-galaxy {
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(139, 69, 234, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(29, 78, 216, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Twinkling stars */
+.theme-galaxy::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+    radial-gradient(circle, rgba(139, 69, 234, 0.7) 0.5px, transparent 0.5px),
+    radial-gradient(circle, rgba(59, 130, 246, 0.6) 0.8px, transparent 0.8px);
+  background-size: 80px 80px, 120px 120px, 60px 60px;
+  background-position: 0 0, 40px 40px, 20px 20px;
+  animation: galaxyTwinkle 12s ease-in-out infinite;
+}
+
+/* Nebula effect */
+.theme-galaxy::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 200px;
+  height: 150px;
+  background: 
+    radial-gradient(ellipse, rgba(139, 69, 234, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse, rgba(29, 78, 216, 0.4) 0%, transparent 60%);
+  animation: galaxyNebula 15s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+@keyframes galaxyTwinkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  25% { opacity: 1; transform: scale(1.05); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+  75% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes galaxyNebula {
+  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.9; transform: scale(1.1) rotate(10deg); }
+}
+
+.btn-galaxy {
+  background: linear-gradient(45deg, #8b45ea, #1d4ed8);
+  color: white;
+  border: 2px solid rgba(139, 69, 234, 0.5);
+  border-radius: 20px;
+  font-weight: 600;
+  font-family: 'Orbitron', monospace;
+  box-shadow: 0 4px 15px rgba(139, 69, 234, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-galaxy::before {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  animation: galaxyStardust 3s ease-in-out infinite;
+}
+
+.btn-galaxy:hover {
+  background: linear-gradient(45deg, #7c3aed, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 69, 234, 0.6);
+}
+
+@keyframes galaxyStardust {
+  0%, 100% { left: -20px; opacity: 0; }
+  50% { left: calc(100% + 10px); opacity: 1; }
+}
+
+.card-galaxy {
+  background: rgba(15, 12, 41, 0.6);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(139, 69, 234, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(139, 69, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.card-galaxy:hover {
+  border-color: rgba(139, 69, 234, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(139, 69, 234, 0.4);
+}
+
+.img-galaxy {
+  border: 3px solid #8b45ea;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(139, 69, 234, 0.6);
+  animation: galaxyOrbit 8s linear infinite;
+}
+
+@keyframes galaxyOrbit {
+  0% { transform: rotate(0deg); box-shadow: 0 0 20px rgba(139, 69, 234, 0.6); }
+  50% { transform: rotate(180deg); box-shadow: 0 0 30px rgba(29, 78, 216, 0.7); }
+  100% { transform: rotate(360deg); box-shadow: 0 0 20px rgba(139, 69, 234, 0.6); }
+}
+
+/* =======================
+   THEME 22 - Ocean Depths
+   ======================= */
+.theme-ocean {
+  background: 
+    radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #0369a1 0%, #0284c7 30%, #0891b2 60%, #0e7490 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ocean waves */
+.theme-ocean::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 30%;
+  background: 
+    linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent),
+    linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+  background-size: 150px 100%, 200px 100%;
+  animation: oceanWaves 8s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+/* Floating bubbles */
+.theme-ocean::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 3px, transparent 3px),
+    radial-gradient(circle, rgba(59, 130, 246, 0.4) 2px, transparent 2px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  background-size: 100px 100px, 150px 150px, 80px 80px;
+  background-position: 0 0, 50px 50px, 25px 25px;
+  animation: oceanBubbles 10s linear infinite;
+}
+
+@keyframes oceanWaves {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  25% { transform: translateX(-50px) translateY(-5px); }
+  50% { transform: translateX(0px) translateY(5px); }
+  75% { transform: translateX(50px) translateY(-3px); }
+}
+
+@keyframes oceanBubbles {
+  0% { transform: translateY(100vh); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px); opacity: 0; }
+}
+
+.btn-ocean {
+  background: linear-gradient(45deg, #0891b2, #0284c7);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-ocean:hover {
+  background: linear-gradient(45deg, #0284c7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.6);
+}
+
+.card-ocean {
+  background: rgba(3, 105, 161, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-ocean:hover {
+  background: rgba(3, 105, 161, 0.4);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+}
+
+.img-ocean {
+  border: 3px solid #0891b2;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.5);
+  animation: oceanFloat 4s ease-in-out infinite;
+}
+
+@keyframes oceanFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.02); }
+}
+
+/* =======================
+   THEME 23 - Mystic Forest
+   ======================= */
+.theme-forest {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(21, 128, 61, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #14532d 0%, #166534 30%, #15803d 60%, #16a34a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Forest canopy */
+.theme-forest::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: 
+    radial-gradient(ellipse at bottom, rgba(21, 128, 61, 0.8) 0%, transparent 70%),
+    radial-gradient(ellipse at bottom, rgba(34, 197, 94, 0.6) 0%, transparent 60%);
+  background-size: 200px 100px, 150px 80px;
+  background-position: 0 100%, 100px 100%;
+  background-repeat: repeat-x;
+  animation: forestSway 12s ease-in-out infinite;
+}
+
+/* Floating leaves */
+.theme-forest::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse, rgba(101, 163, 13, 0.5) 0%, transparent 60%);
+  background-size: 8px 12px, 6px 10px;
+  background-position: 0 0, 50px 30px;
+  animation: forestLeaves 20s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes forestSway {
+  0%, 100% { transform: translateX(0px) scaleY(1); }
+  25% { transform: translateX(10px) scaleY(1.02); }
+  50% { transform: translateX(-5px) scaleY(0.98); }
+  75% { transform: translateX(5px) scaleY(1.01); }
+}
+
+@keyframes forestLeaves {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+.btn-forest {
+  background: linear-gradient(45deg, #15803d, #22c55e);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  font-weight: 500;
+  font-family: 'Merriweather', serif;
+  box-shadow: 0 4px 15px rgba(21, 128, 61, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-forest:hover {
+  background: linear-gradient(45deg, #22c55e, #16a34a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(21, 128, 61, 0.6);
+}
+
+.card-forest {
+  background: rgba(20, 83, 45, 0.4);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(34, 197, 94, 0.4);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-forest:hover {
+  background: rgba(20, 83, 45, 0.6);
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+.img-forest {
+  border: 3px solid #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+  position: relative;
+}
+
+.img-forest:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
+}
+
+/* =======================
+   THEME 24 - Ancient Egypt
+   ======================= */
+.theme-egyptian {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(217, 119, 6, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #78350f 0%, #92400e 30%, #d97706 60%, #f59e0b 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pyramid silhouette */
+.theme-egyptian::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 0;
+  height: 0;
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-bottom: 120px solid rgba(120, 53, 15, 0.6);
+  animation: egyptianPyramid 8s ease-in-out infinite;
+}
+
+/* Hieroglyphic patterns */
+.theme-egyptian::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 100px;
+  height: 200px;
+  background: 
+    linear-gradient(0deg, transparent 0%, rgba(251, 191, 36, 0.3) 20%, transparent 40%),
+    linear-gradient(0deg, transparent 50%, rgba(217, 119, 6, 0.3) 70%, transparent 90%);
+  background-size: 20px 40px;
+  background-repeat: repeat-y;
+  animation: egyptianHieroglyphs 10s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes egyptianPyramid {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes egyptianHieroglyphs {
+  0%, 100% { transform: translateY(0px); opacity: 0.8; }
+  50% { transform: translateY(-10px); opacity: 1; }
+}
+
+.btn-egyptian {
+  background: linear-gradient(45deg, #d97706, #fbbf24);
+  color: #78350f;
+  border: 2px solid rgba(120, 53, 15, 0.5);
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Cinzel', serif;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.btn-egyptian:hover {
+  background: linear-gradient(45deg, #fbbf24, #f59e0b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6);
+}
+
+.card-egyptian {
+  background: rgba(120, 53, 15, 0.3);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-egyptian:hover {
+  background: rgba(120, 53, 15, 0.4);
+  border-color: rgba(251, 191, 36, 0.7);
+}
+
+.img-egyptian {
+  border: 3px solid #fbbf24;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  position: relative;
+}
+
+.img-egyptian:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
+}
+
+/* =======================
+   THEME 25 - Sakura Blossom
+   ======================= */
+.theme-sakura {
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(251, 113, 133, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(244, 114, 182, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #fce7f3 0%, #f3e8ff 30%, #e0e7ff 60%, #dbeafe 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Falling cherry blossoms */
+.theme-sakura::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-image: 
+    radial-gradient(ellipse, rgba(251, 113, 133, 0.8) 0%, transparent 70%),
+    radial-gradient(ellipse, rgba(244, 114, 182, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse, rgba(255, 255, 255, 0.9) 0%, transparent 80%);
+  background-size: 8px 12px, 6px 10px, 4px 6px;
+  background-position: 0 0, 30px 20px, 60px 10px;
+  animation: sakuraFall 15s linear infinite;
+  opacity: 0.9;
+}
+
+/* Sakura tree branch */
+.theme-sakura::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: -5%;
+  width: 300px;
+  height: 150px;
+  background: 
+    linear-gradient(45deg, rgba(101, 67, 33, 0.6) 0%, transparent 20%),
+    radial-gradient(circle at 20% 20%, rgba(251, 113, 133, 0.8) 0%, transparent 50%),
+    radial-gradient(circle at 50% 40%, rgba(244, 114, 182, 0.7) 0%, transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(251, 113, 133, 0.6) 0%, transparent 45%);
+  background-size: 100px 20px, 15px 15px, 12px 12px, 10px 10px;
+  background-position: 0 50%, 50px 30px, 100px 20px, 150px 40px;
+  background-repeat: no-repeat;
+  animation: sakuraBranch 12s ease-in-out infinite;
+}
+
+@keyframes sakuraFall {
+  0% { transform: translateY(-100px) rotate(0deg); }
+  100% { transform: translateY(calc(100vh + 100px)) rotate(360deg); }
+}
+
+@keyframes sakuraBranch {
+  0%, 100% { transform: translateX(0px) rotate(0deg); }
+  50% { transform: translateX(10px) rotate(2deg); }
+}
+
+.btn-sakura {
+  background: linear-gradient(45deg, #f472b6, #fb7185);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  font-weight: 400;
+  font-family: 'Noto Sans JP', sans-serif;
+  box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-sakura:hover {
+  background: linear-gradient(45deg, #fb7185, #f472b6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 114, 182, 0.6);
+}
+
+.card-sakura {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(251, 113, 133, 0.3);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-sakura:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(251, 113, 133, 0.5);
+}
+
+.img-sakura {
+  border: 3px solid #f472b6;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
+  position: relative;
+}
+
+.img-sakura:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(244, 114, 182, 0.7);
+}
+
+/* =======================
+   THEME 26 - Viking Warrior
+   ======================= */
+.theme-viking {
+  background: 
+    radial-gradient(circle at 60% 30%, rgba(107, 114, 128, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(75, 85, 99, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #1f2937 0%, #374151 30%, #4b5563 60%, #6b7280 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Northern lights effect */
+.theme-viking::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: 
+    linear-gradient(0deg, transparent, rgba(34, 197, 94, 0.3), transparent),
+    linear-gradient(0deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+  background-size: 100% 200px, 100% 150px;
+  animation: vikingAurora 10s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+/* Runic symbols */
+.theme-viking::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 80px;
+  height: 120px;
+  background: 
+    linear-gradient(0deg, transparent 0%, rgba(156, 163, 175, 0.6) 20%, transparent 40%),
+    linear-gradient(0deg, transparent 50%, rgba(156, 163, 175, 0.6) 70%, transparent 90%);
+  background-size: 15px 30px;
+  background-repeat: repeat-y;
+  animation: vikingRunes 8s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes vikingAurora {
+  0%, 100% { opacity: 0.7; transform: scaleY(1); }
+  50% { opacity: 0.9; transform: scaleY(1.1); }
+}
+
+@keyframes vikingRunes {
+  0%, 100% { opacity: 0.8; transform: translateY(0px); }
+  50% { opacity: 1; transform: translateY(-5px); }
+}
+
+.btn-viking {
+  background: linear-gradient(45deg, #4b5563, #6b7280);
+  color: white;
+  border: 2px solid rgba(156, 163, 175, 0.6);
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Norse', serif;
+  box-shadow: 0 4px 15px rgba(75, 85, 99, 0.4);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-viking:hover {
+  background: linear-gradient(45deg, #6b7280, #9ca3af);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(75, 85, 99, 0.6);
+}
+
+.card-viking {
+  background: rgba(31, 41, 55, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(107, 114, 128, 0.4);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-viking:hover {
+  background: rgba(31, 41, 55, 0.8);
+  border-color: rgba(107, 114, 128, 0.6);
+}
+
+.img-viking {
+  border: 3px solid #6b7280;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(107, 114, 128, 0.5);
+  position: relative;
+}
+
+.img-viking:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(107, 114, 128, 0.7);
+}
+
+/* =======================
+   THEME 27 - Cyberpunk 2077
+   ======================= */
+.theme-cyberpunk {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0c0a09 0%, #1c1917 30%, #292524 60%, #44403c 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Neon grid lines */
+.theme-cyberpunk::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(0deg, transparent 0%, rgba(236, 72, 153, 0.3) 1px, transparent 2px),
+    linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.2) 1px, transparent 2px);
+  background-size: 50px 50px;
+  animation: cyberpunkGrid 8s linear infinite;
+  opacity: 0.6;
+}
+
+/* Digital glitch effect */
+.theme-cyberpunk::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.1), transparent),
+    linear-gradient(0deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+  background-size: 200px 100%, 100% 200px;
+  animation: cyberpunkGlitch 4s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes cyberpunkGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes cyberpunkGlitch {
+  0%, 100% { opacity: 0.8; transform: skew(0deg); }
+  25% { opacity: 1; transform: skew(0.5deg); }
+  50% { opacity: 0.6; transform: skew(-0.5deg); }
+  75% { opacity: 1; transform: skew(0.2deg); }
+}
+
+.btn-cyberpunk {
+  background: linear-gradient(45deg, #ec4899, #0ea5e9);
+  color: white;
+  border: 2px solid rgba(236, 72, 153, 0.6);
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: 'Rajdhani', sans-serif;
+  box-shadow: 
+    0 0 10px rgba(236, 72, 153, 0.5),
+    0 0 20px rgba(14, 165, 233, 0.3);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-cyberpunk:hover {
+  background: linear-gradient(45deg, #0ea5e9, #ec4899);
+  transform: translateY(-1px);
+  box-shadow: 
+    0 0 15px rgba(236, 72, 153, 0.7),
+    0 0 30px rgba(14, 165, 233, 0.5);
+}
+
+.card-cyberpunk {
+  background: rgba(12, 10, 9, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(236, 72, 153, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+  transition: all 0.3s ease;
+}
+
+.card-cyberpunk:hover {
+  border-color: rgba(236, 72, 153, 0.6);
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+}
+
+.img-cyberpunk {
+  border: 3px solid #ec4899;
+  border-radius: 4px;
+  box-shadow: 
+    0 0 15px rgba(236, 72, 153, 0.6),
+    0 0 30px rgba(14, 165, 233, 0.3);
+  animation: cyberpunkPulse 3s ease-in-out infinite;
+}
+
+@keyframes cyberpunkPulse {
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6), 0 0 30px rgba(14, 165, 233, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.8), 0 0 50px rgba(14, 165, 233, 0.5);
+  }
+}
+
+/* =======================
+   THEME 28 - Medieval Kingdom
+   ======================= */
+.theme-medieval {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(120, 53, 15, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(69, 26, 3, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #451a03 0%, #7c2d12 30%, #a16207 60%, #ca8a04 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Castle silhouette */
+.theme-medieval::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 200px;
+  height: 120px;
+  background: 
+    linear-gradient(0deg, rgba(69, 26, 3, 0.8) 0%, rgba(69, 26, 3, 0.8) 60%, transparent 61%),
+    linear-gradient(0deg, transparent 40%, rgba(69, 26, 3, 0.9) 41%, rgba(69, 26, 3, 0.9) 80%, transparent 81%) 40px 0,
+    linear-gradient(0deg, transparent 50%, rgba(69, 26, 3, 0.7) 51%, rgba(69, 26, 3, 0.7) 90%, transparent 91%) 80px 0,
+    linear-gradient(0deg, transparent 30%, rgba(69, 26, 3, 0.8) 31%, rgba(69, 26, 3, 0.8) 70%, transparent 71%) 120px 0;
+  background-size: 40px 120px, 40px 120px, 40px 120px, 40px 120px;
+  background-repeat: no-repeat;
+  animation: medievalCastle 10s ease-in-out infinite;
+}
+
+/* Floating banners */
+.theme-medieval::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  width: 30px;
+  height: 80px;
+  background: 
+    linear-gradient(0deg, rgba(185, 28, 28, 0.8) 0%, rgba(185, 28, 28, 0.8) 60%, transparent 100%),
+    linear-gradient(0deg, rgba(202, 138, 4, 0.6) 20%, rgba(202, 138, 4, 0.6) 40%, transparent 40%);
+  background-size: 30px 80px, 30px 20px;
+  animation: medievalBanner 6s ease-in-out infinite;
+}
+
+@keyframes medievalCastle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes medievalBanner {
+  0%, 100% { transform: rotate(0deg) translateX(0px); }
+  25% { transform: rotate(5deg) translateX(3px); }
+  50% { transform: rotate(0deg) translateX(0px); }
+  75% { transform: rotate(-5deg) translateX(-3px); }
+}
+
+.btn-medieval {
+  background: linear-gradient(45deg, #7c2d12, #ca8a04);
+  color: white;
+  border: 2px solid rgba(185, 28, 28, 0.6);
+  border-radius: 12px;
+  font-weight: bold;
+  font-family: 'Uncial Antiqua', serif;
+  box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.btn-medieval:hover {
+  background: linear-gradient(45deg, #ca8a04, #eab308);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 45, 18, 0.6);
+}
+
+.card-medieval {
+  background: rgba(69, 26, 3, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(202, 138, 4, 0.5);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-medieval:hover {
+  background: rgba(69, 26, 3, 0.8);
+  border-color: rgba(202, 138, 4, 0.7);
+}
+
+.img-medieval {
+  border: 3px solid #ca8a04;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(202, 138, 4, 0.5);
+  position: relative;
+}
+
+.img-medieval:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(202, 138, 4, 0.7);
+}
+
+/* =======================
+   THEME 29 - Tropical Paradise
+   ======================= */
+.theme-tropical {
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(14, 165, 233, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #0ea5e9 0%, #06b6d4 30%, #10b981 60%, #22c55e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ocean waves */
+.theme-tropical::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 30%;
+  background: 
+    radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse at bottom, rgba(14, 165, 233, 0.4) 0%, transparent 60%);
+  background-size: 300px 100px, 200px 80px;
+  background-position: 0 100%, 150px 100%;
+  background-repeat: repeat-x;
+  animation: tropicalWaves 8s ease-in-out infinite;
+}
+
+/* Palm tree silhouette */
+.theme-tropical::after {
+  content: '';
+  position: absolute;
+  bottom: 30%;
+  left: 5%;
+  width: 120px;
+  height: 150px;
+  background: 
+    /* Tree trunk */
+    linear-gradient(0deg, rgba(101, 67, 33, 0.8) 0%, rgba(101, 67, 33, 0.8) 80%, transparent 81%) 40px 80px,
+    /* Palm fronds */
+    radial-gradient(ellipse, rgba(34, 197, 94, 0.8) 0%, transparent 70%) 0 0,
+    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 60%) 60px 20px,
+    radial-gradient(ellipse, rgba(34, 197, 94, 0.7) 0%, transparent 65%) 30px 40px;
+  background-size: 40px 150px, 80px 40px, 60px 30px, 70px 35px;
+  background-repeat: no-repeat;
+  animation: tropicalPalm 12s ease-in-out infinite;
+}
+
+@keyframes tropicalWaves {
+  0%, 100% { transform: translateX(0px) scaleY(1); }
+  25% { transform: translateX(-50px) scaleY(1.1); }
+  50% { transform: translateX(0px) scaleY(0.9); }
+  75% { transform: translateX(50px) scaleY(1.05); }
+}
+
+@keyframes tropicalPalm {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(2deg) scale(1.02); }
+  50% { transform: rotate(0deg) scale(0.98); }
+  75% { transform: rotate(-2deg) scale(1.01); }
+}
+
+.btn-tropical {
+  background: linear-gradient(45deg, #10b981, #06b6d4);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 25px;
+  font-weight: 400;
+  font-family: 'Dancing Script', cursive;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.btn-tropical:hover {
+  background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.card-tropical {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.card-tropical:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
+.img-tropical {
+  border: 3px solid #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  animation: tropicalFloat 4s ease-in-out infinite;
+}
+
+@keyframes tropicalFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
+}
+
+/* =======================
+   THEME 30 - Art Deco Vintage
+   ======================= */
+.theme-artdeco {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(6, 6, 6, 0.6) 0%, transparent 50%),
+    linear-gradient(135deg, #000000 0%, #1c1917 30%, #78350f 60%, #fbbf24 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Art Deco geometric patterns */
+.theme-artdeco::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%),
+    linear-gradient(0deg, transparent 48%, rgba(251, 191, 36, 0.2) 50%, transparent 52%);
+  background-size: 100px 100px, 80px 80px, 60px 60px;
+  animation: artdecoPattern 15s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+/* Vintage sunburst */
+.theme-artdeco::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 120px;
+  height: 120px;
+  background: 
+    conic-gradient(from 0deg, rgba(251, 191, 36, 0.3), transparent, rgba(251, 191, 36, 0.3)),
+    radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: artdecoSunburst 10s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes artdecoPattern {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(5deg); }
+}
+
+@keyframes artdecoSunburst {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.btn-artdeco {
+  background: linear-gradient(45deg, #000000, #fbbf24);
+  color: white;
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: 'Great Vibes', cursive;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  letter-spacing: 1px;
+}
+
+.btn-artdeco:hover {
+  background: linear-gradient(45deg, #fbbf24, #f59e0b);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+}
+
+.card-artdeco {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-artdeco:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(251, 191, 36, 0.7);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
+}
+
+.img-artdeco {
+  border: 3px solid #fbbf24;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  position: relative;
+  animation: artdecoGlow 6s ease-in-out infinite;
+}
+
+@keyframes artdecoGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    filter: brightness(1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
+    filter: brightness(1.1);
+  }
 }

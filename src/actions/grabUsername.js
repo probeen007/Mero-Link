@@ -1,7 +1,7 @@
 'use server';
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Page } from "@/models/Page";
-import mongoose from "mongoose";
+import dbConnect from "@/libs/mongoClient";
 import { getServerSession } from "next-auth";
 
 export default async function grabUsername(formData) {
@@ -12,12 +12,7 @@ export default async function grabUsername(formData) {
     }
 
     // Ensure MongoDB connection
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-    }
+    await dbConnect();
 
     // Check if the username already exists
     const existingPageDoc = await Page.findOne({ uri: username });

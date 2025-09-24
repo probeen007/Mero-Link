@@ -18,14 +18,10 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function PageLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={lato.className}>
-        <main>
-          {children}
-        </main>
-      </body>
-    </html>
-  )
+    <main className={lato.className}>
+      {children}
+    </main>
+  );
 }

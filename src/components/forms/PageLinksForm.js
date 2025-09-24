@@ -3,23 +3,26 @@ import { savePageLinks } from "@/actions/pageActions";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import SectionBox from "@/components/layout/SectionBox";
 import { upload } from "@/libs/upload";
+import { deleteFromS3ByUrl } from "@/libs/s3Delete";
 import { faCloudArrowUp, faGripLines, faLink, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
 
 export default function PageLinksForm({ page, user }) {
   const [links, setLinks] = useState(page.links || []);
+  const nextId = useRef(1);
   async function save() {
     await savePageLinks(links);
     toast.success('Saved!');
   }
   function addNewLink() {
     setLinks(prev => {
+      const newId = nextId.current++;
       return [...prev, {
-        key: Date.now().toString(),
+        key: `link-${newId}`,
         title: '',
         subtitle: '',
         icon: '',
@@ -28,6 +31,10 @@ export default function PageLinksForm({ page, user }) {
     });
   }
   function handleUpload(ev, linkKeyForUpload) {
+    // Find the current icon URL for the link to delete it
+    const currentLink = links.find(link => link.key === linkKeyForUpload);
+    const oldIconUrl = currentLink?.icon || null;
+    
     upload(ev, uploadedImageUrl => {
       setLinks(prevLinks => {
         const newLinks = [...prevLinks];
@@ -38,7 +45,7 @@ export default function PageLinksForm({ page, user }) {
         });
         return newLinks;
       });
-    });
+    }, oldIconUrl); // Pass old icon URL for deletion
   }
   function handleLinkChange(keyOfLinkToChange, prop, ev) {
     setLinks(prev => {
@@ -52,9 +59,25 @@ export default function PageLinksForm({ page, user }) {
     })
   }
   function removeLink(linkKeyToRemove) {
-    setLinks(prevLinks =>
-      [...prevLinks].filter(l => l.key !== linkKeyToRemove)
-    );
+    // Find the link to delete its icon from S3
+    const linkToRemove = links.find(l => l.key === linkKeyToRemove);
+    
+    setLinks(prevLinks => {
+      const filteredLinks = [...prevLinks].filter(l => l.key !== linkKeyToRemove);
+      
+      // Delete the icon from S3 if it exists
+      if (linkToRemove?.icon && linkToRemove.icon.trim() !== '') {
+        deleteFromS3ByUrl(linkToRemove.icon).then((success) => {
+          if (success) {
+            console.log('🗑️ Link icon deleted from S3:', linkToRemove.icon);
+          }
+        }).catch((error) => {
+          console.error('❌ Failed to delete link icon from S3:', error);
+        });
+      }
+      
+      return filteredLinks;
+    });
   }
   return (
     <SectionBox>

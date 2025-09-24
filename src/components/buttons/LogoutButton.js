@@ -13,9 +13,15 @@ export default function LogoutButton({
       className={className}
       onClick={() => signOut()}>
 
+      {iconLeft && (
+        <FontAwesomeIcon icon={faRightFromBracket} className={iconClasses} />
+      )}
+      
       <span>Logout</span>
 
-      <FontAwesomeIcon icon={faRightFromBracket} className={iconClasses} />
+      {!iconLeft && (
+        <FontAwesomeIcon icon={faRightFromBracket} className={iconClasses} />
+      )}
     </button>
   );
 }

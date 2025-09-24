@@ -5,6 +5,7 @@ const UserSchema = new Schema({
   email: String,
   image: String,
   emailVerified: Date,
+  isVerified: { type: Boolean, default: false },
 });
 
 export const User = models?.User || model('User', UserSchema);
