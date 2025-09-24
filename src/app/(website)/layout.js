@@ -2,7 +2,7 @@ import { Lato } from 'next/font/google';
 import '../globals.css';
 import HeaderServer from "@/components/headerserver";
 import SessionProviderWrapper from '@/components/SessionProviderWrapper';
-import DynamicFooter from '@/components/DynamicFooter';
+import Footer from '@/components/footer';
 import PWAInstaller from '@/components/PWAInstaller';
 import { Suspense } from 'react';
 import { LoadingSkeleton } from '@/components/LoadingStates';
@@ -57,7 +57,7 @@ export default function WebsiteLayout({ children }) {
             {children}
           </Suspense>
         </div>
-        <DynamicFooter />
+  <Footer />
         <PWAInstaller />
       </main>
     </SessionProviderWrapper>
