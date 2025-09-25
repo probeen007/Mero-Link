@@ -7,6 +7,10 @@ export default function ThemeSelectorWrapper({ currentTheme, pageId, onThemeChan
     const [selectedTheme, setSelectedTheme] = useState(currentTheme);
 
     useEffect(() => setMounted(true), []);
+    // Keep internal state in sync with prop changes (e.g., after refresh)
+    useEffect(() => {
+        setSelectedTheme(currentTheme);
+    }, [currentTheme]);
 
     const handleThemeChange = async (themeKey) => {
         console.log("Theme change requested:", { themeKey, pageId });

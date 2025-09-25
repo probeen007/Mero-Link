@@ -1,20 +1,18 @@
 // public/sw.js
 // Service Worker for caching and offline support
 
-const CACHE_NAME = 'mero-link-v1';
-const STATIC_CACHE = 'mero-link-static-v1';
-const DYNAMIC_CACHE = 'mero-link-dynamic-v1';
+// Bump cache versions to invalidate old cached HTML/assets
+const CACHE_NAME = 'mero-link-v2';
+const STATIC_CACHE = 'mero-link-static-v2';
+const DYNAMIC_CACHE = 'mero-link-dynamic-v2';
 
 // Resources to cache immediately
+// Do NOT pre-cache HTML routes to avoid serving stale SSR markup
 const STATIC_ASSETS = [
-  '/',
-  '/login',
-  '/about',
-  '/pricing',
-  '/contact',
-  '/_next/static/css/',
-  '/_next/static/js/',
-  '/favicon.ico'
+  '/favicon.ico',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+  '/apple-touch-icon.png'
 ];
 
 // API routes to cache
@@ -69,15 +67,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Never intercept Next.js internal assets to prevent MIME/type issues
+  if (url.pathname.startsWith('/_next/')) {
+    return;
+  }
+
   // Handle different types of requests
   if (request.method === 'GET') {
     if (isStaticAsset(request.url)) {
       event.respondWith(cacheFirst(request, STATIC_CACHE));
-    } else if (isAPIRequest(request.url)) {
-      event.respondWith(networkFirst(request, DYNAMIC_CACHE));
-    } else if (isPageRequest(request)) {
-      event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+      return;
     }
+    if (isAPIRequest(request.url)) {
+      event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+      return;
+    }
+    // For HTML/page navigations: do not intercept; let Next serve fresh SSR
   }
 });
 
@@ -134,10 +139,9 @@ async function staleWhileRevalidate(request, cacheName) {
 
 // Helper functions
 function isStaticAsset(url) {
-  return url.includes('/_next/static/') || 
-         url.includes('/favicon.ico') ||
-         url.includes('.css') ||
-         url.includes('.js') ||
+  // Exclude Next.js internals entirely; let the browser handle them
+  if (url.includes('/_next/')) return false;
+  return url.includes('/favicon.ico') ||
          url.includes('.png') ||
          url.includes('.jpg') ||
          url.includes('.jpeg') ||
@@ -148,10 +152,7 @@ function isAPIRequest(url) {
   return url.includes('/api/');
 }
 
-function isPageRequest(request) {
-  return request.mode === 'navigate' || 
-         (request.method === 'GET' && request.headers.get('accept').includes('text/html'));
-}
+// No page request caching: avoid hydration mismatches from stale HTML
 
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {

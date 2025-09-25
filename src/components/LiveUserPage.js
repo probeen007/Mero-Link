@@ -45,7 +45,7 @@ export const buttonsIcons = {
 
 // Shape helpers
 const getShapeClasses = (shape, isProfile = false) => {
-  const base = isProfile ? "w-36 h-36" : "w-16 h-16";
+  const base = isProfile ? "w-28 h-28 sm:w-36 sm:h-36" : "w-12 h-12 sm:w-16 sm:h-16";
   switch (shape) {
     case "circle": return `${base} rounded-full`;
     case "square": return `${base} rounded-lg`;
@@ -191,7 +191,7 @@ export default function LiveUserPage({ initialData, uri }) {
           <p className="text-center mb-6 px-8 max-w-md mx-auto">{page?.bio || "Bio..."}</p>
 
           {/* Social Buttons */}
-          <div className="flex gap-3 justify-center mt-4 pb-4 flex-wrap">
+          <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 flex-wrap">
             {page?.buttons && Object.keys(page.buttons).map((key, idx) => (
               <a
                 key={key}
@@ -201,13 +201,13 @@ export default function LiveUserPage({ initialData, uri }) {
                 className={clsx(getShapeClasses(theme?.socialShape), "p-3 flex items-center justify-center shadow-md transition duration-200", theme?.buttonClass || "bg-gray-700 text-white")}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <FontAwesomeIcon icon={buttonsIcons[key] || faLink} className="w-5 h-5" />
+                <FontAwesomeIcon icon={buttonsIcons[key] || faLink} className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
             ))}
           </div>
 
           {/* Links */}
-          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-6">
+          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6 p-3 sm:p-4 px-4 sm:px-6">
             {page?.links && page.links.map((link, idx) => (
               <a
                 key={idx}
@@ -217,7 +217,7 @@ export default function LiveUserPage({ initialData, uri }) {
                 className={clsx("flex items-center transition duration-200 p-4 shadow-md", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800", "hover:scale-105")}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className={clsx("flex items-center justify-center bg-blue-700 mr-4", getShapeClasses(theme?.socialShape))}>
+                <div className={clsx("flex items-center justify-center bg-blue-700 mr-3 sm:mr-4", getShapeClasses(theme?.socialShape))}>
                   {link.icon ? (
                     <Image
                       src={link.icon}
@@ -227,12 +227,12 @@ export default function LiveUserPage({ initialData, uri }) {
                       className="w-full h-full object-cover rounded-full"
                     />
                   ) : (
-                    <FontAwesomeIcon icon={faLink} className="w-8 h-8 text-white/80" />
+                    <FontAwesomeIcon icon={faLink} className="w-6 h-6 sm:w-8 sm:h-8 text-white/80" />
                   )}
                 </div>
                 <div className="flex-1 overflow-hidden">
-                  <h3 className="text-lg font-medium truncate">{link.title}</h3>
-                  <p className="text-white/50 text-sm truncate">{link.subtitle}</p>
+                  <h3 className="text-base sm:text-lg font-medium truncate">{link.title}</h3>
+                  <p className="text-white/50 text-xs sm:text-sm truncate">{link.subtitle}</p>
                 </div>
               </a>
             ))}

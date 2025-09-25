@@ -10,7 +10,7 @@ import ClientLiveUserPage from "@/components/ClientLiveUserPage";
 
 // Dynamic metadata generation for each user page
 export async function generateMetadata({ params }) {
-  const { uri } = params;
+  const { uri } = await params;
 
   try {
     await dbConnect();
@@ -98,7 +98,7 @@ const fetchPageData = measurePerformance("fetchPageData", async (uri) => {
 });
 
 export default async function UserPage({ params }) {
-  const { uri } = params;
+  const { uri } = await params;
 
   try {
     const data = await fetchPageData(uri);

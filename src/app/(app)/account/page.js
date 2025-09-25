@@ -8,24 +8,6 @@ import { User } from "@/models/User";
 import UsernameForm from "@/components/forms/UsernameForm";
 import AccountPageClient from "./AccountPageClient";
 
-// Reverse theme mapping: database enum values to numeric keys
-const reverseThemeMapping = {
-  "default": "1",
-  "aurora": "2", 
-  "neon": "3",
-  "light": "4",
-  "starfield": "5",
-  "gamer": "6",
-  "coder": "7",
-  "hacker": "8",
-  "elegant": "9",
-  "funky": "10",
-  "feminine": "11",
-  "retro": "12",
-  "nature": "13",
-  "corporate": "14",
-  "cosmic": "15"
-};
 
 let cached = global.mongoose;
 if (!cached) cached = global.mongoose = { conn: null, promise: null };
@@ -64,9 +46,6 @@ export default async function AccountPage({ searchParams }) {
   }
 
   page._id = page._id.toString();
-  
-  // Convert database theme value to numeric key for UI
-  page.theme = reverseThemeMapping[page.theme] || "1";
 
   // Pass data to client component including user verification status
   return <AccountPageClient page={page} user={session.user} isVerified={user?.isVerified || false} />;

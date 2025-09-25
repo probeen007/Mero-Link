@@ -33,20 +33,20 @@ export default function HeroForm({ user }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-row items-center shadow-lg bg-white shadow-gray-500/20 w-full max-w-2xl rounded-lg p-2 gap-2"
+      className="flex flex-col sm:flex-row items-stretch sm:items-center shadow-lg bg-white shadow-gray-500/20 w-full max-w-2xl rounded-lg p-2 gap-2"
     >
-      <div className="flex items-center bg-gray-50 rounded-md h-11 px-3 text-gray-600 font-medium text-sm whitespace-nowrap">
+      <div className="flex items-center justify-center sm:justify-start bg-gray-50 rounded-md h-12 px-3 text-gray-600 font-medium text-sm sm:text-base whitespace-nowrap">
         merolink.me/
       </div>
       <input
         type="text"
         ref={inputRef}
-        className="flex-grow border border-gray-300 rounded-md px-1 h-11  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+        className="flex-grow border border-gray-300 rounded-md px-2 h-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
         placeholder="username"
       />
       <button
         type="submit"
-        className="h-11 bg-gradient-to-r from-blue-600 to-blue-700 text-white  px-3 rounded-md hover:from-blue-700 hover:to-blue-800 transition-all whitespace-nowrap font-medium text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+        className="h-12 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 rounded-md hover:from-blue-700 hover:to-blue-800 transition-all whitespace-nowrap font-medium text-base shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
       >
         Join for Free
       </button>

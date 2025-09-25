@@ -13,9 +13,9 @@ export default function AccountPageClient({ page, user, isVerified }) {
   const [theme, setTheme] = useState(page.theme);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Enhanced Header with Branding */}
-      <div className="max-w-4xl mx-auto mb-8">
+  <div className="max-w-4xl mx-auto mb-4 px-3 sm:px-4">
         <div className="text-center mb-6">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-blue-100 p-1 rounded-full mr-4">
@@ -54,8 +54,8 @@ export default function AccountPageClient({ page, user, isVerified }) {
       </div>
 
       {/* Theme Selector with Enhanced Styling */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-6">
+      <div className="max-w-4xl mx-auto mb-6 px-3 sm:px-4">
+        <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-3 sm:p-5">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
             <FontAwesomeIcon icon={faUser} className="text-blue-600 mr-2" />
             Theme Selection
@@ -69,10 +69,10 @@ export default function AccountPageClient({ page, user, isVerified }) {
       </div>
 
       {/* Enhanced Verification Status Section */}
-      <div className="max-w-4xl mx-auto mb-8">
+  <div className="max-w-4xl mx-auto mb-6 px-3 sm:px-4">
         {isVerified ? (
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-lg p-6">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="bg-green-100 p-3 rounded-full">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-green-600 text-2xl" />
               </div>
@@ -109,30 +109,30 @@ export default function AccountPageClient({ page, user, isVerified }) {
       </div>
 
       {/* Enhanced Forms Section */}
-      <div className="max-w-4xl mx-auto space-y-8">
+  <div className="max-w-4xl mx-auto space-y-5 px-3 sm:px-4">
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2.5 sm:p-3.5">
             <h3 className="text-lg font-semibold text-white">Profile Settings</h3>
           </div>
-          <div className="p-2">
+          <div className="p-3 sm:p-4">
             <PageSettingsForm page={page} user={user} />
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2.5 sm:p-3.5">
             <h3 className="text-lg font-semibold text-white">Social Buttons</h3>
           </div>
-          <div className="p-2">
+          <div className="p-3 sm:p-4">
             <PageButtonsForm page={page} user={user} />
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2.5 sm:p-3.5">
             <h3 className="text-lg font-semibold text-white">Custom Links</h3>
           </div>
-          <div className="p-2">
+          <div className="p-3 sm:p-4">
             <PageLinksForm page={page} user={user} />
           </div>
         </div>
