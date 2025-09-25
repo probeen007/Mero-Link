@@ -71,9 +71,6 @@ ENV HOSTNAME="0.0.0.0"
 # Add runtime protections
 ENV NODE_OPTIONS="--max-old-space-size=512 --unhandled-rejections=strict"
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/api/health || exit 1
 
 # Start server
 CMD ["dumb-init", "node", "server.js"]
