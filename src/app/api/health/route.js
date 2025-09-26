@@ -5,6 +5,21 @@ import mongoose from 'mongoose';
 import dbConnect from '@/libs/mongoClient';
 import { NextResponse } from 'next/server';
 
+// Track last DB error globally (can be set in dbConnect catch blocks elsewhere)
+if (!global.__lastDbError) {
+  global.__lastDbError = null;
+}
+
+function mapReadyState(state) {
+  switch (state) {
+    case 0: return 'disconnected';
+    case 1: return 'connected';
+    case 2: return 'connecting';
+    case 3: return 'disconnecting';
+    default: return 'unknown';
+  }
+}
+
 export async function GET() {
   const healthCheck = {
     status: 'ok',
@@ -15,6 +30,11 @@ export async function GET() {
       database: 'unknown',
       memory: 'unknown',
       uptime: process.uptime(),
+      dbState: mapReadyState(mongoose.connection.readyState),
+      lastDbError: global.__lastDbError ? {
+        message: global.__lastDbError.message,
+        at: global.__lastDbError.at
+      } : null
     }
   };
 
@@ -29,6 +49,7 @@ export async function GET() {
   } catch (error) {
     healthCheck.checks.database = 'error';
     healthCheck.status = 'degraded';
+    global.__lastDbError = { message: error.message, at: new Date().toISOString() };
   }
 
   // Memory usage check

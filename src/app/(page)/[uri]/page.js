@@ -7,6 +7,7 @@ import { logger } from "@/libs/logger";
 import { measurePerformance } from "@/libs/performance";
 import { generatePersonStructuredData, generateWebPageStructuredData } from "@/libs/structuredData";
 import ClientLiveUserPage from "@/components/ClientLiveUserPage";
+import { generateCorrelationId } from "@/libs/correlation";
 
 // Dynamic metadata generation for each user page
 export async function generateMetadata({ params }) {
@@ -72,36 +73,46 @@ export async function generateMetadata({ params }) {
   }
 }
 
-const fetchPageData = measurePerformance("fetchPageData", async (uri) => {
+const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
+  const start = performance.now();
   await dbConnect();
 
   const cacheKeyStr = cacheKey("page-data", uri);
   const cached = cache.get(cacheKeyStr);
   if (cached) {
-    logger.debug("Page data served from cache", { uri });
+    logger.debug("Page data served from cache", { uri, cid });
     return cached;
   }
 
-  const page = await Page.findOne({ uri }).lean();
-  if (!page) return null;
+  try {
+    const page = await Page.findOne({ uri }).lean();
+    if (!page) return null;
 
-  const user = await User.findOne({ email: page.owner }).lean();
+    const user = await User.findOne({ email: page.owner }).lean();
 
-  // Convert ObjectIds to strings for client
-  page._id = page._id.toString();
-  if (user) user._id = user._id.toString();
+    page._id = page._id.toString();
+    if (user) user._id = user._id.toString();
 
-  const data = { page, user };
-  cache.set(cacheKeyStr, data, 30000); // Cache 30 sec for live updates
+    const data = { page, user };
+    cache.set(cacheKeyStr, data, 30000); // Cache 30 sec
 
-  return data;
+    const ms = (performance.now() - start).toFixed(2);
+    logger.debug("Page data fetched", { uri, cid, ms });
+    return data;
+  } catch (error) {
+    const ms = (performance.now() - start).toFixed(2);
+    logger.error("Failed fetching page data", { uri, cid, ms, error: error.message });
+    throw error;
+  }
 });
 
 export default async function UserPage({ params }) {
   const { uri } = await params;
+  const cid = generateCorrelationId();
+  const renderStart = performance.now();
 
   try {
-    const data = await fetchPageData(uri);
+    const data = await fetchPageData(uri, cid);
 
     if (!data) {
       return (
@@ -121,7 +132,7 @@ export default async function UserPage({ params }) {
 
     // Log view (fire and forget)
     Event.create({ uri, page: uri, type: "view" }).catch((error) =>
-      logger.error("Failed to log view event", { uri, error: error.message })
+      logger.error("Failed to log view event", { uri, cid, error: error.message })
     );
 
     // Prepare consistent initialData for hydration
@@ -138,19 +149,23 @@ export default async function UserPage({ params }) {
     const structuredData = generatePersonStructuredData(page, user);
     const webPageData = generateWebPageStructuredData(page, user);
 
+    const totalMs = (performance.now() - renderStart).toFixed(2);
+    logger.debug("User page rendered", { uri, cid, ms: totalMs });
+
     return (
       <>
-        <script 
-          type="application/ld+json" 
+        <script
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([structuredData, webPageData])
-          }} 
+          }}
         />
         <ClientLiveUserPage initialData={initialData} uri={uri} />
       </>
     );
   } catch (error) {
-    logger.error("Error rendering user page", { uri, error: error.message });
+    const totalMs = (performance.now() - renderStart).toFixed(2);
+    logger.error("Error rendering user page", { uri, cid, ms: totalMs, error: error.message });
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="text-center text-white">

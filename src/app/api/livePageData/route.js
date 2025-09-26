@@ -1,66 +1,70 @@
-import mongoose from 'mongoose';
 import { Page } from '@/models/Page';
 import { User } from '@/models/User';
+import dbConnect from '@/libs/mongoClient';
+import { logger } from '@/libs/logger';
 
-let cached = global.mongoose;
-if (!cached) cached = global.mongoose = { conn: null, promise: null };
-
-async function connectToDatabase() {
-  if (cached.conn) return cached.conn;
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.MONGO_URI).then(m => m);
-  }
-  cached.conn = await cached.promise;
-  return cached.conn;
+// Simple correlation id generator (avoids dependency) - format: ts-rand
+function correlationId() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-// GET endpoint to fetch live page data
 export async function GET(request) {
+  const cid = correlationId();
+  const start = performance.now();
+
   try {
-    await connectToDatabase();
-    
+    await dbConnect();
+
     const { searchParams } = new URL(request.url);
     const uri = searchParams.get('uri');
-    
+
     if (!uri) {
-      return new Response(JSON.stringify({ error: 'URI parameter required' }), { 
+      logger.warn('livePageData missing uri', { cid });
+      return new Response(JSON.stringify({ error: 'URI parameter required', cid }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    // Fetch page and user data
     const page = await Page.findOne({ uri }).lean();
     if (!page) {
-      return new Response(JSON.stringify({ error: 'Page not found' }), { 
+      logger.info('livePageData page not found', { cid, uri });
+      return new Response(JSON.stringify({ error: 'Page not found', cid }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
     const user = await User.findOne({ email: page.owner }).lean();
-    
-    // Convert ObjectId to string for serialization
+
     page._id = page._id.toString();
     if (user) user._id = user._id.toString();
 
-    // Add timestamp for cache busting
     const responseData = {
       page,
       user,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
+      cid
     };
 
-    return new Response(JSON.stringify(responseData), { 
+    const duration = performance.now() - start;
+    if (duration > 1000) {
+      logger.warn('livePageData slow response', { cid, uri, ms: duration.toFixed(2) });
+    } else {
+      logger.debug('livePageData served', { cid, uri, ms: duration.toFixed(2) });
+    }
+
+    return new Response(JSON.stringify(responseData), {
       status: 200,
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate'
       }
     });
-  } catch (err) {
-    console.error("❌ livePageData error:", err);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+  } catch (error) {
+    const duration = performance.now() - start;
+    logger.error('livePageData error', { cid, ms: duration.toFixed(2), error: error.message, stack: process.env.NODE_ENV === 'production' ? undefined : error.stack });
+    return new Response(JSON.stringify({ error: 'Internal server error', cid }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
