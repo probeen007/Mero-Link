@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { Page, THEME_VALUES } from '@/models/Page';
+import dbConnect from '@/libs/mongoClient';
 
 // Theme mapping: numeric keys to database enum values
 const themeMapping = {
@@ -20,27 +20,6 @@ const themeMapping = {
   "15": "cosmic"
 };
 
-let cached = global.mongoose;
-if (!cached) cached = global.mongoose = { conn: null, promise: null };
-
-async function connectToDatabase() {
-  if (cached.conn) return cached.conn;
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.MONGO_URI).then(m => m);
-  }
-  cached.conn = await cached.promise;
-  
-  // Force refresh models in development to pick up schema changes
-  if (process.env.NODE_ENV === 'development') {
-    console.log("🔄 Development mode: Refreshing mongoose models");
-    // Clear the model cache to ensure updated schema is used
-    if (mongoose.models.Page) {
-      delete mongoose.models.Page;
-    }
-  }
-  
-  return cached.conn;
-}
 
 // GET for testing
 export async function GET() {
@@ -50,7 +29,7 @@ export async function GET() {
 // POST to save theme
 export async function POST(req) {
   try {
-    await connectToDatabase();
+    await dbConnect();
     const { pageId, theme } = await req.json();
 
     console.log("📥 Received request:", { pageId, theme, pageIdType: typeof pageId, themeType: typeof theme });

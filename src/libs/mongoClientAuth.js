@@ -12,14 +12,15 @@ const uri = process.env.MONGO_URI
 // Optimized options for NextAuth MongoDB adapter
 const options = {
   maxPoolSize: 10,
-  minPoolSize: 2,
+  minPoolSize: 0, // allow scaling to zero in serverless idle periods
   maxIdleTimeMS: 30000,
-  serverSelectionTimeoutMS: 15000, // Increased to match main MongoDB client
-  socketTimeoutMS: 45000,
-  connectTimeoutMS: 15000, // Increased to match main MongoDB client
+  serverSelectionTimeoutMS: 30000, // give more time for elections / cold starts
+  socketTimeoutMS: 60000,
+  connectTimeoutMS: 30000,
   heartbeatFrequencyMS: 10000,
   retryWrites: true,
   retryReads: true,
+  family: 4, // prefer IPv4 to avoid IPv6 DNS issues on some platforms
 }
 
 let client
@@ -38,7 +39,22 @@ if (process.env.NODE_ENV === "development") {
 } else {
   // In production mode, it's best to not use a global variable.
   client = new MongoClient(uri, options)
-  clientPromise = client.connect()
+  const connectWithRetry = async () => {
+    const delays = [500, 1000, 2000]
+    let lastError
+    for (let i = 0; i < delays.length; i++) {
+      try {
+        return await client.connect()
+      } catch (err) {
+        lastError = err
+        if (i < delays.length - 1) {
+          await new Promise(res => setTimeout(res, delays[i]))
+        }
+      }
+    }
+    throw lastError
+  }
+  clientPromise = connectWithRetry()
 }
 
 // Export a module-scoped MongoClient promise for NextAuth
