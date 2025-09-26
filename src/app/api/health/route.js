@@ -34,6 +34,14 @@ export async function GET() {
       lastDbError: global.__lastDbError ? {
         message: global.__lastDbError.message,
         at: global.__lastDbError.at
+      } : null,
+      mongoMetrics: global.__mongoMetrics ? {
+        lastAttemptAt: global.__mongoMetrics.lastAttemptAt,
+        lastSuccessAt: global.__mongoMetrics.lastSuccessAt,
+        lastErrorAt: global.__mongoMetrics.lastErrorAt,
+        lastErrorMessage: global.__mongoMetrics.lastErrorMessage,
+        attemptCount: global.__mongoMetrics.attemptCount,
+        consecutiveFailures: global.__mongoMetrics.consecutiveFailures,
       } : null
     }
   };
@@ -46,10 +54,29 @@ export async function GET() {
       await dbConnect();
       healthCheck.checks.database = 'connected';
     }
+    // Recompute dbState after attempting connect
+    healthCheck.checks.dbState = mapReadyState(mongoose.connection.readyState);
+    // If mongoMetrics missing but connected, seed minimal success info
+    if (healthCheck.checks.database === 'connected' && (!healthCheck.checks.mongoMetrics || !healthCheck.checks.mongoMetrics.lastSuccessAt)) {
+      if (!global.__mongoMetrics) {
+        global.__mongoMetrics = { attemptCount: 1, lastSuccessAt: new Date().toISOString(), lastAttemptAt: new Date().toISOString(), lastErrorAt: null, lastErrorMessage: null, consecutiveFailures: 0 };
+      } else {
+        global.__mongoMetrics.lastSuccessAt = global.__mongoMetrics.lastSuccessAt || new Date().toISOString();
+      }
+      healthCheck.checks.mongoMetrics = {
+        lastAttemptAt: global.__mongoMetrics.lastAttemptAt,
+        lastSuccessAt: global.__mongoMetrics.lastSuccessAt,
+        lastErrorAt: global.__mongoMetrics.lastErrorAt,
+        lastErrorMessage: global.__mongoMetrics.lastErrorMessage,
+        attemptCount: global.__mongoMetrics.attemptCount,
+        consecutiveFailures: global.__mongoMetrics.consecutiveFailures,
+      };
+    }
   } catch (error) {
     healthCheck.checks.database = 'error';
     healthCheck.status = 'degraded';
     global.__lastDbError = { message: error.message, at: new Date().toISOString() };
+    healthCheck.checks.dbState = mapReadyState(mongoose.connection.readyState);
   }
 
   // Memory usage check

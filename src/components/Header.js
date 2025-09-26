@@ -45,7 +45,7 @@ export default function Header({ session }) {
   //console.log('Session in HeaderClient:', session); // Debugging line
   return (
 
-  <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 py-4 shadow-sm sticky top-0 z-[10001] transition-all ">
+  <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 py-4 shadow-sm sticky top-0 z-[50] transition-all ">
       <div className="max-w-7xl flex justify-between mx-auto px-6 items-center">
         <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           {/* Logo Image */}
@@ -126,7 +126,7 @@ export default function Header({ session }) {
       {/* Backdrop overlay */}
       {isMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 z-[10000]"
+          className="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 z-[40]"
           onClick={toggleMenu}
         ></div>
       )}
@@ -134,7 +134,7 @@ export default function Header({ session }) {
       {/* Sidebar Menu for small and medium screens */}
       <div
         className={`md:hidden fixed top-0 right-0 h-full bg-white shadow-2xl w-72 transform ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out border-l border-gray-300 z-[10002]`}
+          } transition-transform duration-300 ease-in-out border-l border-gray-300 z-[60]`}
       >
         <div className="flex flex-col gap-6 p-8 h-full bg-white">
           {/* Close Icon */}

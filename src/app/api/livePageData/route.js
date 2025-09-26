@@ -16,7 +16,23 @@ export async function GET(request) {
     await dbConnect();
 
     const { searchParams } = new URL(request.url);
-    const uri = searchParams.get('uri');
+    let uri = searchParams.get('uri');
+    if (!uri) {
+      // Fallback: attempt to parse from referer path /<uri>
+      const referer = request.headers.get('referer');
+      if (referer) {
+        try {
+          const refUrl = new URL(referer);
+          const parts = refUrl.pathname.split('/').filter(Boolean);
+          if (parts.length === 1) {
+            uri = parts[0];
+            logger.debug('Derived uri from referer', { cid, uri });
+          }
+        } catch (e) {
+          // ignore parsing errors
+        }
+      }
+    }
 
     if (!uri) {
       logger.warn('livePageData missing uri', { cid });

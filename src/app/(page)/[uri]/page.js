@@ -20,8 +20,18 @@ export async function generateMetadata({ params }) {
     const cached = cache.get(cacheKeyStr);
     if (cached) return cached;
 
-    const page = await Page.findOne({ uri }).lean();
-    const user = await User.findOne({ email: page?.owner }).lean();
+    // Defensive fetch pattern to avoid exceptions mid-render
+    const page = await Page.findOne({ uri }).lean().catch(e => {
+      logger.error('Metadata page fetch failed', { uri, error: e.message });
+      return null;
+    });
+    let user = null;
+    if (page?.owner) {
+      user = await User.findOne({ email: page.owner }).lean().catch(e => {
+        logger.error('Metadata user fetch failed', { uri, error: e.message });
+        return null;
+      });
+    }
 
     if (!page) {
       return {
@@ -88,7 +98,10 @@ const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
     const page = await Page.findOne({ uri }).lean();
     if (!page) return null;
 
-    const user = await User.findOne({ email: page.owner }).lean();
+    let user = null;
+    if (page.owner) {
+      user = await User.findOne({ email: page.owner }).lean();
+    }
 
     page._id = page._id.toString();
     if (user) user._id = user._id.toString();

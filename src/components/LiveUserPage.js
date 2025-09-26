@@ -109,7 +109,8 @@ export default function LiveUserPage({ initialData, uri }) {
   useEffect(() => {
     const pollForUpdates = async () => {
       try {
-        const res = await fetch(`/api/livePageData?uri=${uri}`, { cache: "no-cache" });
+  const encoded = encodeURIComponent(uri || '');
+  const res = await fetch(`/api/livePageData?uri=${encoded}`, { cache: "no-cache" });
         if (!res.ok) return;
         const data = await res.json();
         if (data.lastUpdated !== lastUpdated) {
@@ -207,14 +208,14 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* Links */}
-          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6 p-3 sm:p-4 px-4 sm:px-6">
+          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6 p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full">
             {page?.links && page.links.map((link, idx) => (
               <a
                 key={idx}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={clsx("flex items-center transition duration-200 p-4 shadow-md", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800", "hover:scale-105")}
+                className={clsx("flex items-center transition duration-200 p-4 shadow-md min-w-0", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800", "hover:scale-105")}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
                 <div className={clsx("flex items-center justify-center bg-blue-700 mr-3 sm:mr-4", getShapeClasses(theme?.socialShape))}>

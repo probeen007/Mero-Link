@@ -1,6 +1,18 @@
 
 import mongoose from "mongoose";
 
+// Global diagnostics object for health & debugging
+if (!global.__mongoMetrics) {
+  global.__mongoMetrics = {
+    lastAttemptAt: null,
+    lastSuccessAt: null,
+    lastErrorAt: null,
+    lastErrorMessage: null,
+    attemptCount: 0,
+    consecutiveFailures: 0,
+  };
+}
+
 if (!process.env.MONGO_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGO_URI"')
 }
@@ -27,8 +39,7 @@ const options = {
   // Compression
   compressors: ['snappy', 'zlib'], // Enable compression for better performance
   
-  // Buffer Settings
-  bufferMaxEntries: 0, // Disable mongoose buffering in production
+  // NOTE: bufferMaxEntries removed (deprecated in modern drivers); Mongoose buffering is controlled via mongoose.set('bufferCommands', false) if needed
   
   // Networking
   family: 4, // Prefer IPv4 to avoid IPv6 DNS issues in some platforms
@@ -52,12 +63,20 @@ async function dbConnect() {
       let lastError;
       for (let i = 0; i < delays.length; i++) {
         try {
+          global.__mongoMetrics.attemptCount += 1;
+          global.__mongoMetrics.lastAttemptAt = new Date().toISOString();
           const m = await mongoose.connect(uri, options);
           console.log('📊 MongoDB connected successfully');
+          global.__mongoMetrics.lastSuccessAt = new Date().toISOString();
+          global.__mongoMetrics.consecutiveFailures = 0;
+          global.__mongoMetrics.lastErrorMessage = null;
           return m;
         } catch (err) {
           lastError = err;
           console.error(`❌ MongoDB connection attempt ${i + 1} failed:`, err?.message || err);
+          global.__mongoMetrics.lastErrorAt = new Date().toISOString();
+          global.__mongoMetrics.lastErrorMessage = err?.message || String(err);
+          global.__mongoMetrics.consecutiveFailures += 1;
           // Only wait if there is another attempt
           if (i < delays.length - 1) {
             await new Promise(res => setTimeout(res, delays[i]));

@@ -50,7 +50,7 @@ export default function InteractiveBackground() {
   return (
     <div 
       ref={backgroundRef}
-      className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+      className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-[0]"
       style={{
         '--mouse-x': '50%',
         '--mouse-y': '50%'
