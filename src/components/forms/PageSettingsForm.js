@@ -91,7 +91,7 @@ export default function PageSettingsForm({ page, user }) {
       <SectionBox>
         <form onSubmit={handleSubmit}>
           <div
-            className={`py-4 -m-4 min-h-[300px] flex justify-center items-center bg-cover bg-center ${backgroundClasses}`}
+            className={`py-1 -m-4 min-h-[300px] flex justify-center items-center bg-cover bg-center ${backgroundClasses}`}
             style={backgroundStyle}
           >
             <div>

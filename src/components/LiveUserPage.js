@@ -175,7 +175,7 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* User Info */}
-          <h2 className="text-3xl font-semibold text-center mb-1 flex items-center justify-center gap-2">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-1 flex items-center justify-center gap-2 leading-snug px-3">
             {page?.displayName || "@randomuser"}
             {user?.isVerified && (
               <FontAwesomeIcon
@@ -185,11 +185,13 @@ export default function LiveUserPage({ initialData, uri }) {
               />
             )}
           </h2>
-          <h3 className="text-md flex gap-2 justify-center items-center text-white/70 mb-2">
+          <h3 className="text-sm sm:text-md flex gap-2 justify-center items-center text-white/70 mb-1 px-3">
             <FontAwesomeIcon icon={faLocationDot} className="h-4" />
             <span>{page?.location || "Unknown location"}</span>
           </h3>
-          <p className="text-center mb-6 px-8 max-w-md mx-auto">{page?.bio || "Bio..."}</p>
+          <p className="text-center mb-5 px-4 sm:px-8 max-w-md mx-auto text-sm sm:text-base leading-relaxed break-words">
+            {page?.bio || "Bio..."}
+          </p>
 
           {/* Social Buttons */}
           <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 flex-wrap">
@@ -240,12 +242,12 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* Footer */}
-          <div className="relative flex justify-center mt-12">
+          <div className="relative flex justify-center mt-10 sm:mt-12 px-4">
             <a
               href="https://merolink.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4 text-sm sm:text-base"
             >
               <div className="bg-yellow-400 text-blue-700 p-2 rounded-full shadow-md">
                 <FontAwesomeIcon icon={faMagic} className="w-4 h-4" />

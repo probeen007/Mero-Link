@@ -155,14 +155,22 @@ input#navCb:checked ~ .backdrop {
 .theme-neon::after {
   content: "";
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
+  width: 220%;
+  height: 220%;
+  top: -60%;
+  left: -60%;
   background: repeating-linear-gradient(45deg, #00fff7, #00fff7 2px, transparent 2px, transparent 10px);
   animation: neonMove 10s linear infinite;
   z-index: 0;
   opacity: 0.3;
+}
+@media (max-width: 640px) {
+  .theme-neon::after {
+    width: 260%;
+    height: 260%;
+    top: -80%;
+    left: -80%;
+  }
 }
 @keyframes neonMove {
   0% { transform: rotate(0deg); }
