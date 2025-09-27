@@ -175,23 +175,39 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* User Info */}
-          <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-1 flex items-center justify-center gap-2 leading-snug px-3">
-            {page?.displayName || "@randomuser"}
-            {user?.isVerified && (
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                className="w-6 h-6 text-blue-500 hover:text-blue-600 transition-colors cursor-help"
-                title="Verified User"
-              />
-            )}
-          </h2>
-          <h3 className="text-sm sm:text-md flex gap-2 justify-center items-center text-white/70 mb-1 px-3">
-            <FontAwesomeIcon icon={faLocationDot} className="h-4" />
-            <span>{page?.location || "Unknown location"}</span>
-          </h3>
-          <p className="text-center mb-5 px-4 sm:px-8 max-w-md mx-auto text-sm sm:text-base leading-relaxed break-words">
-            {page?.bio || "Bio..."}
-          </p>
+          <div className="mt-1 px-3 flex flex-col items-center">
+            {/* Display Name + Verified */}
+            <div className="w-full flex items-center justify-center max-w-xs sm:max-w-md">
+              <h1
+                className="flex-1 text-center text-[1.45rem] sm:text-3xl font-semibold leading-tight truncate select-text"
+                title={page?.displayName || '@randomuser'}
+              >
+                {page?.displayName || '@randomuser'}
+              </h1>
+              {user?.isVerified && (
+                <span
+                  className="ml-2 inline-flex items-center justify-center shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white ring-2 ring-offset-2 ring-offset-gray-900 ring-blue-400 shadow-md shadow-blue-500/30 animate-in fade-in zoom-in duration-300"
+                  title="Verified User"
+                  aria-label="Verified user"
+                >
+                  <FontAwesomeIcon icon={faCheckCircle} className="w-4 h-4 drop-shadow" />
+                </span>
+              )}
+            </div>
+
+            {/* Location */}
+            <div className="mt-1 flex items-center gap-1.5 text-[0.72rem] sm:text-sm text-white/70">
+              <FontAwesomeIcon icon={faLocationDot} className="h-3 w-3 opacity-80" />
+              <span className="truncate max-w-[220px] sm:max-w-none" title={page?.location || 'Unknown location'}>
+                {page?.location || 'Unknown location'}
+              </span>
+            </div>
+
+            {/* Bio */}
+            <p className="mt-2 text-center px-4 sm:px-8 max-w-md mx-auto text-[0.78rem] sm:text-base leading-relaxed text-white/85 break-words">
+              {page?.bio || 'Bio...'}
+            </p>
+          </div>
 
           {/* Social Buttons */}
           <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 flex-wrap">
