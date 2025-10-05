@@ -12,10 +12,13 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function PageSettingsForm({ page, user }) {
-  const [bgType, setBgType] = useState(page.bgType);
+  // Normalize legacy state: if bgType was 'adapt', treat it as color with adaptBackground=true
+  const initialBgType = page.bgType === 'adapt' ? 'color' : page.bgType;
+  const initialAdapt = (page.adaptBackground || false) || page.bgType === 'adapt';
+  const [bgType, setBgType] = useState(initialBgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
   const [bgImage, setBgImage] = useState(page.bgImage);
-  const [adaptBackground, setAdaptBackground] = useState(page.adaptBackground || false);
+  const [adaptBackground, setAdaptBackground] = useState(initialAdapt);
   const [avatar, setAvatar] = useState(user?.image);
   const [uploadingAvatar, setUploadingAvatar] = useState(false); // Fixed this line
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -86,6 +89,8 @@ export default function PageSettingsForm({ page, user }) {
     ? `${currentTheme.bgClass} relative` 
     : '';
 
+  const selectedBgOption = adaptBackground ? 'adapt' : bgType;
+
   return (
     <div>
       <SectionBox>
@@ -96,7 +101,7 @@ export default function PageSettingsForm({ page, user }) {
           >
             <div>
               <RadioTogglers
-                defaultValue={adaptBackground ? 'adapt' : (page.bgType === 'adapt' ? 'color' : page.bgType)}
+                value={selectedBgOption}
                 options={[
                   { value: 'color', icon: faPalette, label: 'Color' },
                   { value: 'image', icon: faImage, label: 'Image' },
