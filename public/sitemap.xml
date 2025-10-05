@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
-    <loc>https://merolink.me/</loc>
+    <loc>https://merolink.it.com/</loc>
     <lastmod>2024-09-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -14,28 +14,28 @@
   </url>
 
   <url>
-    <loc>https://merolink.me/about</loc>
+    <loc>https://merolink.it.com/about</loc>
     <lastmod>2024-09-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://merolink.me/contact</loc>
+    <loc>https://merolink.it.com/contact</loc>
     <lastmod>2024-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://merolink.me/pricing</loc>
+    <loc>https://merolink.it.com/pricing</loc>
     <lastmod>2024-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://merolink.me/account</loc>
+    <loc>https://merolink.it.com/account</loc>
     <lastmod>2024-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
