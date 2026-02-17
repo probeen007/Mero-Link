@@ -1,10 +1,10 @@
 import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION || 'us-east-1',
+  region: process.env.AWS_REGION || 'eu-north-1',
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || process.env.S3_SECRET_ACCESS_KEY,
   },
 });
 
@@ -22,7 +22,7 @@ export function extractFilenameFromUrl(url) {
     const filename = pathname.substring(1);
     
     // Make sure it's actually an S3 URL from our bucket
-    const bucketName = process.env.S3_BUCKET_NAME;
+    const bucketName = process.env.S3_BUCKET_NAME || process.env.BUCKET_NAME;
     if (urlObj.hostname === `${bucketName}.s3.amazonaws.com` || 
         urlObj.hostname.includes(`${bucketName}.s3.`)) {
       return filename;
@@ -40,7 +40,7 @@ export async function deleteFromS3(filename) {
   if (!filename) return false;
   
   try {
-    const bucketName = process.env.S3_BUCKET_NAME;
+    const bucketName = process.env.S3_BUCKET_NAME || process.env.BUCKET_NAME;
     
     console.log(`🗑️ Deleting file from S3: ${filename}`);
     

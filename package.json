@@ -12,7 +12,8 @@
     "type-check": "tsc --noEmit",
     "optimize": "npm run lint:fix && npm run build",
     "production": "NODE_ENV=production npm run build && npm start",
-    "test:build": "npm run build && npm run start & sleep 10 && curl -f http://localhost:3000/api/health && killall node"
+    "test:build": "npm run build && npm run start & sleep 10 && curl -f http://localhost:3000/api/health && killall node",
+    "fix-s3": "node scripts/fix-s3-permissions.js"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.5.0",

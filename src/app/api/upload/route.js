@@ -60,10 +60,10 @@ export async function POST(req) {
     
     // Initialize S3 client with proper error handling
     const s3Client = new S3Client({
-      region: process.env.AWS_REGION || 'us-east-1',
+      region: process.env.AWS_REGION || 'eu-north-1',
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.S3_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || process.env.S3_SECRET_ACCESS_KEY,
       },
     });
 
@@ -83,7 +83,7 @@ export async function POST(req) {
     const randomId = uniqid();
     const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const newFilename = `${timestamp}-${randomId}.${ext}`;
-    const bucketName = process.env.S3_BUCKET_NAME;
+    const bucketName = process.env.S3_BUCKET_NAME || process.env.BUCKET_NAME;
 
     if (!bucketName) {
       throw new Error('S3_BUCKET_NAME environment variable is not set');
@@ -98,9 +98,9 @@ export async function POST(req) {
       Key: newFilename,
       Body: buffer,
       ContentType: file.type,
+      ACL: 'public-read', // Make uploaded files publicly accessible
       CacheControl: 'max-age=31536000', // 1 year cache
       ContentDisposition: 'inline',
-      // Remove ACL for security - use bucket policy instead
       Metadata: {
         'uploaded-by': session.user.email,
         'upload-timestamp': new Date().toISOString(),
@@ -109,7 +109,7 @@ export async function POST(req) {
 
     await s3Client.send(new PutObjectCommand(uploadParams));
 
-    const link = `https://${bucketName}.s3.${process.env.AWS_REGION || 'us-east-1'}.amazonaws.com/${newFilename}`;
+    const link = `https://${bucketName}.s3.${process.env.AWS_REGION || 'eu-north-1'}.amazonaws.com/${newFilename}`;
     console.log('✅ New file uploaded:', link);
 
     return Response.json({ 
