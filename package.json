@@ -29,7 +29,7 @@
     "date-fns": "^4.1.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.6.3",
-    "next": "^15.5.4",
+    "next": "15.5.9",
     "next-auth": "^4.24.7",
     "object-copy": "^1.0.0",
     "plain-object-clone": "^2.0.0",
