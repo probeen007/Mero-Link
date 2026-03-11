@@ -5,9 +5,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const awsRegion = process.env.AWS_REGION || 'us-east-1';
-const s3Bucket = process.env.S3_BUCKET_NAME || 'mero-link';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -34,11 +31,15 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
+      // Allow all HTTPS image sources for user-provided URLs
+      { protocol: 'https', hostname: '**' },
+      // Common image hosting services
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
       { protocol: 'https', hostname: 'i.ibb.co' },
-      // Explicit S3 endpoints that we generate
-      { protocol: 'https', hostname: `${s3Bucket}.s3.${awsRegion}.amazonaws.com` },
-      { protocol: 'https', hostname: `${s3Bucket}.s3.amazonaws.com` },
+      { protocol: 'https', hostname: 'imgur.com' },
+      { protocol: 'https', hostname: 'i.imgur.com' },
+      { protocol: 'https', hostname: 'cdn.discordapp.com' },
+      { protocol: 'https', hostname: 'media.discordapp.net' },
     ],
     minimumCacheTTL: 31536000,
   },

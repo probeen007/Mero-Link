@@ -2,9 +2,7 @@
 import { savePageLinks } from "@/actions/pageActions";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import SectionBox from "@/components/layout/SectionBox";
-import { upload } from "@/libs/upload";
-import { deleteFromS3ByUrl } from "@/libs/s3Delete";
-import { faCloudArrowUp, faGripLines, faLink, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faGripLines, faLink, faPlus, faSave, faTrash, faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useState, useRef } from "react";
@@ -30,23 +28,6 @@ export default function PageLinksForm({ page, user }) {
       }];
     });
   }
-  function handleUpload(ev, linkKeyForUpload) {
-    // Find the current icon URL for the link to delete it
-    const currentLink = links.find(link => link.key === linkKeyForUpload);
-    const oldIconUrl = currentLink?.icon || null;
-    
-    upload(ev, uploadedImageUrl => {
-      setLinks(prevLinks => {
-        const newLinks = [...prevLinks];
-        newLinks.forEach((link, index) => {
-          if (link.key === linkKeyForUpload) {
-            link.icon = uploadedImageUrl;
-          }
-        });
-        return newLinks;
-      });
-    }, oldIconUrl); // Pass old icon URL for deletion
-  }
   function handleLinkChange(keyOfLinkToChange, prop, ev) {
     setLinks(prev => {
       const newLinks = [...prev];
@@ -59,25 +40,7 @@ export default function PageLinksForm({ page, user }) {
     })
   }
   function removeLink(linkKeyToRemove) {
-    // Find the link to delete its icon from S3
-    const linkToRemove = links.find(l => l.key === linkKeyToRemove);
-    
-    setLinks(prevLinks => {
-      const filteredLinks = [...prevLinks].filter(l => l.key !== linkKeyToRemove);
-      
-      // Delete the icon from S3 if it exists
-      if (linkToRemove?.icon && linkToRemove.icon.trim() !== '') {
-        deleteFromS3ByUrl(linkToRemove.icon).then((success) => {
-          if (success) {
-            console.log('🗑️ Link icon deleted from S3:', linkToRemove.icon);
-          }
-        }).catch((error) => {
-          console.error('❌ Failed to delete link icon from S3:', error);
-        });
-      }
-      
-      return filteredLinks;
-    });
+    setLinks(prevLinks => [...prevLinks].filter(l => l.key !== linkKeyToRemove));
   }
   return (
     <SectionBox>
@@ -115,15 +78,6 @@ export default function PageLinksForm({ page, user }) {
                     )}
                   </div>
                   <div>
-                    <input
-                      onChange={ev => handleUpload(ev, l.key)}
-                      id={'icon' + l.key}
-                      type="file"
-                      className="hidden" />
-                    <label htmlFor={'icon' + l.key} className="border mt-2 p-2 flex items-center gap-1 text-gray-600 cursor-pointer mb-2 justify-center">
-                      <FontAwesomeIcon icon={faCloudArrowUp} />
-                      <span>Change icon</span>
-                    </label>
                     <button
                       onClick={() => removeLink(l.key)}
                       type="button" className="w-full bg-red-300 py-2 px-3 mb-2 h-full flex gap-2 items-center justify-center">
@@ -133,6 +87,11 @@ export default function PageLinksForm({ page, user }) {
                   </div>
                 </div>
                 <div className="grow">
+                  <label className="input-label">Icon URL:</label>
+                  <input
+                    value={l.icon}
+                    onChange={ev => handleLinkChange(l.key, 'icon', ev)}
+                    type="url" placeholder="https://example.com/icon.png (optional)" />
                   <label className="input-label">Title:</label>
                   <input
                     value={l.title}

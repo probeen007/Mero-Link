@@ -161,7 +161,7 @@ export default function LiveUserPage({ initialData, uri }) {
           {/* Avatar */}
           <div className={clsx("aspect-square mx-auto relative -top-16 -mb-12 shadow-lg", getShapeClasses(theme?.profileShape, true), theme.imageClass)}>
             <Image
-              src={user?.image || "/default-avatar.png"}
+              src={user?.image || "/icon-192x192.png"}
               alt="avatar"
               width={250}
               height={250}

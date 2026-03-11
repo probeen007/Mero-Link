@@ -3,9 +3,8 @@ import { savePageSettings } from "@/actions/pageActions";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import RadioTogglers from "@/components/formItems/radioTogglers";
 import SectionBox from "@/components/layout/SectionBox";
-import { upload } from "@/libs/upload";
 import { themes } from "@/libs/themes";
-import { faCloudArrowUp, faImage, faPalette, faSave, faMagic } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faPalette, faSave, faMagic, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -20,8 +19,6 @@ export default function PageSettingsForm({ page, user }) {
   const [bgImage, setBgImage] = useState(page.bgImage);
   const [adaptBackground, setAdaptBackground] = useState(initialAdapt);
   const [avatar, setAvatar] = useState(user?.image);
-  const [uploadingAvatar, setUploadingAvatar] = useState(false); // Fixed this line
-  const [uploadingCover, setUploadingCover] = useState(false);
   const [saving, setSaving] = useState(false);
 
   // Update currentTheme when page theme changes (for real-time theme switching)
@@ -51,30 +48,6 @@ export default function PageSettingsForm({ page, user }) {
     const formData = new FormData(ev.target);
     await saveBaseSettings(formData);
   };
-
-  async function handleCoverImageChange(ev) {
-    try {
-      setUploadingCover(true);
-      // Pass current bgImage as old file to delete
-      await upload(ev, link => setBgImage(link), bgImage);
-    } catch (error) {
-      toast.error('Failed to upload cover image.');
-    } finally {
-      setUploadingCover(false);
-    }
-  }
-
-  async function handleAvatarImageChange(ev) {
-    try {
-      setUploadingAvatar(true);
-      // Pass current avatar as old file to delete
-      await upload(ev, link => setAvatar(link), avatar);
-    } catch (error) {
-      toast.error('Failed to upload avatar.');
-    } finally {
-      setUploadingAvatar(false);
-    }
-  }
 
   // Get current theme for adapt background - use theme name directly as key
   const currentTheme = themes[page.theme] || themes["default"];
@@ -133,15 +106,21 @@ export default function PageSettingsForm({ page, user }) {
                 </div>
               )}
               {!adaptBackground && bgType === 'image' && (
-                <div className="flex justify-center">
-                  <label className="bg-white shadow px-4 py-2 mt-2 flex gap-2">
-                    <input type="hidden" name="bgImage" value={bgImage} />
-                    <input type="file" onChange={handleCoverImageChange} className="hidden" />
-                    <div className="flex gap-2 items-center cursor-pointer">
-                      <FontAwesomeIcon icon={faCloudArrowUp} className="text-gray-700" />
-                      <span>{uploadingCover ? 'Uploading...' : 'Change image'}</span>
-                    </div>
-                  </label>
+                <div className="bg-gray-200 shadow text-gray-700 p-3 mt-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2 text-sm font-medium">
+                      <FontAwesomeIcon icon={faLink} className="text-gray-600" />
+                      <span>Background Image URL:</span>
+                    </label>
+                    <input
+                      type="url"
+                      name="bgImage"
+                      value={bgImage}
+                      onChange={ev => setBgImage(ev.target.value)}
+                      placeholder="https://example.com/image.jpg"
+                      className="px-3 py-2 border border-gray-300 rounded text-sm w-full"
+                    />
+                  </div>
                 </div>
               )}
               {adaptBackground && (
@@ -159,28 +138,24 @@ export default function PageSettingsForm({ page, user }) {
               <div className="overflow-hidden h-full rounded-full border-4 border-white shadow shadow-black/50">
                 <Image
                   className="w-full h-full object-cover"
-                  src={avatar}
+                  src={avatar || '/icon-192x192.png'}
                   alt={'avatar'}
                   width={128}
                   height={128}
                 />
               </div>
-              <label
-                htmlFor="avatarIn"
-                className="absolute bottom-0 -right-2 bg-white p-2 rounded-full shadow shadow-black/50 aspect-square flex items-center cursor-pointer"
-              >
-                <FontAwesomeIcon size={'xl'} icon={faCloudArrowUp} />
-              </label>
-              <input
-                onChange={handleAvatarImageChange}
-                id="avatarIn"
-                type="file"
-                className="hidden"
-              />
-              <input type="hidden" name="avatar" value={avatar} />
             </div>
           </div>
           <div className="p-0">
+            <label className="input-label" htmlFor="avatarIn">Avatar Image URL</label>
+            <input
+              type="url"
+              id="avatarIn"
+              name="avatar"
+              value={avatar}
+              onChange={ev => setAvatar(ev.target.value)}
+              placeholder="https://example.com/avatar.jpg"
+            />
             <label className="input-label" htmlFor="nameIn">Display name</label>
             <input
               type="text"

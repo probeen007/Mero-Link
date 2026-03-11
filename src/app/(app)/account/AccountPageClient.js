@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faEnvelope, faInfoCircle, faCog, faUser, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faEnvelope, faCog, faUser, faLink } from "@fortawesome/free-solid-svg-icons";
 
 import ThemeSelectorWrapper from "@/components/forms/ThemeSelectorWrapper";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
