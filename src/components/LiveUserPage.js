@@ -260,7 +260,7 @@ export default function LiveUserPage({ initialData, uri }) {
           {/* Footer */}
           <div className="relative flex justify-center mt-10 sm:mt-12 px-4">
             <a
-              href="https://merolink.me"
+              href="https://merolink.it.com"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4 text-sm sm:text-base"

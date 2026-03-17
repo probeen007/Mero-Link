@@ -21,13 +21,6 @@ export const ChartSkeleton = () => (
   </div>
 );
 
-export const QRSkeleton = () => (
-  <div className="animate-pulse">
-    <div className="h-6 bg-gray-200 rounded mb-4 w-1/2"></div>
-    <div className="w-64 h-64 bg-gray-200 rounded mx-auto"></div>
-  </div>
-);
-
 // Lazy loaded components with loading states
 export const LazyPageLinksForm = dynamic(
   () => import('@/components/forms/PageLinksForm'),
@@ -65,14 +58,6 @@ export const LazyChart = dynamic(
   () => import('@/components/Chart'),
   {
     loading: () => <ChartSkeleton />,
-    ssr: false
-  }
-);
-
-export const LazyCustomQRClient = dynamic(
-  () => import('@/components/CustomQRClient'),
-  {
-    loading: () => <QRSkeleton />,
     ssr: false
   }
 );

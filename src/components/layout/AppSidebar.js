@@ -1,7 +1,7 @@
 'use client';
 import LogoutButton from "@/components/buttons/LogoutButton";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
-import { faArrowLeft, faChartLine, faQrcode, faGlobe, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faChartLine, faGlobe, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -56,12 +56,6 @@ export default function AppSidebar() {
           icon={faChartLine}
           label="Analytics"
           isActive={path === '/analytics'}
-        />
-        <NavItem
-          href="/custom-qr"
-          icon={faQrcode}
-          label="Custom QR"
-          isActive={path === '/custom-qr'}
         />
       </div>
 

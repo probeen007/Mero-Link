@@ -53,7 +53,7 @@ export async function generateMetadata({ params }) {
         title: `${displayName} - Mero Link`,
         description: bio,
         images: avatar ? [{ url: avatar, width: 400, height: 400 }] : [],
-        url: `https://merolink.me/${uri}`,
+        url: `https://merolink.it.com/${uri}`,
         type: "profile",
         siteName: "Mero Link",
       },
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }) {
         follow: true,
       },
       alternates: {
-        canonical: `https://merolink.me/${uri}`,
+        canonical: `https://merolink.it.com/${uri}`,
       },
     };
 

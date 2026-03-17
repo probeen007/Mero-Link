@@ -1,4 +1,4 @@
-﻿// src/libs/themes.js
+// src/libs/themes.js
 // Theme definitions using your CSS classes
 export const themes = {
     default: {

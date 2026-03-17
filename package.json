@@ -27,6 +27,7 @@
     "clone-deep": "^4.0.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "html2canvas": "^1.4.1",
     "mongodb": "^6.9.0",
     "mongoose": "^8.6.3",
     "next": "15.5.9",

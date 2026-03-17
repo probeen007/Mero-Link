@@ -1111,15 +1111,14 @@ input#navCb:checked ~ .backdrop {
    THEME 16 - Nepal Heritage
    ======================= */
 .theme-nepal {
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(220, 20, 60, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(0, 56, 147, 0.15) 0%, transparent 50%),
-    linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #e94560 100%);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(220, 20, 60, 0.2) 0%, transparent 52%),
+    radial-gradient(circle at 15% 85%, rgba(0, 56, 147, 0.2) 0%, transparent 52%),
+    linear-gradient(135deg, #0b1731 0%, #12305c 45%, #1d3f73 70%, #b91c3a 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Elegant geometric patterns */
 .theme-nepal::before {
   content: '';
   position: absolute;
@@ -1127,45 +1126,40 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(45deg, transparent 30%, rgba(220, 20, 60, 0.05) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(0, 56, 147, 0.05) 50%, transparent 70%);
-  background-size: 80px 80px, 60px 60px;
-  animation: nepalPattern 12s linear infinite;
-  opacity: 0.8;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 1px,
+      transparent 1px 18px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.04) 0 1px,
+      transparent 1px 22px
+    );
+  animation: nepalPattern 18s linear infinite;
+  opacity: 0.55;
 }
 
-/* Subtle traditional motifs */
 .theme-nepal::after {
   content: '';
   position: absolute;
-  top: 15%;
-  right: 10%;
-  width: 100px;
-  height: 100px;
-  background: 
-    radial-gradient(circle, rgba(255, 215, 0, 0.3) 2px, transparent 2px),
-    radial-gradient(circle, rgba(220, 20, 60, 0.2) 1px, transparent 1px);
-  background-size: 25px 25px, 15px 15px;
-  background-position: 0 0, 12px 12px;
-  animation: nepalMotif 8s ease-in-out infinite;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 35%),
+    radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.15), transparent 30%);
+  animation: nepalMotif 9s ease-in-out infinite;
   opacity: 0.6;
 }
 
 @keyframes nepalPattern {
-  0% { transform: translateX(0px) translateY(0px); }
-  100% { transform: translateX(-80px) translateY(-60px); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-40px, -40px, 0); }
 }
 
 @keyframes nepalMotif {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1);
-    opacity: 0.6;
-  }
-  50% { 
-    transform: rotate(180deg) scale(1.1);
-    opacity: 0.8;
-  }
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.8; }
 }
 
 .btn-nepal {
@@ -1245,134 +1239,58 @@ input#navCb:checked ~ .backdrop {
   box-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
 }
 
-.card-nepal {
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 247, 0, 0.6);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3);
-}
-
-.img-nepal {
-  border: 4px solid #fff700;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(255, 247, 0, 0.5);
-  position: relative;
-}
-
-.img-nepal::after {
-  content: '🇳🇵';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  font-size: 1.2rem;
-  background: white;
-  border-radius: 50%;
-  padding: 2px;
-}
-
 /* =======================
    THEME 17 - Minecraft World
    ======================= */
 .theme-minecraft {
-  background: 
-    /* Grass blocks pattern */
-    linear-gradient(90deg, #4a7c59 0%, #4a7c59 25%, #5d8a69 25%, #5d8a69 50%, #4a7c59 50%, #4a7c59 75%, #6b9977 75%),
-    linear-gradient(0deg, #8b4513 0%, #8b4513 30%, #4a7c59 30%);
-  background-size: 32px 32px, 64px 64px;
+  background:
+    linear-gradient(0deg, #4b7a3f 0%, #4b7a3f 32%, #6b4f2a 32%, #6b4f2a 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0 2px, transparent 2px 16px);
+  background-size: 100% 100%, 16px 16px, 16px 16px;
   position: relative;
-  animation: minecraftShift 15s linear infinite;
+  overflow: hidden;
+  animation: minecraftShift 14s steps(28) infinite;
 }
 
-/* Minecraft Steve character (pixel art) */
 .theme-minecraft::before {
   content: '';
   position: absolute;
-  top: 20%;
-  right: 15%;
-  width: 32px;
-  height: 48px;
-  background: 
-    /* Head - skin color */
-    linear-gradient(0deg, #d4a574 0px, #d4a574 16px, transparent 16px),
-    /* Eyes */
-    linear-gradient(0deg, transparent 4px, #000 4px, #000 6px, transparent 6px),
-    /* Body - blue shirt */
-    linear-gradient(0deg, transparent 16px, #2c5aa0 16px, #2c5aa0 32px, transparent 32px),
-    /* Arms */
-    linear-gradient(90deg, #d4a574 0px, #d4a574 8px, transparent 8px, transparent 24px, #d4a574 24px, #d4a574 32px),
-    /* Legs - dark blue pants */
-    linear-gradient(0deg, transparent 32px, #1e3a8a 32px, #1e3a8a 48px);
-  background-position: 8px 0, 10px 0, 8px 0, 0 16px, 8px 0;
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
-  animation: minecraftSteve 3s ease-in-out infinite;
-  z-index: 3;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.06) 0 1px,
+      transparent 1px 32px
+    );
+  opacity: 0.35;
+  animation: minecraftSteve 8s linear infinite;
 }
 
-/* Floating Minecraft items */
 .theme-minecraft::after {
   content: '';
   position: absolute;
-  bottom: 25%;
-  left: 10%;
-  width: 200px;
-  height: 80px;
-  background: 
-    /* Diamond pickaxe */
-    linear-gradient(45deg, transparent 10px, #4fc3f7 10px, #4fc3f7 14px, transparent 14px),
-    linear-gradient(90deg, transparent 20px, #8b4513 20px, #8b4513 60px, transparent 60px),
-    /* Creeper head */
-    radial-gradient(circle 12px at 80px 20px, #00aa00 40%, transparent 41%),
-    /* TNT block */
-    linear-gradient(0deg, transparent 40px, #ff4444 40px, #ff4444 56px, transparent 56px) 120px 0,
-    linear-gradient(90deg, transparent 120px, #ff4444 120px, #ff4444 136px, transparent 136px) 0 40px,
-    /* Golden apple */
-    radial-gradient(circle 8px at 160px 30px, #ffd700 50%, transparent 51%);
-  background-size: 200px 80px;
-  background-repeat: no-repeat;
-  animation: minecraftItems 4s ease-in-out infinite;
-  image-rendering: pixelated;
-  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 65%, rgba(255, 255, 255, 0.09) 100%),
+    radial-gradient(circle at 75% 22%, rgba(79, 195, 247, 0.35) 0 6%, transparent 18%);
+  opacity: 0.65;
+  animation: minecraftItems 5s ease-in-out infinite;
 }
 
 @keyframes minecraftShift {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 32px 32px, 64px 64px; }
+  0% { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 0 0, 32px 0, 0 32px; }
 }
 
 @keyframes minecraftSteve {
-  0%, 100% { 
-    transform: translateY(0px) scaleX(1);
-  }
-  25% { 
-    transform: translateY(-2px) scaleX(1);
-  }
-  50% { 
-    transform: translateY(0px) scaleX(-1);
-  }
-  75% { 
-    transform: translateY(-2px) scaleX(-1);
-  }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-18px); }
 }
 
 @keyframes minecraftItems {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg);
-    opacity: 0.9;
-  }
-  25% { 
-    transform: translateY(-8px) rotate(5deg);
-    opacity: 1;
-  }
-  50% { 
-    transform: translateY(-5px) rotate(-3deg);
-    opacity: 0.95;
-  }
-  75% { 
-    transform: translateY(-10px) rotate(2deg);
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.82; }
 }
 
 .btn-minecraft {
@@ -1484,67 +1402,49 @@ input#navCb:checked ~ .backdrop {
    THEME 18 - Adventure Explorer
    ======================= */
 .theme-adventure {
-  background: 
-    radial-gradient(circle at 70% 30%, rgba(139, 69, 19, 0.4) 0%, transparent 50%),
-    linear-gradient(135deg, #1a2f1a 0%, #2c5530 20%, #3d6b3d 40%, #5a8a5a 60%, #7ba87b 80%, #a8d8a8 100%);
+  background:
+    radial-gradient(circle at 70% 25%, rgba(250, 204, 21, 0.2) 0%, transparent 40%),
+    linear-gradient(180deg, #1f3a2b 0%, #2f5d3d 42%, #4f7b4b 70%, #6f9460 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Mountain silhouette */
 .theme-adventure::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40%;
-  background: 
-    linear-gradient(30deg, transparent 30%, #2c3e2c 30.5%, #2c3e2c 40%, transparent 40.5%),
-    linear-gradient(-30deg, transparent 25%, #1a2f1a 25.5%, #1a2f1a 35%, transparent 35.5%),
-    linear-gradient(45deg, transparent 35%, #415341 35.5%, #415341 45%, transparent 45.5%);
-  background-size: 120px 100%, 100px 100%, 140px 100%;
-  background-position: 0 100%, 60px 100%, 120px 100%;
+  height: 44%;
+  background:
+    linear-gradient(20deg, transparent 34%, #1f2f24 35%, #1f2f24 58%, transparent 59%),
+    linear-gradient(-25deg, transparent 28%, #25372a 29%, #25372a 54%, transparent 55%),
+    linear-gradient(35deg, transparent 36%, #304535 37%, #304535 64%, transparent 65%);
+  background-size: 150px 100%, 130px 100%, 170px 100%;
+  background-position: 0 100%, 75px 100%, 145px 100%;
   background-repeat: repeat-x;
-  z-index: 1;
+  animation: adventureDrift 14s ease-in-out infinite;
 }
 
-/* Compass floating */
 .theme-adventure::after {
   content: '';
   position: absolute;
-  top: 20%;
-  right: 15%;
-  width: 40px;
-  height: 40px;
-  background: 
-    radial-gradient(circle, #daa520 30%, #8b4513 31%, #8b4513 35%, transparent 36%),
-    linear-gradient(0deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%),
-    linear-gradient(90deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%);
-  border: 3px solid #2f4f2f;
-  border-radius: 50%;
-  animation: adventureCompass 6s ease-in-out infinite;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 35%),
+    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.22), transparent 16%);
+  opacity: 0.55;
+  animation: adventureCompass 10s ease-in-out infinite;
+}
+
+@keyframes adventureDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-18px); }
 }
 
 @keyframes adventureCompass {
-  0%, 100% { 
-    transform: rotate(0deg) translateY(0px);
-    opacity: 0.9;
-  }
-  25% { 
-    transform: rotate(90deg) translateY(-3px);
-    opacity: 1;
-  }
-  50% { 
-    transform: rotate(180deg) translateY(0px);
-    opacity: 0.9;
-  }
-  75% { 
-    transform: rotate(270deg) translateY(-3px);
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.78; }
 }
 
 .btn-adventure {
@@ -1599,15 +1499,14 @@ input#navCb:checked ~ .backdrop {
    THEME 19 - Anime Aesthetic
    ======================= */
 .theme-anime {
-  background: 
-    radial-gradient(circle at 70% 30%, rgba(147, 51, 234, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4c1d95 50%, #1e40af 75%, #0f172a 100%);
+  background:
+    radial-gradient(circle at 76% 24%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
+    radial-gradient(circle at 24% 78%, rgba(96, 165, 250, 0.24) 0%, transparent 45%),
+    linear-gradient(135deg, #181a4f 0%, #2d2b77 34%, #40229a 62%, #1f3f9d 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Anime energy waves */
 .theme-anime::before {
   content: '';
   position: absolute;
@@ -1615,54 +1514,33 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(45deg, transparent 30%, rgba(147, 51, 234, 0.1) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(59, 130, 246, 0.1) 50%, transparent 70%);
-  background-size: 100px 100px, 80px 80px;
-  animation: animeWaves 8s linear infinite;
-  opacity: 0.7;
+  background:
+    repeating-linear-gradient(60deg, transparent 0 18px, rgba(147, 51, 234, 0.11) 18px 20px),
+    repeating-linear-gradient(-60deg, transparent 0 22px, rgba(59, 130, 246, 0.09) 22px 24px);
+  animation: animeWaves 12s linear infinite;
+  opacity: 0.55;
 }
 
-/* Floating Japanese characters and symbols */
 .theme-anime::after {
   content: '';
   position: absolute;
-  top: 10%;
-  right: 15%;
-  width: 120px;
-  height: 120px;
-  background: 
-    /* Stylized characters */
-    radial-gradient(circle at 20% 20%, #8b5cf6 2px, transparent 2px),
-    radial-gradient(circle at 60% 30%, #3b82f6 1.5px, transparent 1.5px),
-    radial-gradient(circle at 80% 60%, #a855f7 1px, transparent 1px),
-    radial-gradient(circle at 40% 80%, #6366f1 1.5px, transparent 1.5px);
-  background-size: 30px 30px, 25px 25px, 20px 20px, 35px 35px;
-  animation: animeFloat 6s ease-in-out infinite;
-  opacity: 0.8;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.26) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 20% 78%, rgba(255, 255, 255, 0.2) 0 1px, transparent 1.8px);
+  background-size: 130px 130px, 100px 100px;
+  animation: animeFloat 8s ease-in-out infinite;
+  opacity: 0.7;
 }
 
 @keyframes animeWaves {
-  0% { transform: translateX(0px) translateY(0px); }
-  25% { transform: translateX(-20px) translateY(-10px); }
-  50% { transform: translateX(0px) translateY(-20px); }
-  75% { transform: translateX(20px) translateY(-10px); }
-  100% { transform: translateX(0px) translateY(0px); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-64px, 0, 0); }
 }
 
 @keyframes animeFloat {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1);
-    opacity: 0.8;
-  }
-  33% { 
-    transform: rotate(120deg) scale(1.1);
-    opacity: 1;
-  }
-  66% { 
-    transform: rotate(240deg) scale(0.9);
-    opacity: 0.9;
-  }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
 }
 
 .btn-anime {
@@ -1790,85 +1668,45 @@ input#navCb:checked ~ .backdrop {
    THEME 20 - Cartoon Fun
    ======================= */
 .theme-cartoon {
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.6) 0%, transparent 40%),
-    radial-gradient(circle at 70% 60%, rgba(254, 202, 87, 0.6) 0%, transparent 40%),
-    radial-gradient(circle at 40% 80%, rgba(72, 219, 251, 0.5) 0%, transparent 40%),
-    linear-gradient(135deg, #87ceeb 0%, #98fb98 25%, #ffb6c1 50%, #dda0dd 75%, #f0e68c 100%);
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 132, 132, 0.45) 0%, transparent 35%),
+    radial-gradient(circle at 78% 22%, rgba(96, 165, 250, 0.4) 0%, transparent 34%),
+    radial-gradient(circle at 52% 80%, rgba(250, 204, 21, 0.35) 0%, transparent 36%),
+    linear-gradient(135deg, #5ec8ff 0%, #8de6b7 35%, #f8b6d9 68%, #c6b7ff 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Cartoon clouds */
 .theme-cartoon::before {
   content: '';
   position: absolute;
-  top: 15%;
-  left: 10%;
-  width: 80px;
-  height: 40px;
-  background: 
-    radial-gradient(circle at 25% 50%, #fff 25%, transparent 26%),
-    radial-gradient(circle at 50% 50%, #fff 35%, transparent 36%),
-    radial-gradient(circle at 75% 50%, #fff 25%, transparent 26%);
-  background-size: 100% 100%;
-  animation: cartoonCloudDrift 8s ease-in-out infinite;
-  opacity: 0.9;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.75) 0 5%, transparent 8%),
+    radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.65) 0 4%, transparent 8%),
+    radial-gradient(circle at 52% 18%, rgba(255, 255, 255, 0.7) 0 3%, transparent 6%);
+  animation: cartoonCloudDrift 10s ease-in-out infinite;
+  opacity: 0.7;
 }
 
-/* Floating stars */
 .theme-cartoon::after {
   content: '';
   position: absolute;
-  top: 30%;
-  right: 15%;
-  width: 100px;
-  height: 100px;
-  background: 
-    radial-gradient(circle, #ffd700 2px, transparent 2px),
-    radial-gradient(circle, #ff69b4 1.5px, transparent 1.5px),
-    radial-gradient(circle, #87ceeb 1px, transparent 1px);
-  background-size: 20px 20px, 30px 30px, 25px 25px;
-  background-position: 0 0, 10px 10px, 15px 5px;
-  animation: cartoonSparkle 4s ease-in-out infinite;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.35) 1px, transparent 2px);
+  background-size: 26px 26px;
+  animation: cartoonSparkle 7s linear infinite;
 }
 
 @keyframes cartoonCloudDrift {
-  0%, 100% { 
-    transform: translateX(0px) translateY(0px) scale(1);
-    opacity: 0.9;
-  }
-  25% { 
-    transform: translateX(20px) translateY(-5px) scale(1.1);
-    opacity: 1;
-  }
-  50% { 
-    transform: translateX(10px) translateY(5px) scale(0.95);
-    opacity: 0.8;
-  }
-  75% { 
-    transform: translateX(-10px) translateY(-3px) scale(1.05);
-    opacity: 1;
-  }
+  0%, 100% { transform: translateX(0); opacity: 0.62; }
+  50% { transform: translateX(18px); opacity: 0.9; }
 }
 
 @keyframes cartoonSparkle {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1);
-    opacity: 0.8;
-  }
-  25% { 
-    transform: rotate(90deg) scale(1.2);
-    opacity: 1;
-  }
-  50% { 
-    transform: rotate(180deg) scale(0.9);
-    opacity: 0.9;
-  }
-  75% { 
-    transform: rotate(270deg) scale(1.1);
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
 }
 
 .btn-cartoon {
@@ -1935,19 +1773,6 @@ input#navCb:checked ~ .backdrop {
 @keyframes cartoonFloat {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
-}
-
-.img-cartoon {
-  border: 4px solid #feca57;
-  border-radius: 50%;
-  box-shadow: 0 0 25px rgba(254, 202, 87, 0.6);
-  animation: cartoonSpin 6s linear infinite;
-}
-
-@keyframes cartoonSpin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.05); }
-  100% { transform: rotate(360deg) scale(1); }
 }
 
 /* =======================
@@ -2329,15 +2154,14 @@ input#navCb:checked ~ .backdrop {
    THEME 21 - Galaxy Explorer
    ======================= */
 .theme-galaxy {
-  background: 
-    radial-gradient(circle at 30% 70%, rgba(139, 69, 234, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 70% 30%, rgba(29, 78, 216, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+  background:
+    radial-gradient(circle at 30% 70%, rgba(167, 139, 250, 0.28) 0%, transparent 45%),
+    radial-gradient(circle at 70% 30%, rgba(96, 165, 250, 0.24) 0%, transparent 42%),
+    linear-gradient(145deg, #0a0b1f 0%, #1d2050 45%, #2a2150 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Twinkling stars */
 .theme-galaxy::before {
   content: '';
   position: absolute;
@@ -2345,40 +2169,33 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
-    radial-gradient(circle, rgba(139, 69, 234, 0.7) 0.5px, transparent 0.5px),
-    radial-gradient(circle, rgba(59, 130, 246, 0.6) 0.8px, transparent 0.8px);
-  background-size: 80px 80px, 120px 120px, 60px 60px;
-  background-position: 0 0, 40px 40px, 20px 20px;
-  animation: galaxyTwinkle 12s ease-in-out infinite;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.75) 0.9px, transparent 1.8px),
+    radial-gradient(circle, rgba(167, 139, 250, 0.4) 0.7px, transparent 1.6px);
+  background-size: 84px 84px, 110px 110px;
+  background-position: 0 0, 36px 36px;
+  animation: galaxyTwinkle 14s ease-in-out infinite;
 }
 
-/* Nebula effect */
 .theme-galaxy::after {
   content: '';
   position: absolute;
-  top: 20%;
-  right: 10%;
-  width: 200px;
-  height: 150px;
-  background: 
-    radial-gradient(ellipse, rgba(139, 69, 234, 0.6) 0%, transparent 70%),
-    radial-gradient(ellipse, rgba(29, 78, 216, 0.4) 0%, transparent 60%);
-  animation: galaxyNebula 15s ease-in-out infinite;
-  opacity: 0.7;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 78% 24%, rgba(139, 92, 246, 0.33) 0%, transparent 30%),
+    radial-gradient(ellipse at 22% 76%, rgba(59, 130, 246, 0.22) 0%, transparent 28%);
+  animation: galaxyNebula 16s ease-in-out infinite;
+  opacity: 0.62;
 }
 
 @keyframes galaxyTwinkle {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  25% { opacity: 1; transform: scale(1.05); }
-  50% { opacity: 0.6; transform: scale(0.95); }
-  75% { opacity: 1; transform: scale(1.02); }
+  0%, 100% { opacity: 0.62; }
+  50% { opacity: 0.95; }
 }
 
 @keyframes galaxyNebula {
-  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
-  50% { opacity: 0.9; transform: scale(1.1) rotate(10deg); }
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.82; transform: scale(1.08); }
 }
 
 .btn-galaxy {
@@ -2447,31 +2264,29 @@ input#navCb:checked ~ .backdrop {
    THEME 22 - Ocean Depths
    ======================= */
 .theme-ocean {
-  background: 
-    radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
-    linear-gradient(180deg, #0369a1 0%, #0284c7 30%, #0891b2 60%, #0e7490 100%);
+  background:
+    radial-gradient(circle at 40% 14%, rgba(125, 211, 252, 0.25) 0%, transparent 35%),
+    radial-gradient(circle at 82% 86%, rgba(14, 116, 144, 0.25) 0%, transparent 42%),
+    linear-gradient(180deg, #03426b 0%, #03699a 38%, #0b8bb2 72%, #0e7490 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Ocean waves */
 .theme-ocean::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 200%;
-  height: 30%;
-  background: 
-    linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent),
-    linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
-  background-size: 150px 100%, 200px 100%;
-  animation: oceanWaves 8s ease-in-out infinite;
-  opacity: 0.8;
+  width: 220%;
+  height: 34%;
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(125, 211, 252, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse at 60% 100%, rgba(56, 189, 248, 0.22) 0%, transparent 58%);
+  background-size: 320px 110px, 280px 95px;
+  animation: oceanWaves 10s ease-in-out infinite;
+  opacity: 0.72;
 }
 
-/* Floating bubbles */
 .theme-ocean::after {
   content: '';
   position: absolute;
@@ -2479,27 +2294,22 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(circle, rgba(255, 255, 255, 0.6) 3px, transparent 3px),
-    radial-gradient(circle, rgba(59, 130, 246, 0.4) 2px, transparent 2px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
-  background-size: 100px 100px, 150px 150px, 80px 80px;
-  background-position: 0 0, 50px 50px, 25px 25px;
-  animation: oceanBubbles 10s linear infinite;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.28) 1.6px, transparent 2.4px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 2px);
+  background-size: 130px 130px, 86px 86px;
+  background-position: 0 0, 42px 42px;
+  animation: oceanBubbles 14s linear infinite;
 }
 
 @keyframes oceanWaves {
-  0%, 100% { transform: translateX(0px) translateY(0px); }
-  25% { transform: translateX(-50px) translateY(-5px); }
-  50% { transform: translateX(0px) translateY(5px); }
-  75% { transform: translateX(50px) translateY(-3px); }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-46px); }
 }
 
 @keyframes oceanBubbles {
-  0% { transform: translateY(100vh); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-100px); opacity: 0; }
+  0% { transform: translateY(40px); opacity: 0.35; }
+  100% { transform: translateY(-40px); opacity: 0.7; }
 }
 
 .btn-ocean {
@@ -2548,32 +2358,30 @@ input#navCb:checked ~ .backdrop {
    THEME 23 - Mystic Forest
    ======================= */
 .theme-forest {
-  background: 
-    radial-gradient(circle at 70% 30%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 30% 70%, rgba(21, 128, 61, 0.4) 0%, transparent 50%),
-    linear-gradient(135deg, #14532d 0%, #166534 30%, #15803d 60%, #16a34a 100%);
+  background:
+    radial-gradient(circle at 72% 24%, rgba(74, 222, 128, 0.2) 0%, transparent 42%),
+    radial-gradient(circle at 30% 76%, rgba(22, 163, 74, 0.23) 0%, transparent 44%),
+    linear-gradient(145deg, #0f3b26 0%, #14532d 40%, #166534 72%, #1c7a44 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Forest canopy */
 .theme-forest::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 40%;
-  background: 
-    radial-gradient(ellipse at bottom, rgba(21, 128, 61, 0.8) 0%, transparent 70%),
-    radial-gradient(ellipse at bottom, rgba(34, 197, 94, 0.6) 0%, transparent 60%);
-  background-size: 200px 100px, 150px 80px;
-  background-position: 0 100%, 100px 100%;
+  height: 42%;
+  background:
+    radial-gradient(ellipse at bottom, rgba(21, 128, 61, 0.7) 0%, transparent 68%),
+    radial-gradient(ellipse at bottom, rgba(74, 222, 128, 0.32) 0%, transparent 62%);
+  background-size: 220px 110px, 160px 90px;
+  background-position: 0 100%, 90px 100%;
   background-repeat: repeat-x;
-  animation: forestSway 12s ease-in-out infinite;
+  animation: forestSway 14s ease-in-out infinite;
 }
 
-/* Floating leaves */
 .theme-forest::after {
   content: '';
   position: absolute;
@@ -2581,25 +2389,23 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 70%),
-    radial-gradient(ellipse, rgba(101, 163, 13, 0.5) 0%, transparent 60%);
-  background-size: 8px 12px, 6px 10px;
-  background-position: 0 0, 50px 30px;
-  animation: forestLeaves 20s linear infinite;
-  opacity: 0.7;
+  background-image:
+    radial-gradient(ellipse, rgba(187, 247, 208, 0.25) 0%, transparent 72%),
+    radial-gradient(ellipse, rgba(134, 239, 172, 0.18) 0%, transparent 65%);
+  background-size: 12px 16px, 8px 12px;
+  background-position: 0 0, 42px 28px;
+  animation: forestLeaves 24s linear infinite;
+  opacity: 0.55;
 }
 
 @keyframes forestSway {
-  0%, 100% { transform: translateX(0px) scaleY(1); }
-  25% { transform: translateX(10px) scaleY(1.02); }
-  50% { transform: translateX(-5px) scaleY(0.98); }
-  75% { transform: translateX(5px) scaleY(1.01); }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
 }
 
 @keyframes forestLeaves {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(100vh) rotate(360deg); }
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(45px) rotate(8deg); }
 }
 
 .btn-forest {
@@ -2648,53 +2454,54 @@ input#navCb:checked ~ .backdrop {
    THEME 24 - Ancient Egypt
    ======================= */
 .theme-egyptian {
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(217, 119, 6, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #78350f 0%, #92400e 30%, #d97706 60%, #f59e0b 100%);
+  background:
+    radial-gradient(circle at 78% 18%, rgba(251, 191, 36, 0.32) 0%, transparent 44%),
+    radial-gradient(circle at 18% 82%, rgba(180, 83, 9, 0.24) 0%, transparent 44%),
+    linear-gradient(140deg, #5b2a09 0%, #7c3f10 36%, #b4661b 72%, #eab14a 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Pyramid silhouette */
 .theme-egyptian::before {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 20%;
+  left: 16%;
   width: 0;
   height: 0;
-  border-left: 80px solid transparent;
-  border-right: 80px solid transparent;
-  border-bottom: 120px solid rgba(120, 53, 15, 0.6);
-  animation: egyptianPyramid 8s ease-in-out infinite;
+  border-left: 92px solid transparent;
+  border-right: 92px solid transparent;
+  border-bottom: 130px solid rgba(92, 42, 9, 0.55);
+  animation: egyptianPyramid 10s ease-in-out infinite;
 }
 
-/* Hieroglyphic patterns */
 .theme-egyptian::after {
   content: '';
   position: absolute;
-  top: 15%;
-  right: 10%;
-  width: 100px;
-  height: 200px;
-  background: 
-    linear-gradient(0deg, transparent 0%, rgba(251, 191, 36, 0.3) 20%, transparent 40%),
-    linear-gradient(0deg, transparent 50%, rgba(217, 119, 6, 0.3) 70%, transparent 90%);
-  background-size: 20px 40px;
+  top: 12%;
+  right: 8%;
+  width: 120px;
+  height: 220px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 8px,
+      rgba(251, 191, 36, 0.2) 8px 10px,
+      transparent 10px 18px
+    );
   background-repeat: repeat-y;
-  animation: egyptianHieroglyphs 10s ease-in-out infinite;
-  opacity: 0.8;
+  animation: egyptianHieroglyphs 12s ease-in-out infinite;
+  opacity: 0.65;
 }
 
 @keyframes egyptianPyramid {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.72; }
 }
 
 @keyframes egyptianHieroglyphs {
-  0%, 100% { transform: translateY(0px); opacity: 0.8; }
-  50% { transform: translateY(-10px); opacity: 1; }
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-8px); opacity: 0.85; }
 }
 
 .btn-egyptian {
@@ -2744,59 +2551,48 @@ input#navCb:checked ~ .backdrop {
    THEME 25 - Sakura Blossom
    ======================= */
 .theme-sakura {
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(251, 113, 133, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(244, 114, 182, 0.2) 0%, transparent 50%),
-    linear-gradient(135deg, #fce7f3 0%, #f3e8ff 30%, #e0e7ff 60%, #dbeafe 100%);
+  background:
+    radial-gradient(circle at 28% 18%, rgba(251, 113, 133, 0.28) 0%, transparent 46%),
+    radial-gradient(circle at 74% 82%, rgba(244, 114, 182, 0.2) 0%, transparent 46%),
+    linear-gradient(135deg, #f7d8e9 0%, #eddcf8 36%, #e0e7ff 70%, #d9ebff 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Falling cherry blossoms */
 .theme-sakura::before {
   content: '';
   position: absolute;
-  top: -20px;
+  top: -10px;
   left: 0;
   width: 100%;
-  height: 120%;
-  background-image: 
-    radial-gradient(ellipse, rgba(251, 113, 133, 0.8) 0%, transparent 70%),
-    radial-gradient(ellipse, rgba(244, 114, 182, 0.6) 0%, transparent 60%),
-    radial-gradient(ellipse, rgba(255, 255, 255, 0.9) 0%, transparent 80%);
-  background-size: 8px 12px, 6px 10px, 4px 6px;
-  background-position: 0 0, 30px 20px, 60px 10px;
-  animation: sakuraFall 15s linear infinite;
-  opacity: 0.9;
+  height: 110%;
+  background-image:
+    radial-gradient(ellipse, rgba(251, 113, 133, 0.62) 0%, transparent 70%),
+    radial-gradient(ellipse, rgba(244, 114, 182, 0.48) 0%, transparent 65%);
+  background-size: 10px 14px, 7px 11px;
+  background-position: 0 0, 34px 18px;
+  animation: sakuraFall 18s linear infinite;
+  opacity: 0.78;
 }
 
-/* Sakura tree branch */
 .theme-sakura::after {
   content: '';
   position: absolute;
-  top: 10%;
-  left: -5%;
-  width: 300px;
-  height: 150px;
-  background: 
-    linear-gradient(45deg, rgba(101, 67, 33, 0.6) 0%, transparent 20%),
-    radial-gradient(circle at 20% 20%, rgba(251, 113, 133, 0.8) 0%, transparent 50%),
-    radial-gradient(circle at 50% 40%, rgba(244, 114, 182, 0.7) 0%, transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(251, 113, 133, 0.6) 0%, transparent 45%);
-  background-size: 100px 20px, 15px 15px, 12px 12px, 10px 10px;
-  background-position: 0 50%, 50px 30px, 100px 20px, 150px 40px;
-  background-repeat: no-repeat;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 35%),
+    radial-gradient(circle at 16% 22%, rgba(255, 182, 193, 0.28), transparent 18%);
   animation: sakuraBranch 12s ease-in-out infinite;
 }
 
 @keyframes sakuraFall {
-  0% { transform: translateY(-100px) rotate(0deg); }
-  100% { transform: translateY(calc(100vh + 100px)) rotate(360deg); }
+  0% { transform: translateY(-20px); }
+  100% { transform: translateY(40px); }
 }
 
 @keyframes sakuraBranch {
-  0%, 100% { transform: translateX(0px) rotate(0deg); }
-  50% { transform: translateX(10px) rotate(2deg); }
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
 }
 
 .btn-sakura {
@@ -2845,55 +2641,53 @@ input#navCb:checked ~ .backdrop {
    THEME 26 - Viking Warrior
    ======================= */
 .theme-viking {
-  background: 
-    radial-gradient(circle at 60% 30%, rgba(107, 114, 128, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 30% 70%, rgba(75, 85, 99, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #1f2937 0%, #374151 30%, #4b5563 60%, #6b7280 100%);
+  background:
+    radial-gradient(circle at 58% 24%, rgba(148, 163, 184, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 22% 80%, rgba(71, 85, 105, 0.22) 0%, transparent 42%),
+    linear-gradient(145deg, #111827 0%, #1f2937 42%, #334155 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Northern lights effect */
 .theme-viking::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 50%;
-  background: 
-    linear-gradient(0deg, transparent, rgba(34, 197, 94, 0.3), transparent),
-    linear-gradient(0deg, transparent, rgba(59, 130, 246, 0.2), transparent);
-  background-size: 100% 200px, 100% 150px;
-  animation: vikingAurora 10s ease-in-out infinite;
-  opacity: 0.7;
+  height: 52%;
+  background:
+    linear-gradient(180deg, transparent, rgba(52, 211, 153, 0.2), transparent),
+    linear-gradient(180deg, transparent, rgba(96, 165, 250, 0.15), transparent);
+  background-size: 100% 220px, 100% 170px;
+  animation: vikingAurora 12s ease-in-out infinite;
+  opacity: 0.62;
 }
 
-/* Runic symbols */
 .theme-viking::after {
   content: '';
   position: absolute;
-  top: 20%;
-  right: 15%;
-  width: 80px;
-  height: 120px;
-  background: 
-    linear-gradient(0deg, transparent 0%, rgba(156, 163, 175, 0.6) 20%, transparent 40%),
-    linear-gradient(0deg, transparent 50%, rgba(156, 163, 175, 0.6) 70%, transparent 90%);
-  background-size: 15px 30px;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 16px,
+      rgba(203, 213, 225, 0.14) 16px 18px,
+      transparent 18px 34px
+    );
   background-repeat: repeat-y;
-  animation: vikingRunes 8s ease-in-out infinite;
-  opacity: 0.8;
+  animation: vikingRunes 14s ease-in-out infinite;
+  opacity: 0.45;
 }
 
 @keyframes vikingAurora {
-  0%, 100% { opacity: 0.7; transform: scaleY(1); }
-  50% { opacity: 0.9; transform: scaleY(1.1); }
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
 }
 
 @keyframes vikingRunes {
-  0%, 100% { opacity: 0.8; transform: translateY(0px); }
-  50% { opacity: 1; transform: translateY(-5px); }
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(-6px); opacity: 0.6; }
 }
 
 .btn-viking {
@@ -2943,15 +2737,14 @@ input#navCb:checked ~ .backdrop {
    THEME 27 - Cyberpunk 2077
    ======================= */
 .theme-cyberpunk {
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #0c0a09 0%, #1c1917 30%, #292524 60%, #44403c 100%);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(236, 72, 153, 0.24) 0%, transparent 44%),
+    radial-gradient(circle at 18% 82%, rgba(14, 165, 233, 0.2) 0%, transparent 44%),
+    linear-gradient(145deg, #070708 0%, #171421 48%, #1b2230 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Neon grid lines */
 .theme-cyberpunk::before {
   content: '';
   position: absolute;
@@ -2959,15 +2752,14 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(0deg, transparent 0%, rgba(236, 72, 153, 0.3) 1px, transparent 2px),
-    linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.2) 1px, transparent 2px);
-  background-size: 50px 50px;
-  animation: cyberpunkGrid 8s linear infinite;
-  opacity: 0.6;
+  background-image:
+    linear-gradient(0deg, transparent 0%, rgba(236, 72, 153, 0.22) 1px, transparent 2px),
+    linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.18) 1px, transparent 2px);
+  background-size: 46px 46px;
+  animation: cyberpunkGrid 10s linear infinite;
+  opacity: 0.5;
 }
 
-/* Digital glitch effect */
 .theme-cyberpunk::after {
   content: '';
   position: absolute;
@@ -2975,24 +2767,22 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.1), transparent),
-    linear-gradient(0deg, transparent, rgba(14, 165, 233, 0.1), transparent);
-  background-size: 200px 100%, 100% 200px;
-  animation: cyberpunkGlitch 4s ease-in-out infinite;
-  opacity: 0.8;
+  background:
+    linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.08), transparent),
+    linear-gradient(0deg, transparent, rgba(14, 165, 233, 0.08), transparent);
+  background-size: 220px 100%, 100% 220px;
+  animation: cyberpunkGlitch 6s ease-in-out infinite;
+  opacity: 0.65;
 }
 
 @keyframes cyberpunkGrid {
   0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
+  100% { transform: translate(46px, 46px); }
 }
 
 @keyframes cyberpunkGlitch {
-  0%, 100% { opacity: 0.8; transform: skew(0deg); }
-  25% { opacity: 1; transform: skew(0.5deg); }
-  50% { opacity: 0.6; transform: skew(-0.5deg); }
-  75% { opacity: 1; transform: skew(0.2deg); }
+  0%, 100% { opacity: 0.55; transform: skew(0deg); }
+  50% { opacity: 0.8; transform: skew(0.3deg); }
 }
 
 .btn-cyberpunk {
@@ -3054,57 +2844,53 @@ input#navCb:checked ~ .backdrop {
    THEME 28 - Medieval Kingdom
    ======================= */
 .theme-medieval {
-  background: 
-    radial-gradient(circle at 70% 30%, rgba(120, 53, 15, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 30% 70%, rgba(69, 26, 3, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #451a03 0%, #7c2d12 30%, #a16207 60%, #ca8a04 100%);
+  background:
+    radial-gradient(circle at 72% 24%, rgba(251, 191, 36, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 24% 78%, rgba(120, 53, 15, 0.26) 0%, transparent 44%),
+    linear-gradient(145deg, #341304 0%, #5f2510 42%, #7c3d14 72%, #ad6a1b 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Castle silhouette */
 .theme-medieval::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 10%;
-  width: 200px;
-  height: 120px;
-  background: 
-    linear-gradient(0deg, rgba(69, 26, 3, 0.8) 0%, rgba(69, 26, 3, 0.8) 60%, transparent 61%),
-    linear-gradient(0deg, transparent 40%, rgba(69, 26, 3, 0.9) 41%, rgba(69, 26, 3, 0.9) 80%, transparent 81%) 40px 0,
-    linear-gradient(0deg, transparent 50%, rgba(69, 26, 3, 0.7) 51%, rgba(69, 26, 3, 0.7) 90%, transparent 91%) 80px 0,
-    linear-gradient(0deg, transparent 30%, rgba(69, 26, 3, 0.8) 31%, rgba(69, 26, 3, 0.8) 70%, transparent 71%) 120px 0;
-  background-size: 40px 120px, 40px 120px, 40px 120px, 40px 120px;
+  width: 220px;
+  height: 130px;
+  background:
+    linear-gradient(0deg, rgba(69, 26, 3, 0.75) 0%, rgba(69, 26, 3, 0.75) 64%, transparent 65%),
+    linear-gradient(0deg, transparent 42%, rgba(92, 42, 9, 0.82) 43%, rgba(92, 42, 9, 0.82) 82%, transparent 83%) 44px 0,
+    linear-gradient(0deg, transparent 38%, rgba(69, 26, 3, 0.7) 39%, rgba(69, 26, 3, 0.7) 78%, transparent 79%) 92px 0,
+    linear-gradient(0deg, transparent 34%, rgba(92, 42, 9, 0.8) 35%, rgba(92, 42, 9, 0.8) 74%, transparent 75%) 140px 0;
+  background-size: 44px 130px, 44px 130px, 44px 130px, 44px 130px;
   background-repeat: no-repeat;
-  animation: medievalCastle 10s ease-in-out infinite;
+  animation: medievalCastle 12s ease-in-out infinite;
 }
 
-/* Floating banners */
 .theme-medieval::after {
   content: '';
   position: absolute;
   top: 15%;
   right: 15%;
-  width: 30px;
-  height: 80px;
+  width: 32px;
+  height: 88px;
   background: 
-    linear-gradient(0deg, rgba(185, 28, 28, 0.8) 0%, rgba(185, 28, 28, 0.8) 60%, transparent 100%),
-    linear-gradient(0deg, rgba(202, 138, 4, 0.6) 20%, rgba(202, 138, 4, 0.6) 40%, transparent 40%);
-  background-size: 30px 80px, 30px 20px;
-  animation: medievalBanner 6s ease-in-out infinite;
+    linear-gradient(0deg, rgba(185, 28, 28, 0.75) 0%, rgba(185, 28, 28, 0.75) 62%, transparent 100%),
+    linear-gradient(0deg, rgba(202, 138, 4, 0.55) 18%, rgba(202, 138, 4, 0.55) 38%, transparent 38%);
+  background-size: 32px 88px, 32px 22px;
+  animation: medievalBanner 8s ease-in-out infinite;
 }
 
 @keyframes medievalCastle {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
 }
 
 @keyframes medievalBanner {
-  0%, 100% { transform: rotate(0deg) translateX(0px); }
-  25% { transform: rotate(5deg) translateX(3px); }
-  50% { transform: rotate(0deg) translateX(0px); }
-  75% { transform: rotate(-5deg) translateX(-3px); }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg); }
 }
 
 .btn-medieval {
@@ -3154,63 +2940,54 @@ input#navCb:checked ~ .backdrop {
    THEME 29 - Tropical Paradise
    ======================= */
 .theme-tropical {
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(14, 165, 233, 0.4) 0%, transparent 50%),
-    linear-gradient(135deg, #0ea5e9 0%, #06b6d4 30%, #10b981 60%, #22c55e 100%);
+  background:
+    radial-gradient(circle at 24% 16%, rgba(34, 197, 94, 0.25) 0%, transparent 42%),
+    radial-gradient(circle at 76% 82%, rgba(14, 165, 233, 0.25) 0%, transparent 42%),
+    linear-gradient(145deg, #0a82b4 0%, #0ea5b5 34%, #14b8a6 62%, #22c55e 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Ocean waves */
 .theme-tropical::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 200%;
-  height: 30%;
-  background: 
-    radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.6) 0%, transparent 70%),
-    radial-gradient(ellipse at bottom, rgba(14, 165, 233, 0.4) 0%, transparent 60%);
-  background-size: 300px 100px, 200px 80px;
-  background-position: 0 100%, 150px 100%;
+  width: 220%;
+  height: 32%;
+  background:
+    radial-gradient(ellipse at bottom, rgba(56, 189, 248, 0.48) 0%, transparent 70%),
+    radial-gradient(ellipse at bottom, rgba(20, 184, 166, 0.35) 0%, transparent 62%);
+  background-size: 300px 100px, 220px 80px;
+  background-position: 0 100%, 140px 100%;
   background-repeat: repeat-x;
-  animation: tropicalWaves 8s ease-in-out infinite;
+  animation: tropicalWaves 10s ease-in-out infinite;
 }
 
-/* Palm tree silhouette */
 .theme-tropical::after {
   content: '';
   position: absolute;
-  bottom: 30%;
-  left: 5%;
-  width: 120px;
-  height: 150px;
-  background: 
-    /* Tree trunk */
-    linear-gradient(0deg, rgba(101, 67, 33, 0.8) 0%, rgba(101, 67, 33, 0.8) 80%, transparent 81%) 40px 80px,
-    /* Palm fronds */
-    radial-gradient(ellipse, rgba(34, 197, 94, 0.8) 0%, transparent 70%) 0 0,
-    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 60%) 60px 20px,
-    radial-gradient(ellipse, rgba(34, 197, 94, 0.7) 0%, transparent 65%) 30px 40px;
-  background-size: 40px 150px, 80px 40px, 60px 30px, 70px 35px;
+  bottom: 32%;
+  left: 6%;
+  width: 110px;
+  height: 140px;
+  background:
+    linear-gradient(0deg, rgba(120, 53, 15, 0.65) 0%, rgba(120, 53, 15, 0.65) 82%, transparent 83%) 38px 76px,
+    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 70%) 0 0,
+    radial-gradient(ellipse, rgba(16, 185, 129, 0.45) 0%, transparent 62%) 54px 20px;
+  background-size: 34px 140px, 78px 38px, 62px 30px;
   background-repeat: no-repeat;
-  animation: tropicalPalm 12s ease-in-out infinite;
+  animation: tropicalPalm 14s ease-in-out infinite;
 }
 
 @keyframes tropicalWaves {
-  0%, 100% { transform: translateX(0px) scaleY(1); }
-  25% { transform: translateX(-50px) scaleY(1.1); }
-  50% { transform: translateX(0px) scaleY(0.9); }
-  75% { transform: translateX(50px) scaleY(1.05); }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-45px); }
 }
 
 @keyframes tropicalPalm {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  25% { transform: rotate(2deg) scale(1.02); }
-  50% { transform: rotate(0deg) scale(0.98); }
-  75% { transform: rotate(-2deg) scale(1.01); }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(2deg); }
 }
 
 .btn-tropical {
@@ -3260,15 +3037,14 @@ input#navCb:checked ~ .backdrop {
    THEME 30 - Art Deco Vintage
    ======================= */
 .theme-artdeco {
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(6, 6, 6, 0.6) 0%, transparent 50%),
-    linear-gradient(135deg, #000000 0%, #1c1917 30%, #78350f 60%, #fbbf24 100%);
+  background:
+    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.28) 0%, transparent 48%),
+    radial-gradient(circle at 22% 82%, rgba(17, 24, 39, 0.45) 0%, transparent 46%),
+    linear-gradient(145deg, #050505 0%, #1f1a18 42%, #5f3b20 72%, #d29c34 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Art Deco geometric patterns */
 .theme-artdeco::before {
   content: '';
   position: absolute;
@@ -3276,34 +3052,33 @@ input#navCb:checked ~ .backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%),
-    linear-gradient(0deg, transparent 48%, rgba(251, 191, 36, 0.2) 50%, transparent 52%);
-  background-size: 100px 100px, 80px 80px, 60px 60px;
-  animation: artdecoPattern 15s ease-in-out infinite;
-  opacity: 0.8;
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 24px, rgba(251, 191, 36, 0.12) 24px 26px),
+    repeating-linear-gradient(-45deg, transparent 0 28px, rgba(251, 191, 36, 0.08) 28px 30px),
+    linear-gradient(0deg, transparent 48%, rgba(251, 191, 36, 0.14) 50%, transparent 52%);
+  background-size: 110px 110px, 90px 90px, 64px 64px;
+  animation: artdecoPattern 16s ease-in-out infinite;
+  opacity: 0.68;
 }
 
-/* Vintage sunburst */
 .theme-artdeco::after {
   content: '';
   position: absolute;
-  top: 20%;
-  right: 15%;
-  width: 120px;
-  height: 120px;
-  background: 
-    conic-gradient(from 0deg, rgba(251, 191, 36, 0.3), transparent, rgba(251, 191, 36, 0.3)),
-    radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, transparent 70%);
+  top: 18%;
+  right: 14%;
+  width: 130px;
+  height: 130px;
+  background:
+    conic-gradient(from 0deg, rgba(251, 191, 36, 0.26), transparent, rgba(251, 191, 36, 0.26)),
+    radial-gradient(circle, rgba(251, 191, 36, 0.42) 0%, transparent 70%);
   border-radius: 50%;
-  animation: artdecoSunburst 10s linear infinite;
-  opacity: 0.7;
+  animation: artdecoSunburst 14s linear infinite;
+  opacity: 0.62;
 }
 
 @keyframes artdecoPattern {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.05) rotate(5deg); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 @keyframes artdecoSunburst {

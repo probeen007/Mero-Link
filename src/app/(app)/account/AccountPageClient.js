@@ -7,6 +7,7 @@ import ThemeSelectorWrapper from "@/components/forms/ThemeSelectorWrapper";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
 import PageButtonsForm from "@/components/forms/PageButtonsForm";
 import PageLinksForm from "@/components/forms/PageLinksForm";
+import ShareProfileSection from "@/components/ShareProfileSection";
 
 // Client-side component
 export default function AccountPageClient({ page, user, isVerified }) {
@@ -45,7 +46,7 @@ export default function AccountPageClient({ page, user, isVerified }) {
                 </h2>
                 <p className="text-blue-600 font-medium flex items-center justify-center mt-1">
                   <FontAwesomeIcon icon={faLink} className="w-4 h-4 mr-2" />
-                  merolink.me/{page.uri}
+                  merolink.it.com/{page.uri}
                 </p>
               </div>
             </div>
@@ -136,6 +137,10 @@ export default function AccountPageClient({ page, user, isVerified }) {
             <PageLinksForm page={page} user={user} />
           </div>
         </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto mt-4 sm:mt-6 mb-4 sm:mb-6 px-3 sm:px-4">
+        <ShareProfileSection />
       </div>
     </div>
   );
