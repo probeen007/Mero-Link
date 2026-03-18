@@ -69,6 +69,12 @@ function upperFirst(str) {
   return str.slice(0, 1).toUpperCase() + str.slice(1);
 }
 
+function getInputType(buttonKey) {
+  if (buttonKey === 'email') return 'email';
+  if (buttonKey === 'mobile') return 'tel';
+  return 'url';
+}
+
 export default function PageButtonsForm({ user, page }) {
   const pageButtons = page?.buttons || {};
   const pageSavedButtonsKeys = Object.keys(pageButtons);
@@ -101,17 +107,17 @@ export default function PageButtonsForm({ user, page }) {
   const availableButtons = allButtons.filter(b1 => !activeButtons.find(b2 => b1.key === b2.key));
 
   return (
-    <SectionBox>
+    <SectionBox className="space-y-4">
       <form action={saveButtons}>
-        <h2 className="text-2xl font-bold mb-4">Buttons</h2>
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">Buttons</h2>
         <ReactSortable
           handle=".handle"
           list={activeButtons}
           setList={setActiveButtons}
         >
           {activeButtons.map(b => (
-            <div key={b.key} className="mb-4 md:flex items-center">
-              <div className="w-56 flex h-full text-gray-700 p-2 gap-2 items-center">
+            <div key={b.key} className="mb-3 rounded-xl border border-gray-200 bg-gray-50/80 p-2 sm:p-3 flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+              <div className="w-full md:w-56 flex h-full text-gray-700 p-1 md:p-2 gap-2 items-center">
                 <FontAwesomeIcon
                   icon={faGripLines}
                   className="cursor-pointer text-gray-400 handle p-2"
@@ -119,18 +125,19 @@ export default function PageButtonsForm({ user, page }) {
                 <FontAwesomeIcon icon={b.icon} />
                 <span>{upperFirst(b.label)}:</span>
               </div>
-              <div className="grow flex">
+              <div className="grow flex flex-col sm:flex-row gap-2">
                 <input
                   placeholder={b.placeholder}
                   name={b.key}
                   defaultValue={pageButtons[b.key]}
-                  type="text"
+                  type={getInputType(b.key)}
                   style={{ marginBottom: '0' }}
+                  className="w-full"
                 />
                 <button
                   onClick={() => removeButton(b)}
                   type="button"
-                  className="py-2 px-4 bg-gray-300 cursor-pointer"
+                  className="py-2.5 px-4 bg-gray-200 hover:bg-red-100 text-gray-700 hover:text-red-700 cursor-pointer rounded-lg transition-colors"
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
@@ -144,7 +151,7 @@ export default function PageButtonsForm({ user, page }) {
               key={b.key}
               type="button"
               onClick={() => addButtonToProfile(b)}
-              className="flex items-center gap-1 p-2 bg-gray-200"
+              className="flex items-center gap-1.5 p-2 bg-gray-100 hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-lg text-sm transition-colors"
             >
               <FontAwesomeIcon icon={b.icon} />
               <span>{upperFirst(b.label)}</span>
@@ -152,7 +159,7 @@ export default function PageButtonsForm({ user, page }) {
             </button>
           ))}
         </div>
-        <div className="max-w-xs mx-auto mt-8">
+        <div className="max-w-xs mx-auto mt-6">
           <SubmitButton>
             <FontAwesomeIcon icon={faSave} />
             <span>Save</span>

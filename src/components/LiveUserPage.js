@@ -156,10 +156,10 @@ export default function LiveUserPage({ initialData, uri }) {
       >
         <div className="relative z-10">
           {/* Banner */}
-          <div className={clsx("h-36 bg-cover bg-center relative", shouldAdaptBackground ? theme.bgClass : "")} style={getBannerStyle()} />
+          <div className={clsx("h-32 sm:h-36 bg-cover bg-center relative", shouldAdaptBackground ? theme.bgClass : "")} style={getBannerStyle()} />
 
           {/* Avatar */}
-          <div className={clsx("aspect-square mx-auto relative -top-16 -mb-12 shadow-lg", getShapeClasses(theme?.profileShape, true), theme.imageClass)}>
+          <div className={clsx("aspect-square mx-auto relative -top-12 sm:-top-16 -mb-8 sm:-mb-12 shadow-lg", getShapeClasses(theme?.profileShape, true), theme.imageClass)}>
             <Image
               src={user?.image || "/icon-192x192.png"}
               alt="avatar"
@@ -168,7 +168,7 @@ export default function LiveUserPage({ initialData, uri }) {
               className="w-full h-full object-cover rounded-full"
             />
             {getThemeDecoration(page?.theme) && (
-              <div className="absolute -top-2 -right-2 text-2xl bg-white bg-opacity-90 rounded-full p-1 shadow-lg animate-pulse">
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 text-lg sm:text-2xl bg-white bg-opacity-90 rounded-full p-1 shadow-lg animate-pulse">
                 {getThemeDecoration(page?.theme)}
               </div>
             )}
@@ -177,9 +177,9 @@ export default function LiveUserPage({ initialData, uri }) {
           {/* User Info */}
           <div className="mt-1 px-3 flex flex-col items-center">
             {/* Display Name + Verified */}
-            <div className="w-full flex items-center justify-center max-w-xs sm:max-w-md">
+            <div className="w-full flex items-center justify-center max-w-sm sm:max-w-md">
               <h1
-                className="flex-1 text-center text-[1.45rem] sm:text-3xl font-semibold leading-tight truncate select-text"
+                className="flex-1 text-center text-xl sm:text-2xl md:text-3xl font-semibold leading-tight break-words select-text"
                 title={page?.displayName || '@randomuser'}
               >
                 {page?.displayName || '@randomuser'}
@@ -210,14 +210,15 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* Social Buttons */}
-          <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 flex-wrap">
+          <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 px-3 sm:px-4 flex-wrap">
             {page?.buttons && Object.keys(page.buttons).map((key, idx) => (
               <a
                 key={key}
                 href={page.buttons[key]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={clsx(getShapeClasses(theme?.socialShape), "p-3 flex items-center justify-center shadow-md transition duration-200", theme?.buttonClass || "bg-gray-700 text-white")}
+                aria-label={`Open ${key} profile`}
+                className={clsx(getShapeClasses(theme?.socialShape), "p-3 flex items-center justify-center shadow-md transition duration-200 hover:scale-105 focus-ring-dark", theme?.buttonClass || "bg-gray-700 text-white")}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
                 <FontAwesomeIcon icon={buttonsIcons[key] || faLink} className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -226,14 +227,15 @@ export default function LiveUserPage({ initialData, uri }) {
           </div>
 
           {/* Links */}
-          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6 p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full">
+          <div className="max-w-2xl mx-auto grid gap-2 sm:gap-4 md:gap-6 md:grid-cols-2 p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full">
             {page?.links && page.links.map((link, idx) => (
               <a
                 key={idx}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={clsx("flex items-center transition duration-200 p-4 shadow-md min-w-0", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800", "hover:scale-105")}
+                aria-label={`Open link ${link.title || idx + 1}`}
+                className={clsx("flex items-center transition duration-200 p-4 shadow-md min-w-0 md:hover:scale-[1.02] focus-ring-dark", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800")}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
                 <div className={clsx("flex items-center justify-center bg-blue-700 mr-3 sm:mr-4", getShapeClasses(theme?.socialShape))}>
@@ -263,7 +265,7 @@ export default function LiveUserPage({ initialData, uri }) {
               href="https://merolink.it.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4 text-sm sm:text-base"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4 text-sm sm:text-base focus-ring-dark"
             >
               <div className="bg-yellow-400 text-blue-700 p-2 rounded-full shadow-md">
                 <FontAwesomeIcon icon={faMagic} className="w-4 h-4" />

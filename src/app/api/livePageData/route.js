@@ -54,11 +54,18 @@ export async function GET(request) {
     const user = await User.findOne({ email: page.owner }).lean();
 
     page._id = page._id.toString();
-    if (user) user._id = user._id.toString();
+    const safeUser = user
+      ? {
+          _id: user._id.toString(),
+          name: user.name || '',
+          image: user.image || '',
+          isVerified: Boolean(user.isVerified),
+        }
+      : null;
 
     const responseData = {
       page,
-      user,
+      user: safeUser,
       lastUpdated: new Date().toISOString(),
       cid
     };

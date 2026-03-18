@@ -14,8 +14,36 @@ body {
     overflow-x: hidden;
 }
 
-input[type="text"], textarea {
-    @apply bg-gray-100 w-full block py-1 px-1 mb-1;
+@layer components {
+  .page-shell {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10;
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  }
+
+  .focus-ring-dark {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50;
+  }
+}
+
+input[type="text"],
+input[type="url"],
+input[type="email"],
+input[type="tel"],
+textarea {
+  @apply bg-gray-100 w-full block py-2 px-3 mb-1 rounded border border-gray-300;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+  @apply outline-none ring-2 ring-blue-300 border-blue-400;
 }
 
 label.input-label {
@@ -44,6 +72,15 @@ input#navCb:checked ~ aside {
 }
 input#navCb:checked ~ .backdrop {
     display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* =======================
@@ -3139,3 +3176,610 @@ input#navCb:checked ~ .backdrop {
     filter: brightness(1.1);
   }
 }
+
+/* =======================
+   PREMIUM THEME POLISH
+   (Interactive + Alignment-safe overlays)
+   ======================= */
+
+.theme-nepal,
+.theme-minecraft,
+.theme-adventure,
+.theme-anime,
+.theme-cartoon,
+.theme-galaxy,
+.theme-ocean,
+.theme-forest,
+.theme-egyptian,
+.theme-sakura,
+.theme-viking,
+.theme-cyberpunk,
+.theme-medieval,
+.theme-tropical,
+.theme-artdeco,
+.theme-rainycity,
+.theme-desertdune,
+.theme-arcticglass,
+.theme-volcanicforge,
+.theme-emeraldlake,
+.theme-sunsetcliff {
+  isolation: isolate;
+}
+
+.theme-nepal::before,
+.theme-nepal::after,
+.theme-minecraft::before,
+.theme-minecraft::after,
+.theme-adventure::before,
+.theme-adventure::after,
+.theme-anime::before,
+.theme-anime::after,
+.theme-cartoon::before,
+.theme-cartoon::after,
+.theme-galaxy::before,
+.theme-galaxy::after,
+.theme-ocean::before,
+.theme-ocean::after,
+.theme-forest::before,
+.theme-forest::after,
+.theme-egyptian::before,
+.theme-egyptian::after,
+.theme-sakura::before,
+.theme-sakura::after,
+.theme-viking::before,
+.theme-viking::after,
+.theme-cyberpunk::before,
+.theme-cyberpunk::after,
+.theme-medieval::before,
+.theme-medieval::after,
+.theme-tropical::before,
+.theme-tropical::after,
+.theme-artdeco::before,
+.theme-artdeco::after,
+.theme-rainycity::before,
+.theme-rainycity::after,
+.theme-desertdune::before,
+.theme-desertdune::after,
+.theme-arcticglass::before,
+.theme-arcticglass::after,
+.theme-volcanicforge::before,
+.theme-volcanicforge::after,
+.theme-emeraldlake::before,
+.theme-emeraldlake::after,
+.theme-sunsetcliff::before,
+.theme-sunsetcliff::after {
+  pointer-events: none;
+}
+
+.btn-nepal,
+.btn-minecraft,
+.btn-adventure,
+.btn-anime,
+.btn-cartoon,
+.btn-galaxy,
+.btn-ocean,
+.btn-forest,
+.btn-egyptian,
+.btn-sakura,
+.btn-viking,
+.btn-cyberpunk,
+.btn-medieval,
+.btn-tropical,
+.btn-artdeco,
+.btn-rainycity,
+.btn-desertdune,
+.btn-arcticglass,
+.btn-volcanicforge,
+.btn-emeraldlake,
+.btn-sunsetcliff {
+  transition:
+    transform 220ms ease,
+    box-shadow 260ms ease,
+    filter 220ms ease,
+    border-color 220ms ease,
+    background-position 320ms ease;
+  will-change: transform, box-shadow;
+  transform-origin: center;
+}
+
+.btn-nepal:focus-visible,
+.btn-minecraft:focus-visible,
+.btn-adventure:focus-visible,
+.btn-anime:focus-visible,
+.btn-cartoon:focus-visible,
+.btn-galaxy:focus-visible,
+.btn-ocean:focus-visible,
+.btn-forest:focus-visible,
+.btn-egyptian:focus-visible,
+.btn-sakura:focus-visible,
+.btn-viking:focus-visible,
+.btn-cyberpunk:focus-visible,
+.btn-medieval:focus-visible,
+.btn-tropical:focus-visible,
+.btn-artdeco:focus-visible,
+.btn-rainycity:focus-visible,
+.btn-desertdune:focus-visible,
+.btn-arcticglass:focus-visible,
+.btn-volcanicforge:focus-visible,
+.btn-emeraldlake:focus-visible,
+.btn-sunsetcliff:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+.btn-nepal:active,
+.btn-minecraft:active,
+.btn-adventure:active,
+.btn-anime:active,
+.btn-cartoon:active,
+.btn-galaxy:active,
+.btn-ocean:active,
+.btn-forest:active,
+.btn-egyptian:active,
+.btn-sakura:active,
+.btn-viking:active,
+.btn-cyberpunk:active,
+.btn-medieval:active,
+.btn-tropical:active,
+.btn-artdeco:active,
+.btn-rainycity:active,
+.btn-desertdune:active,
+.btn-arcticglass:active,
+.btn-volcanicforge:active,
+.btn-emeraldlake:active,
+.btn-sunsetcliff:active {
+  transform: translateY(0) scale(0.985);
+  filter: saturate(1.06);
+}
+
+.card-nepal,
+.card-minecraft,
+.card-adventure,
+.card-anime,
+.card-cartoon,
+.card-galaxy,
+.card-ocean,
+.card-forest,
+.card-egyptian,
+.card-sakura,
+.card-viking,
+.card-cyberpunk,
+.card-medieval,
+.card-tropical,
+.card-artdeco,
+.card-rainycity,
+.card-desertdune,
+.card-arcticglass,
+.card-volcanicforge,
+.card-emeraldlake,
+.card-sunsetcliff {
+  transition:
+    transform 260ms ease,
+    box-shadow 300ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+  transform-origin: center;
+}
+
+.img-nepal,
+.img-minecraft,
+.img-adventure,
+.img-anime,
+.img-cartoon,
+.img-galaxy,
+.img-ocean,
+.img-forest,
+.img-egyptian,
+.img-sakura,
+.img-viking,
+.img-cyberpunk,
+.img-medieval,
+.img-tropical,
+.img-artdeco,
+.img-rainycity,
+.img-desertdune,
+.img-arcticglass,
+.img-volcanicforge,
+.img-emeraldlake,
+.img-sunsetcliff {
+  transition:
+    transform 260ms ease,
+    box-shadow 300ms ease,
+    filter 240ms ease;
+}
+
+/* =======================
+   NEW REALISTIC THEMES
+   ======================= */
+
+/* THEME 31 - Rainy City Lights */
+.theme-rainycity {
+  background:
+    radial-gradient(circle at 78% 14%, rgba(125, 211, 252, 0.2) 0%, transparent 30%),
+    linear-gradient(180deg, #070d1a 0%, #101a2c 45%, #1f2f48 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-rainycity::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(15, 23, 42, 0.86) 0%,
+      rgba(15, 23, 42, 0.86) 18%,
+      transparent 18%
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(148, 163, 184, 0.25) 0 10px,
+      rgba(30, 41, 59, 0.65) 10px 14px,
+      transparent 14px 26px
+    );
+  background-size: 100% 100%, 100% 22%;
+  background-position: center, bottom;
+  opacity: 0.72;
+}
+
+.theme-rainycity::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.16) 0 1px,
+      transparent 1px 16px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%);
+  animation: rainyCityRain 2.4s linear infinite;
+  opacity: 0.35;
+}
+
+@keyframes rainyCityRain {
+  0% { transform: translateY(-14px); }
+  100% { transform: translateY(14px); }
+}
+
+.btn-rainycity {
+  background: linear-gradient(45deg, #1d4ed8, #2563eb);
+  color: #fff;
+  border: 2px solid rgba(125, 211, 252, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
+}
+
+.btn-rainycity:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.38);
+}
+
+.card-rainycity {
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(148, 163, 184, 0.28);
+  border-radius: 14px;
+}
+
+.img-rainycity {
+  border: 3px solid #93c5fd;
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(147, 197, 253, 0.45);
+}
+
+/* THEME 32 - Desert Dune */
+.theme-desertdune {
+  background:
+    radial-gradient(circle at 78% 16%, rgba(254, 240, 138, 0.35) 0%, transparent 22%),
+    linear-gradient(160deg, #70411f 0%, #a45f2b 46%, #d69a56 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-desertdune::before {
+  content: '';
+  position: absolute;
+  inset: auto -10% 0 -10%;
+  height: 44%;
+  background:
+    radial-gradient(ellipse at 24% 100%, rgba(251, 191, 36, 0.36), transparent 62%),
+    radial-gradient(ellipse at 58% 100%, rgba(217, 119, 6, 0.32), transparent 64%),
+    radial-gradient(ellipse at 86% 100%, rgba(180, 83, 9, 0.28), transparent 66%);
+  background-size: 300px 130px, 340px 140px, 280px 120px;
+  animation: duneShift 18s ease-in-out infinite;
+}
+
+.theme-desertdune::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%),
+    repeating-linear-gradient(12deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 18px);
+  opacity: 0.4;
+}
+
+@keyframes duneShift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-28px); }
+}
+
+.btn-desertdune {
+  background: linear-gradient(45deg, #b45309, #f59e0b);
+  color: #fff;
+  border: 2px solid rgba(254, 215, 170, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.35);
+}
+
+.btn-desertdune:hover { transform: translateY(-2px); }
+
+.card-desertdune {
+  background: rgba(120, 53, 15, 0.35);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(251, 191, 36, 0.35);
+  border-radius: 14px;
+}
+
+.img-desertdune {
+  border: 3px solid #fbbf24;
+  border-radius: 14px;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.45);
+}
+
+/* THEME 33 - Arctic Glass */
+.theme-arcticglass {
+  background:
+    radial-gradient(circle at 22% 14%, rgba(224, 242, 254, 0.34) 0%, transparent 26%),
+    linear-gradient(150deg, #11334a 0%, #185b77 46%, #7ab4cf 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-arcticglass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(125deg, transparent 0 44%, rgba(255, 255, 255, 0.2) 50%, transparent 58%),
+    repeating-linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 20px);
+  animation: arcticSweep 12s ease-in-out infinite;
+}
+
+.theme-arcticglass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.28), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%);
+  opacity: 0.72;
+}
+
+@keyframes arcticSweep {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(14px); }
+}
+
+.btn-arcticglass {
+  background: linear-gradient(45deg, #0ea5e9, #38bdf8);
+  color: #fff;
+  border: 2px solid rgba(186, 230, 253, 0.5);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.32);
+}
+
+.btn-arcticglass:hover { transform: translateY(-2px); }
+
+.card-arcticglass {
+  background: rgba(15, 118, 140, 0.28);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(186, 230, 253, 0.32);
+  border-radius: 16px;
+}
+
+.img-arcticglass {
+  border: 3px solid #bae6fd;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(186, 230, 253, 0.5);
+}
+
+/* THEME 34 - Volcanic Forge */
+.theme-volcanicforge {
+  background:
+    radial-gradient(circle at 80% 16%, rgba(251, 146, 60, 0.18) 0%, transparent 40%),
+    linear-gradient(150deg, #120b0b 0%, #2a1211 44%, #4a1a17 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-volcanicforge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      115deg,
+      transparent 0 24px,
+      rgba(249, 115, 22, 0.22) 24px 27px,
+      transparent 27px 46px
+    ),
+    linear-gradient(180deg, transparent 56%, rgba(220, 38, 38, 0.22) 100%);
+  animation: forgePulse 5.5s ease-in-out infinite;
+}
+
+.theme-volcanicforge::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 36%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(239, 68, 68, 0.38), transparent 72%);
+}
+
+@keyframes forgePulse {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 0.72; }
+}
+
+.btn-volcanicforge {
+  background: linear-gradient(45deg, #b91c1c, #f97316);
+  color: #fff;
+  border: 2px solid rgba(253, 186, 116, 0.45);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(185, 28, 28, 0.35);
+}
+
+.btn-volcanicforge:hover { transform: translateY(-2px); }
+
+.card-volcanicforge {
+  background: rgba(24, 24, 27, 0.62);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(248, 113, 113, 0.28);
+  border-radius: 12px;
+}
+
+.img-volcanicforge {
+  border: 3px solid #fb923c;
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.45);
+}
+
+/* THEME 35 - Emerald Lake */
+.theme-emeraldlake {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(110, 231, 183, 0.2) 0%, transparent 35%),
+    linear-gradient(150deg, #0b3a31 0%, #125547 46%, #1f7a68 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-emeraldlake::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background:
+    linear-gradient(180deg, transparent, rgba(45, 212, 191, 0.22)),
+    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.16), transparent 40%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 24px);
+  animation: emeraldRipples 11s ease-in-out infinite;
+}
+
+.theme-emeraldlake::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(6, 32, 28, 0.68) 0%,
+      rgba(6, 32, 28, 0.68) 22%,
+      transparent 22%
+    );
+  opacity: 0.75;
+}
+
+@keyframes emeraldRipples {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-16px); }
+}
+
+.btn-emeraldlake {
+  background: linear-gradient(45deg, #0d9488, #14b8a6);
+  color: #fff;
+  border: 2px solid rgba(167, 243, 208, 0.45);
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.34);
+}
+
+.btn-emeraldlake:hover { transform: translateY(-2px); }
+
+.card-emeraldlake {
+  background: rgba(15, 118, 110, 0.32);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(110, 231, 183, 0.3);
+  border-radius: 16px;
+}
+
+.img-emeraldlake {
+  border: 3px solid #6ee7b7;
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(110, 231, 183, 0.45);
+}
+
+/* THEME 36 - Sunset Cliff */
+.theme-sunsetcliff {
+  background:
+    radial-gradient(circle at 74% 20%, rgba(253, 186, 116, 0.36) 0%, transparent 18%),
+    linear-gradient(160deg, #2b1a1a 0%, #6a3327 44%, #b86a3a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-sunsetcliff::before {
+  content: '';
+  position: absolute;
+  inset: auto -8% 0 -8%;
+  height: 42%;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(120, 53, 15, 0.5)),
+    linear-gradient(25deg, transparent 24%, rgba(41, 22, 18, 0.8) 25%, rgba(41, 22, 18, 0.8) 52%, transparent 53%),
+    linear-gradient(-22deg, transparent 22%, rgba(56, 31, 22, 0.74) 23%, rgba(56, 31, 22, 0.74) 50%, transparent 51%);
+  background-size: 100% 100%, 220px 100%, 240px 100%;
+  background-position: center, 0 100%, 110px 100%;
+  background-repeat: repeat-x;
+}
+
+.theme-sunsetcliff::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%),
+    radial-gradient(circle at 74% 20%, rgba(255, 244, 214, 0.2), transparent 14%);
+  animation: sunsetBreathe 8s ease-in-out infinite;
+}
+
+@keyframes sunsetBreathe {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.72; }
+}
+
+.btn-sunsetcliff {
+  background: linear-gradient(45deg, #c2410c, #fb923c);
+  color: #fff;
+  border: 2px solid rgba(254, 215, 170, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(194, 65, 12, 0.34);
+}
+
+.btn-sunsetcliff:hover { transform: translateY(-2px); }
+
+.card-sunsetcliff {
+  background: rgba(120, 53, 15, 0.33);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(251, 146, 60, 0.3);
+  border-radius: 14px;
+}
+
+.img-sunsetcliff {
+  border: 3px solid #fdba74;
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(251, 146, 60, 0.45);
+}
+
+@media (max-width: 640px) {
+  .theme-rainycity::before,
+  .theme-rainycity::after,
+  .theme-desertdune::before,
+  .theme-arcticglass::before,
+  .theme-volcanicforge::before,
+  .theme-emeraldlake::before,
+  .theme-sunsetcliff::after,
+  .theme-sunsetcliff::before {
+    animation-duration: 12s;
+  }
+}
+

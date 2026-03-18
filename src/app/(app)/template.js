@@ -6,8 +6,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import mongoose from "mongoose";
 import {getServerSession} from "next-auth";
 import {Lato} from 'next/font/google'
-import '../globals.css'
-import {headers} from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import {redirect} from "next/navigation";
@@ -18,12 +16,15 @@ const lato = Lato({ subsets: ['latin'], weight: ['400','700'] })
 export const metadata = {
   title: 'Mero Link - Unify Your Online Presence with Ease',
   description: 'Mero Link is a revolutionary startup from Nepal, designed to help you effortlessly unify your online identity. Create personalized link trees to combine all your social media profiles, websites, and essential links into one seamless, shareable link. Perfect for professionals, influencers, and businesses seeking to enhance their digital presence, Mero Link makes it easy to connect and share everything in one place. Join the Mero Link community today and take control of your online presence!',
-  keywords: 'Mero Link, custom link tree, online presence, social media, digital identity, startup Nepal, share links, unify profiles',
-  author: 'Prabin Bhattarai',
+  keywords: ['Mero Link', 'dashboard', 'profile settings', 'analytics', 'link management'],
+  authors: [{ name: 'Prabin Bhattarai' }],
+  robots: {
+    index: false,
+    follow: false,
+  },
   
 }
-export default async function AppTemplate({ children, ...rest }) {
-  const headersList = headers();
+export default async function AppTemplate({ children }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return redirect('/');
@@ -33,6 +34,12 @@ export default async function AppTemplate({ children, ...rest }) {
   return (
    
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <a
+        href="#app-main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[120] focus:bg-white focus:text-blue-700 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Skip to dashboard content
+      </a>
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -48,16 +55,16 @@ export default async function AppTemplate({ children, ...rest }) {
       
       <main className="lg:flex min-h-screen">
         {/* Mobile Navigation Toggle */}
-        <label htmlFor="navCb" className="lg:hidden fixed top-4 left-4 z-30 p-3 rounded-xl bg-white shadow-lg border border-gray-200 inline-flex items-center gap-2 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+        <label htmlFor="navCb" className="lg:hidden fixed top-3 left-3 sm:top-4 sm:left-4 z-30 p-2.5 sm:p-3 rounded-xl bg-white shadow-lg border border-gray-200 inline-flex items-center gap-2 cursor-pointer hover:bg-gray-50 transition-all duration-200">
           <FontAwesomeIcon icon={faBars} className="text-blue-600" />
-          <span className="text-sm font-medium text-gray-700">Menu</span>
+          <span className="hidden sm:inline text-sm font-medium text-gray-700">Menu</span>
         </label>
         
         <input id="navCb" type="checkbox" className="hidden" />
         <label htmlFor="navCb" className="hidden backdrop fixed inset-0 bg-black/60 z-20 lg:hidden"></label>
         
         {/* Sidebar */}
-        <aside className="bg-white/90 backdrop-blur-xl w-80 p-6 shadow-2xl border-r border-gray-200 fixed lg:static -left-80 top-0 bottom-0 z-30 transition-all duration-300 overflow-y-auto">
+        <aside className="bg-white/90 backdrop-blur-xl w-[85vw] max-w-80 p-4 sm:p-6 shadow-2xl border-r border-gray-200 fixed lg:static -left-full top-0 bottom-0 z-30 transition-all duration-300 overflow-y-auto">
           {/* Close button for mobile */}
           <label htmlFor="navCb" className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
             <FontAwesomeIcon icon={faTimes} className="text-gray-500" />
@@ -80,8 +87,8 @@ export default async function AppTemplate({ children, ...rest }) {
                 </div>
               </div>
               
-              <h3 className="font-bold text-gray-800 text-lg mb-1">{session.user.name}</h3>
-              <p className="text-gray-500 text-sm mb-4">{session.user.email}</p>
+              <h3 className="font-bold text-gray-800 text-lg mb-1 truncate px-2">{session.user.name}</h3>
+              <p className="text-gray-500 text-sm mb-4 break-all">{session.user.email}</p>
               
               {page && (
                 <Link
@@ -104,8 +111,8 @@ export default async function AppTemplate({ children, ...rest }) {
         </aside>
         
         {/* Main Content */}
-        <div className="flex-1 lg:ml-0 min-h-screen">
-          <div className="lg:p-8 p-4 pt-20 lg:pt-8">
+        <div id="app-main-content" className="flex-1 lg:ml-0 min-h-screen" tabIndex={-1}>
+          <div className="lg:p-8 p-3 sm:p-4 pt-16 sm:pt-20 lg:pt-8">
             {children}
           </div>
         </div>

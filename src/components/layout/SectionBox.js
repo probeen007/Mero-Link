@@ -1,6 +1,6 @@
-export default function SectionBox({ children }) {
+export default function SectionBox({ children, className = "" }) {
   return (
-    <div className="bg-white m-8 p-4 shadow">
+    <div className={className}>
       {children}
     </div>
   );

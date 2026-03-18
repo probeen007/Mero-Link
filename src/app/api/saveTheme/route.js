@@ -1,5 +1,8 @@
 import { Page, THEME_VALUES } from '@/models/Page';
 import dbConnect from '@/libs/mongoClient';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { badRequest, notFound, ok, serverError, unauthorized, isValidObjectId } from '@/libs/apiResponse';
 
 // Theme mapping: numeric keys to database enum values
 const themeMapping = {
@@ -30,95 +33,47 @@ export async function GET() {
 export async function POST(req) {
   try {
     await dbConnect();
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return unauthorized();
+    }
+
     const { pageId, theme } = await req.json();
 
-    console.log("📥 Received request:", { pageId, theme, pageIdType: typeof pageId, themeType: typeof theme });
-
-    if (!pageId) return new Response("pageId missing", { status: 400 });
-    if (!theme) return new Response("theme missing", { status: 400 });
+    if (!pageId || !isValidObjectId(pageId)) return badRequest('Valid pageId is required');
+    if (!theme || typeof theme !== 'string') return badRequest('theme is required');
 
     // Convert numeric theme ID to database enum value
     const dbThemeValue = themeMapping[theme.toString()] || theme;
-    console.log("🎨 Theme mapping:", { originalTheme: theme, mappedTheme: dbThemeValue });
 
     // Validate theme value before saving using exported theme values
     if (!THEME_VALUES.includes(dbThemeValue)) {
-      console.log("❌ Invalid theme value:", dbThemeValue);
-      console.log("✅ Valid themes:", THEME_VALUES);
-      return new Response(`Invalid theme value: ${dbThemeValue}. Valid themes: ${THEME_VALUES.join(', ')}`, { status: 400 });
+      return badRequest('Invalid theme value');
     }
 
-    console.log("🔍 Looking for page with ID:", pageId);
-    const page = await Page.findById(pageId);
-    console.log("📄 Found page:", page ? "YES" : "NO");
-    
-    if (!page) {
-      console.log("❌ Page not found for ID:", pageId);
-      return new Response("Page not found", { status: 404 });
-    }
-
-    console.log("💾 Current page theme:", page.theme);
-    console.log("🎨 Setting new theme:", dbThemeValue);
-    console.log("🔧 Page adaptBackground setting:", page.adaptBackground);
-    
-    try {
-      // Try the standard approach first
-      page.set('theme', dbThemeValue);
-      page.set('updatedAt', new Date());
-      
-      // Validate the document before saving
-      const validationError = page.validateSync();
-      if (validationError) {
-        console.log("❌ Validation error:", validationError);
-        // If validation fails, try direct database update (bypass Mongoose validation)
-        console.log("🔄 Attempting direct database update...");
-        await Page.updateOne(
-          { _id: pageId },
-          { 
-            $set: { 
-              theme: dbThemeValue,
-              updatedAt: new Date()
-            }
-          }
-        );
-        console.log("✅ Direct database update successful");
-      } else {
-        await page.save();
-        console.log("✅ Standard save successful");
-      }
-    } catch (saveError) {
-      console.log("❌ Save error, attempting direct update:", saveError.message);
-      // Fallback to direct database update
-      await Page.updateOne(
-        { _id: pageId },
-        { 
-          $set: { 
-            theme: dbThemeValue,
-            updatedAt: new Date()
-          }
+    const updateResult = await Page.updateOne(
+      { _id: pageId, owner: session.user.email },
+      {
+        $set: {
+          theme: dbThemeValue,
+          updatedAt: new Date()
         }
-      );
-      console.log("✅ Fallback direct update successful");
-    }
+      },
+      { runValidators: true }
+    );
 
-    console.log("✅ Theme saved successfully");
+    if (!updateResult.matchedCount) {
+      return notFound('Page not found or forbidden');
+    }
     
     // Return success with timestamp for live updates
-    return new Response(JSON.stringify({ 
+    return ok({ 
       success: true, 
       message: "Theme saved",
       lastUpdated: new Date().toISOString()
-    }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
     });
   } catch (err) {
-    console.error("❌ saveTheme error:", err);
-    console.error("❌ Error details:", {
-      name: err.name,
-      message: err.message,
-      stack: err.stack
-    });
-    return new Response(`Error saving theme: ${err.message}`, { status: 500 });
+    console.error("❌ saveTheme error:", err?.message || err);
+    return serverError('Failed to save theme');
   }
 }

@@ -13,7 +13,7 @@ export default function AppSidebar() {
     <Link
       href={href}
       className={`
-        group flex items-center gap-3 p-3 rounded-xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden
+        group flex items-center gap-3 p-3 rounded-xl transition-all duration-300 transform md:hover:scale-[1.02] relative overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
         ${isActive 
           ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/30' 
           : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-700 hover:shadow-md'
@@ -63,7 +63,7 @@ export default function AppSidebar() {
       <div className="border-t border-gray-100 pt-4 mb-4">
         <LogoutButton
           iconLeft={true}
-          className="w-full flex gap-3 items-center justify-center text-gray-600 bg-gray-50 hover:bg-red-500 hover:text-white p-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-lg group"
+          className="w-full flex gap-3 items-center justify-center text-gray-600 bg-gray-50 hover:bg-red-500 hover:text-white p-3 rounded-xl transition-all duration-300 transform md:hover:scale-[1.02] shadow-sm hover:shadow-lg group"
           iconClasses="w-4 h-4 transition-all duration-300"
         />
       </div>
@@ -72,7 +72,7 @@ export default function AppSidebar() {
       <div className="border-t border-gray-100 pt-4">
         <Link 
           href="/" 
-          className="group flex items-center justify-center gap-3 text-gray-600 bg-gradient-to-r from-gray-50 to-blue-50 hover:from-blue-600 hover:to-purple-600 hover:text-white p-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-lg relative overflow-hidden"
+          className="group flex items-center justify-center gap-3 text-gray-600 bg-gradient-to-r from-gray-50 to-blue-50 hover:from-blue-600 hover:to-purple-600 hover:text-white p-3 rounded-xl transition-all duration-300 transform md:hover:scale-[1.02] shadow-sm hover:shadow-lg relative overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
           <FontAwesomeIcon 

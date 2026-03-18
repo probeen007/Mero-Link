@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faDownload, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faCopy, faDownload, faShareNodes, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ShareCardPreview from "@/components/ShareCardPreview";
 
 export default function ShareProfileSection() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
+  const [copying, setCopying] = useState(false);
   const [error, setError] = useState("");
   const cardRef = useRef(null);
 
@@ -58,12 +59,15 @@ export default function ShareProfileSection() {
   }, []);
 
   const copyProfileLink = async () => {
-    if (!data?.profileUrl) return;
+    if (!data?.profileUrl || copying) return;
     try {
+      setCopying(true);
       await navigator.clipboard.writeText(data.profileUrl);
       toast.success("Profile link copied");
     } catch (err) {
       toast.error("Failed to copy link");
+    } finally {
+      setCopying(false);
     }
   };
 
@@ -122,8 +126,8 @@ export default function ShareProfileSection() {
 
       {!loading && !error && data && (
         <div className="space-y-4">
-          <div className="overflow-x-auto">
-            <div className="min-w-[360px] flex justify-center">
+          <div className="overflow-x-auto pb-1">
+            <div className="min-w-[300px] sm:min-w-[360px] flex justify-center">
               <ShareCardPreview ref={cardRef} data={data} />
             </div>
           </div>
@@ -132,17 +136,18 @@ export default function ShareProfileSection() {
             <button
               type="button"
               onClick={copyProfileLink}
-              className="inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium transition"
+              disabled={copying}
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-70 disabled:cursor-not-allowed text-gray-800 px-4 py-2 rounded-lg font-medium transition"
             >
-              <FontAwesomeIcon icon={faCopy} className="w-4 h-4" />
-              Copy Profile Link
+              <FontAwesomeIcon icon={copying ? faSpinner : faCopy} className={`w-4 h-4 ${copying ? 'animate-spin' : ''}`} />
+              {copying ? 'Copying...' : 'Copy Profile Link'}
             </button>
 
             <button
               type="button"
               onClick={downloadCard}
               disabled={downloading}
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-70 text-white px-4 py-2 rounded-lg font-medium transition"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-70 text-white px-4 py-2 rounded-lg font-medium transition"
             >
               <FontAwesomeIcon icon={faDownload} className="w-4 h-4" />
               {downloading ? "Generating..." : "Download Share Card"}

@@ -39,6 +39,12 @@ const CARD_BG = {
   medieval:  "linear-gradient(135deg, #451a03 0%, #7c2d12 30%, #a16207 60%, #ca8a04 100%)",
   tropical:  "linear-gradient(135deg, #0ea5e9 0%, #06b6d4 30%, #10b981 60%, #22c55e 100%)",
   artdeco:   "linear-gradient(135deg, #000000 0%, #1c1917 30%, #78350f 60%, #fbbf24 100%)",
+  rainycity: "linear-gradient(145deg, #0b1220 0%, #1e293b 55%, #334155 100%)",
+  desertdune: "linear-gradient(140deg, #7c4a1b 0%, #b56a2d 45%, #e0a55f 100%)",
+  arcticglass: "linear-gradient(145deg, #0f4c6b 0%, #1d6f8f 45%, #87b8d6 100%)",
+  volcanicforge: "linear-gradient(145deg, #1b1211 0%, #3f1b14 45%, #7f1d1d 100%)",
+  emeraldlake: "linear-gradient(145deg, #0f3f33 0%, #166b58 46%, #2ea88d 100%)",
+  sunsetcliff: "linear-gradient(145deg, #3a1f1a 0%, #7a3b2e 45%, #d27a45 100%)",
 };
 
 const ShareCardPreview = forwardRef(function ShareCardPreview({ data }, ref) {

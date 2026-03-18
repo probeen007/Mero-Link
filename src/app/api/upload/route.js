@@ -1,8 +1,12 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import { deleteFromS3ByUrl } from "@/libs/s3Delete";
+import dbConnect from "@/libs/mongoClient";
+import { Page } from "@/models/Page";
+import { User } from "@/models/User";
 import { rateLimit } from "@/libs/rateLimit";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { badRequest, ok, serverError, tooManyRequests, unauthorized, isLikelyUrl } from '@/libs/apiResponse';
 import uniqid from "uniqid";
 
 // Rate limiting: 10 uploads per 15 minutes per user
@@ -12,25 +16,43 @@ const uploadRateLimit = rateLimit(10, 15 * 60 * 1000);
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
+async function userOwnsFileUrl(email, fileUrl) {
+  const [page, user] = await Promise.all([
+    Page.findOne({ owner: email }).lean(),
+    User.findOne({ email }).lean(),
+  ]);
+
+  const linkIcons = Array.isArray(page?.links)
+    ? page.links.map((link) => link?.icon).filter(Boolean)
+    : [];
+
+  const candidates = [
+    page?.bgImage,
+    user?.image,
+    ...linkIcons,
+  ].filter(Boolean);
+
+  return candidates.includes(fileUrl);
+}
+
 export async function POST(req) {
   try {
+    await dbConnect();
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return unauthorized();
     }
 
     // Check rate limit
     if (!uploadRateLimit(req)) {
-      return Response.json({ 
-        error: 'Too many uploads. Please try again later.' 
-      }, { status: 429 });
+      return tooManyRequests('Too many uploads. Please try again later.');
     }
 
     const formData = await req.formData();
 
     if (!formData.has('file')) {
-      return Response.json({ error: 'No file provided' }, { status: 400 });
+      return badRequest('No file provided');
     }
 
     const file = formData.get('file');
@@ -38,24 +60,15 @@ export async function POST(req) {
     
     // Validate file
     if (!file || file.size === 0) {
-      return Response.json({ error: 'Invalid file' }, { status: 400 });
+      return badRequest('Invalid file');
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      return Response.json({ 
-        error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB` 
-      }, { status: 400 });
+      return badRequest(`File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`);
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return Response.json({ 
-        error: 'Invalid file type. Only images are allowed.' 
-      }, { status: 400 });
-    }
-    
-    console.log('📁 New file:', file.name, `(${(file.size / 1024).toFixed(1)}KB)`);
-    if (oldFileUrl) {
-      console.log('🗑️ Old file to delete:', oldFileUrl);
+      return badRequest('Invalid file type. Only images are allowed.');
     }
     
     // Initialize S3 client with proper error handling
@@ -69,9 +82,15 @@ export async function POST(req) {
 
     // Delete old file first (if provided)
     if (oldFileUrl && oldFileUrl.trim() !== '') {
+      if (!isLikelyUrl(oldFileUrl)) {
+        return badRequest('Invalid oldFileUrl');
+      }
+
       try {
-        await deleteFromS3ByUrl(oldFileUrl);
-        console.log('✅ Old file deleted successfully');
+        const ownsOldFile = await userOwnsFileUrl(session.user.email, oldFileUrl);
+        if (ownsOldFile) {
+          await deleteFromS3ByUrl(oldFileUrl);
+        }
       } catch (error) {
         console.error('❌ Error deleting old file:', error.message);
         // Continue with upload even if delete fails
@@ -110,9 +129,8 @@ export async function POST(req) {
     await s3Client.send(new PutObjectCommand(uploadParams));
 
     const link = `https://${bucketName}.s3.${process.env.AWS_REGION || 'eu-north-1'}.amazonaws.com/${newFilename}`;
-    console.log('✅ New file uploaded:', link);
 
-    return Response.json({ 
+    return ok({ 
       url: link,
       filename: newFilename,
       size: file.size,
@@ -124,13 +142,9 @@ export async function POST(req) {
     
     // Return appropriate error response
     if (error.name === 'CredentialsError') {
-      return Response.json({ 
-        error: 'Server configuration error' 
-      }, { status: 500 });
+      return serverError('Server configuration error');
     }
     
-    return Response.json({ 
-      error: 'Upload failed. Please try again.' 
-    }, { status: 500 });
+    return serverError('Upload failed. Please try again.');
   }
 }

@@ -5,6 +5,18 @@ import { User } from "@/models/User";
 import dbConnect from "@/libs/mongoClient";
 import {getServerSession} from "next-auth";
 
+const ALLOWED_BUTTON_KEYS = new Set([
+  'email', 'mobile', 'instagram', 'facebook', 'discord', 'tiktok', 'youtube',
+  'whatsapp', 'github', 'telegram', 'twitter', 'linkedin', 'snapchat',
+  'pinterest', 'reddit', 'twitch', 'spotify', 'soundcloud', 'medium', 'tumblr'
+]);
+
+const ALLOWED_BG_TYPES = new Set(['color', 'image']);
+
+function toSafeString(value, maxLength = 500) {
+  return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
+}
+
 export async function savePageSettings(formData) {
   await dbConnect();
   const session = await getServerSession(authOptions);
@@ -20,8 +32,18 @@ export async function savePageSettings(formData) {
         // Handle boolean conversion for adaptBackground
         if (key === 'adaptBackground') {
           dataToUpdate[key] = formData.get(key) === 'true';
+        } else if (key === 'bgType') {
+          const bgType = toSafeString(formData.get(key), 20);
+          if (ALLOWED_BG_TYPES.has(bgType)) {
+            dataToUpdate[key] = bgType;
+          }
+        } else if (key === 'bgColor') {
+          const bgColor = toSafeString(formData.get(key), 20);
+          if (/^#[0-9A-Fa-f]{6}$/.test(bgColor)) {
+            dataToUpdate[key] = bgColor;
+          }
         } else {
-          dataToUpdate[key] = formData.get(key);
+          dataToUpdate[key] = toSafeString(formData.get(key));
         }
       }
     }
@@ -32,7 +54,7 @@ export async function savePageSettings(formData) {
     );
 
     if (formData.has('avatar')) {
-      const avatarLink = formData.get('avatar');
+      const avatarLink = toSafeString(formData.get('avatar'));
       await User.updateOne(
         {email: session.user?.email},
         {image: avatarLink},
@@ -51,7 +73,12 @@ export async function savePageButtons(formData) {
   if (session) {
     const buttonsValues = {};
     formData.forEach((value, key) => {
-      buttonsValues[key] = value;
+      if (ALLOWED_BUTTON_KEYS.has(key)) {
+        const safeValue = toSafeString(value);
+        if (safeValue.length > 0) {
+          buttonsValues[key] = safeValue;
+        }
+      }
     });
     const dataToUpdate = {buttons:buttonsValues};
     await Page.updateOne(

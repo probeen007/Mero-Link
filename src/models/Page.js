@@ -8,7 +8,8 @@ const THEME_VALUES = [
   "feminine", "retro", "nature", "corporate", "cosmic",
   "nepal", "minecraft", "adventure", "anime", "cartoon",
   "galaxy", "ocean", "forest", "egyptian", "sakura",
-  "viking", "cyberpunk", "medieval", "tropical", "artdeco"
+  "viking", "cyberpunk", "medieval", "tropical", "artdeco",
+  "rainycity", "desertdune", "arcticglass", "volcanicforge", "emeraldlake", "sunsetcliff"
 ];
 
 const PageSchema = new Schema(

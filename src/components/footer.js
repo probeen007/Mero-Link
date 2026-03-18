@@ -6,7 +6,7 @@ export default function Footer() {
 
     return (
         <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="page-shell">
                 {/* Main Footer Content */}
                 <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Brand Section */}
@@ -30,7 +30,7 @@ export default function Footer() {
                             <span>📧</span>
                             <a
                                 href="mailto:prootech123@gmail.com"
-                                className="hover:text-blue-400 transition-colors"
+                                className="hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                             >
                                 prootech123@gmail.com
                             </a>
@@ -42,17 +42,17 @@ export default function Footer() {
                         <h3 className="font-bold text-lg mb-4 text-white">Quick Links</h3>
                         <ul className="space-y-3">
                             <li>
-                                <Link href="/about" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                <Link href="/about" className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded px-1">
                                     About Us
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/pricing" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                <Link href="/pricing" className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded px-1">
                                     Pricing
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/contact" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                <Link href="/contact" className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded px-1">
                                     Contact
                                 </Link>
                             </li>
@@ -64,19 +64,19 @@ export default function Footer() {
                         <h3 className="font-bold text-lg mb-4 text-white">Legal & Support</h3>
                         <ul className="space-y-3">
                             <li>
-                                <Link href="/privacy" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                <Link href="/privacy" className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded px-1">
                                     Privacy Policy
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/terms" className="text-gray-300 hover:text-blue-400 transition-colors text-base">
+                                <Link href="/terms" className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded px-1">
                                     Terms of Service
                                 </Link>
                             </li>
                             <li>
                                 <a 
                                     href="mailto:prootech123@gmail.com" 
-                                    className="text-gray-300 hover:text-blue-400 transition-colors text-base"
+                                    className="text-gray-300 hover:text-blue-400 transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                                 >
                                     Get Verified
                                 </a>
@@ -88,7 +88,7 @@ export default function Footer() {
                 {/* Bottom Section */}
                 <div className="border-t border-gray-700 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-gray-400 text-sm text-center md:text-left">
                             &copy; {currentYear} Mero Link. All rights reserved.
                         </p>
                         <div className="flex items-center gap-6">

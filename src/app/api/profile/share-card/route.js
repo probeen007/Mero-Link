@@ -4,6 +4,7 @@ import dbConnect from "@/libs/mongoClient";
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import { Project } from "@/models/Project";
+import { notFound, ok, serverError, unauthorized } from "@/libs/apiResponse";
 
 const SOCIAL_KEYS = new Set([
   "email",
@@ -32,7 +33,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return unauthorized();
     }
 
     await dbConnect();
@@ -44,7 +45,7 @@ export async function GET() {
     ]);
 
     if (!page) {
-      return Response.json({ error: "Profile not found" }, { status: 404 });
+      return notFound("Profile not found");
     }
 
     const linksCount = Array.isArray(page.links) ? page.links.length : 0;
@@ -66,25 +67,19 @@ export async function GET() {
     ).replace(/\/$/, "");
     const profileUrl = `${publicBaseUrl}/${page.uri}`;
 
-    return Response.json(
-      {
-        avatar: user?.image || "/icon-192x192.png",
-        fullName: page.displayName || user?.name || "Mero Link User",
-        bio: page.bio || "Create your own profile with Mero Link",
-        linksCount,
-        projectsCount,
-        socialKeys,
-        profileUrl,
-        uri: page.uri,
-        theme: page.theme || "default",
-      },
-      { status: 200 }
-    );
+    return ok({
+      avatar: user?.image || "/icon-192x192.png",
+      fullName: page.displayName || user?.name || "Mero Link User",
+      bio: page.bio || "Create your own profile with Mero Link",
+      linksCount,
+      projectsCount,
+      socialKeys,
+      profileUrl,
+      uri: page.uri,
+      theme: page.theme || "default",
+    });
   } catch (error) {
     console.error("Share card API error:", error);
-    return Response.json(
-      { error: "Failed to load share card data" },
-      { status: 500 }
-    );
+    return serverError("Failed to load share card data");
   }
 }

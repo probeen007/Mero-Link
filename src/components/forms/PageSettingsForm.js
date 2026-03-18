@@ -29,11 +29,9 @@ export default function PageSettingsForm({ page, user }) {
   async function saveBaseSettings(formData) {
     try {
       setSaving(true);
-      console.log('💾 Saving page settings with adaptBackground:', adaptBackground);
       const result = await savePageSettings(formData);
       if (result) {
         toast.success('Settings saved successfully!');
-        console.log('✅ Page settings saved successfully');
       }
     } catch (error) {
       console.error('❌ Error saving page settings:', error);
@@ -66,13 +64,13 @@ export default function PageSettingsForm({ page, user }) {
 
   return (
     <div>
-      <SectionBox>
+      <SectionBox className="space-y-4">
         <form onSubmit={handleSubmit}>
           <div
-            className={`py-1 -m-4 min-h-[300px] flex justify-center items-center bg-cover bg-center ${backgroundClasses}`}
+            className={`py-3 px-3 min-h-[240px] sm:min-h-[280px] flex justify-center items-center bg-cover bg-center rounded-xl border border-gray-200 ${backgroundClasses}`}
             style={backgroundStyle}
           >
-            <div>
+            <div className="w-full max-w-md">
               <RadioTogglers
                 value={selectedBgOption}
                 options={[
@@ -93,8 +91,8 @@ export default function PageSettingsForm({ page, user }) {
               <input type="hidden" name="bgType" value={bgType} />
               <input type="hidden" name="adaptBackground" value={adaptBackground.toString()} />
               {!adaptBackground && bgType === 'color' && (
-                <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
-                  <div className="flex gap-2 justify-center">
+                <div className="bg-gray-100 border border-gray-200 text-gray-700 p-2 mt-2 rounded-lg">
+                  <div className="flex flex-wrap gap-2 items-center justify-center">
                     <span>Background color:</span>
                     <input
                       type="color"
@@ -106,8 +104,8 @@ export default function PageSettingsForm({ page, user }) {
                 </div>
               )}
               {!adaptBackground && bgType === 'image' && (
-                <div className="bg-gray-200 shadow text-gray-700 p-3 mt-2">
-                  <div className="flex flex-col gap-2">
+                <div className="bg-gray-100 border border-gray-200 text-gray-700 p-3 mt-2 rounded-lg">
+                  <div className="flex flex-col gap-2 sm:gap-3">
                     <label className="flex items-center gap-2 text-sm font-medium">
                       <FontAwesomeIcon icon={faLink} className="text-gray-600" />
                       <span>Background Image URL:</span>
@@ -118,14 +116,15 @@ export default function PageSettingsForm({ page, user }) {
                       value={bgImage}
                       onChange={ev => setBgImage(ev.target.value)}
                       placeholder="https://example.com/image.jpg"
-                      className="px-3 py-2 border border-gray-300 rounded text-sm w-full"
+                      className="w-full"
                     />
+                    <p className="text-xs text-gray-500">Use a direct image link (JPG, PNG, WEBP).</p>
                   </div>
                 </div>
               )}
               {adaptBackground && (
-                <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
-                  <div className="flex gap-2 justify-center">
+                <div className="bg-gray-100 border border-gray-200 text-gray-700 p-2 mt-2 rounded-lg">
+                  <div className="flex flex-wrap gap-2 items-center justify-center text-sm">
                     <FontAwesomeIcon icon={faMagic} className="text-gray-600" />
                     <span>Using theme background: {currentTheme.name}</span>
                   </div>
@@ -146,7 +145,7 @@ export default function PageSettingsForm({ page, user }) {
               </div>
             </div>
           </div>
-          <div className="p-0">
+          <div className="p-0 mt-1">
             <label className="input-label" htmlFor="avatarIn">Avatar Image URL</label>
             <input
               type="url"
@@ -156,6 +155,7 @@ export default function PageSettingsForm({ page, user }) {
               onChange={ev => setAvatar(ev.target.value)}
               placeholder="https://example.com/avatar.jpg"
             />
+            <p className="text-xs text-gray-500 mb-3">Paste a direct image URL for your profile avatar.</p>
             <label className="input-label" htmlFor="nameIn">Display name</label>
             <input
               type="text"
@@ -179,7 +179,7 @@ export default function PageSettingsForm({ page, user }) {
               id="bioIn"
               placeholder="Your bio goes here..."
             />
-            <div className="max-w-[200px] mx-auto">
+            <div className="max-w-[240px] mx-auto mt-4">
               <SubmitButton disabled={saving}>
                 <FontAwesomeIcon icon={faSave} />
                 <span>{saving ? 'Saving...' : 'Save'}</span>

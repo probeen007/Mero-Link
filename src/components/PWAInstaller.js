@@ -18,12 +18,7 @@ const PWAInstaller = () => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js')
-        .then(registration => {
-          console.log('SW registered: ', registration);
-        })
-        .catch(registrationError => {
-          console.log('SW registration failed: ', registrationError);
-        });
+        .catch(() => {});
     }
 
     // Listen for install prompt
@@ -59,13 +54,7 @@ const PWAInstaller = () => {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
-    }
+    await deferredPrompt.userChoice;
     
     setDeferredPrompt(null);
     setShowInstallPrompt(false);

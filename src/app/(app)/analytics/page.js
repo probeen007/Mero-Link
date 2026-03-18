@@ -1,6 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Chart from "@/components/Chart";
-import SectionBox from "@/components/layout/SectionBox";
 import { Event } from "@/models/Event";
 import { Page } from "@/models/Page";
 import { faLink, faChartLine, faEye, faMousePointer, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
@@ -71,30 +70,30 @@ export default async function AnalyticsPage() {
   const todayClicks = clicks.filter(click => isToday(click.createdAt)).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-3 sm:px-4 md:px-6 py-4 sm:py-6">
       <div className="max-w-6xl mx-auto">
         {/* Enhanced Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-blue-100 p-3 rounded-full mr-4">
-              <FontAwesomeIcon icon={faChartLine} className="text-2xl text-blue-600" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 gap-3 sm:gap-4">
+            <div className="bg-blue-100 p-3 rounded-full">
+              <FontAwesomeIcon icon={faChartLine} className="text-xl sm:text-2xl text-blue-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 Analytics Dashboard
               </h1>
-              <p className="text-gray-600 mt-1">Track your Mero Link performance and engagement</p>
+              <p className="text-sm sm:text-base text-gray-600 mt-1">Track your Mero Link performance and engagement</p>
             </div>
           </div>
         </div>
 
         {/* Stats Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm font-medium">Total Views</p>
-                <p className="text-3xl font-bold text-blue-600">{totalViews}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-600">{totalViews}</p>
               </div>
               <div className="bg-blue-100 p-3 rounded-full">
                 <FontAwesomeIcon icon={faEye} className="text-blue-600 text-xl" />
@@ -102,11 +101,11 @@ export default async function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg border border-green-100 p-6">
+          <div className="bg-white rounded-xl shadow-lg border border-green-100 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm font-medium">Total Clicks</p>
-                <p className="text-3xl font-bold text-green-600">{totalClicks}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-green-600">{totalClicks}</p>
               </div>
               <div className="bg-green-100 p-3 rounded-full">
                 <FontAwesomeIcon icon={faMousePointer} className="text-green-600 text-xl" />
@@ -114,11 +113,11 @@ export default async function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg border border-purple-100 p-6">
+          <div className="bg-white rounded-xl shadow-lg border border-purple-100 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm font-medium">Today's Views</p>
-                <p className="text-3xl font-bold text-purple-600">{todayViews}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-purple-600">{todayViews}</p>
               </div>
               <div className="bg-purple-100 p-3 rounded-full">
                 <FontAwesomeIcon icon={faCalendarDay} className="text-purple-600 text-xl" />
@@ -126,11 +125,11 @@ export default async function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg border border-orange-100 p-6">
+          <div className="bg-white rounded-xl shadow-lg border border-orange-100 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm font-medium">Today's Clicks</p>
-                <p className="text-3xl font-bold text-orange-600">{todayClicks}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-orange-600">{todayClicks}</p>
               </div>
               <div className="bg-orange-100 p-3 rounded-full">
                 <FontAwesomeIcon icon={faMousePointer} className="text-orange-600 text-xl" />
@@ -141,13 +140,13 @@ export default async function AnalyticsPage() {
 
         {/* Enhanced Views Section */}
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 mb-8 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
-            <h2 className="text-xl font-semibold text-white flex items-center">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white flex items-center">
               <FontAwesomeIcon icon={faEye} className="mr-3" />
               Page Views Over Time
             </h2>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <Chart data={groupedViews.map(o => ({
               date: o._id,
               views: o.count,
@@ -157,13 +156,13 @@ export default async function AnalyticsPage() {
 
         {/* Enhanced Clicks Section */}
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
-            <h2 className="text-xl font-semibold text-white flex items-center">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white flex items-center">
               <FontAwesomeIcon icon={faMousePointer} className="mr-3" />
               Link Performance
             </h2>
           </div>
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {page.links && page.links.length > 0 ? (
               <div className="space-y-4">
                 {page.links.map((link, index) => (

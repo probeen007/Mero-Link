@@ -20,7 +20,11 @@ function mapReadyState(state) {
   }
 }
 
-export async function GET() {
+export async function GET(request) {
+  const adminHealthKey = process.env.HEALTHCHECK_SECRET;
+  const providedKey = request?.headers?.get('x-health-key');
+  const isAuthorized = adminHealthKey && providedKey === adminHealthKey;
+
   const healthCheck = {
     status: 'ok',
     timestamp: new Date().toISOString(),
@@ -31,18 +35,6 @@ export async function GET() {
       memory: 'unknown',
       uptime: process.uptime(),
       dbState: mapReadyState(mongoose.connection.readyState),
-      lastDbError: global.__lastDbError ? {
-        message: global.__lastDbError.message,
-        at: global.__lastDbError.at
-      } : null,
-      mongoMetrics: global.__mongoMetrics ? {
-        lastAttemptAt: global.__mongoMetrics.lastAttemptAt,
-        lastSuccessAt: global.__mongoMetrics.lastSuccessAt,
-        lastErrorAt: global.__mongoMetrics.lastErrorAt,
-        lastErrorMessage: global.__mongoMetrics.lastErrorMessage,
-        attemptCount: global.__mongoMetrics.attemptCount,
-        consecutiveFailures: global.__mongoMetrics.consecutiveFailures,
-      } : null
     }
   };
 
@@ -57,20 +49,12 @@ export async function GET() {
     // Recompute dbState after attempting connect
     healthCheck.checks.dbState = mapReadyState(mongoose.connection.readyState);
     // If mongoMetrics missing but connected, seed minimal success info
-    if (healthCheck.checks.database === 'connected' && (!healthCheck.checks.mongoMetrics || !healthCheck.checks.mongoMetrics.lastSuccessAt)) {
+    if (healthCheck.checks.database === 'connected' && (!global.__mongoMetrics || !global.__mongoMetrics.lastSuccessAt)) {
       if (!global.__mongoMetrics) {
         global.__mongoMetrics = { attemptCount: 1, lastSuccessAt: new Date().toISOString(), lastAttemptAt: new Date().toISOString(), lastErrorAt: null, lastErrorMessage: null, consecutiveFailures: 0 };
       } else {
         global.__mongoMetrics.lastSuccessAt = global.__mongoMetrics.lastSuccessAt || new Date().toISOString();
       }
-      healthCheck.checks.mongoMetrics = {
-        lastAttemptAt: global.__mongoMetrics.lastAttemptAt,
-        lastSuccessAt: global.__mongoMetrics.lastSuccessAt,
-        lastErrorAt: global.__mongoMetrics.lastErrorAt,
-        lastErrorMessage: global.__mongoMetrics.lastErrorMessage,
-        attemptCount: global.__mongoMetrics.attemptCount,
-        consecutiveFailures: global.__mongoMetrics.consecutiveFailures,
-      };
     }
   } catch (error) {
     healthCheck.checks.database = 'error';
@@ -93,6 +77,22 @@ export async function GET() {
       healthCheck.status = 'warning';
       healthCheck.alerts = ['High memory usage detected'];
     }
+  }
+
+  if (isAuthorized) {
+    healthCheck.checks.lastDbError = global.__lastDbError ? {
+      message: global.__lastDbError.message,
+      at: global.__lastDbError.at
+    } : null;
+
+    healthCheck.checks.mongoMetrics = global.__mongoMetrics ? {
+      lastAttemptAt: global.__mongoMetrics.lastAttemptAt,
+      lastSuccessAt: global.__mongoMetrics.lastSuccessAt,
+      lastErrorAt: global.__mongoMetrics.lastErrorAt,
+      lastErrorMessage: global.__mongoMetrics.lastErrorMessage,
+      attemptCount: global.__mongoMetrics.attemptCount,
+      consecutiveFailures: global.__mongoMetrics.consecutiveFailures,
+    } : null;
   }
 
   const statusCode = healthCheck.status === 'ok' ? 200 : 

@@ -1,55 +1,60 @@
 import { deleteFromS3ByUrl } from "@/libs/s3Delete";
+import dbConnect from "@/libs/mongoClient";
+import { Page } from "@/models/Page";
+import { User } from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { badRequest, forbidden, serverError, unauthorized, ok, isLikelyUrl } from '@/libs/apiResponse';
+
+async function userOwnsFileUrl(email, fileUrl) {
+  const [page, user] = await Promise.all([
+    Page.findOne({ owner: email }).lean(),
+    User.findOne({ email }).lean(),
+  ]);
+
+  const linkIcons = Array.isArray(page?.links)
+    ? page.links.map((link) => link?.icon).filter(Boolean)
+    : [];
+
+  const candidates = [
+    page?.bgImage,
+    user?.image,
+    ...linkIcons,
+  ].filter(Boolean);
+
+  return candidates.includes(fileUrl);
+}
 
 export async function DELETE(request) {
   try {
+    await dbConnect();
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return unauthorized();
     }
 
     const { searchParams } = new URL(request.url);
     const fileUrl = searchParams.get('url');
     
     if (!fileUrl) {
-      return new Response(JSON.stringify({ error: 'File URL parameter required' }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return badRequest('File URL parameter required');
+    }
+    
+    if (!isLikelyUrl(fileUrl)) {
+      return badRequest('Invalid file URL format');
     }
 
-    console.log('🗑️ Manual delete request for:', fileUrl);
+    const ownsFile = await userOwnsFileUrl(session.user.email, fileUrl);
+    if (!ownsFile) {
+      return forbidden('You do not own this file');
+    }
     
     const success = await deleteFromS3ByUrl(fileUrl);
-    
-    if (success) {
-      return new Response(JSON.stringify({ 
-        success: true, 
-        message: 'File deleted successfully',
-        deletedUrl: fileUrl
-      }), { 
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    } else {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Failed to delete file' 
-      }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+
+    return ok({ success: true, message: 'File deleted successfully' });
   } catch (err) {
-    console.error("❌ deleteFile error:", err);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('❌ Delete file error:', err);
+    return serverError('Delete failed');
   }
 }
