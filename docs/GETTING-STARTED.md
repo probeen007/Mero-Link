@@ -41,7 +41,7 @@ Edit `.env.local` and fill in the following values:
 
 ```env
 # Database
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/merolink
+MONGO_URI=your link
 
 # NextAuth.js
 NEXTAUTH_SECRET=your-random-secret-key (generate with: openssl rand -base64 32)
@@ -68,7 +68,7 @@ AWS_REGION=us-east-1
 
 ### Using MongoDB Atlas (Cloud)
 
-1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+1. Create account at [MongoDB Atlas]
 2. Create a cluster
 3. Whitelist your IP address
 4. Create database user
@@ -93,7 +93,7 @@ MONGO_URI=mongodb://localhost:27017/merolink
 3. Enable "Google+ API"
 4. Navigate to "Credentials"
 5. Create "OAuth 2.0 Client ID" for Web Application
-6. Add `http://localhost:3000/api/auth/callback/google` to Authorized redirect URIs
+6. Add `link` to Authorized redirect URIs
 7. Copy Client ID and Secret to `.env.local`
 
 ---
@@ -164,7 +164,7 @@ src/
 
 ### Issue: "Google OAuth failed"
 **Solution:** 
-- Verify redirect URI is exactly: `http://localhost:3000/api/auth/callback/google`
+- Verify redirect URI is exactly: ` link `
 - Check Client ID and Secret match your Google Cloud project
 
 ### Issue: Port 3000 already in use
