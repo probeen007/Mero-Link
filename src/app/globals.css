@@ -7,11 +7,63 @@
    ======================= */
 html {
     overflow-x: hidden;
+    font-size: clamp(14px, 0.35vw + 13px, 16px);
 }
 
 body {
     @apply bg-gray-100;
     overflow-x: hidden;
+}
+
+:root {
+  --space-fluid-xs: clamp(0.25rem, 0.15rem + 0.4vw, 0.5rem);
+  --space-fluid-sm: clamp(0.5rem, 0.3rem + 0.7vw, 0.9rem);
+  --space-fluid-md: clamp(0.75rem, 0.45rem + 1vw, 1.25rem);
+  --space-fluid-lg: clamp(1rem, 0.7rem + 1.2vw, 1.75rem);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  font-size: clamp(1.5rem, 1rem + 2.1vw, 3.5rem);
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: clamp(1.25rem, 0.95rem + 1.4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.75rem);
+  line-height: 1.25;
+}
+
+p,
+li,
+label,
+button,
+input,
+textarea,
+select {
+  font-size: clamp(0.875rem, 0.82rem + 0.25vw, 1rem);
+}
+
+p,
+li,
+label {
+  overflow-wrap: anywhere;
 }
 
 @layer components {
@@ -36,6 +88,7 @@ input[type="email"],
 input[type="tel"],
 textarea {
   @apply bg-gray-100 w-full block py-2 px-3 mb-1 rounded border border-gray-300;
+  min-height: 2.625rem;
 }
 
 input[type="text"]:focus,
@@ -46,15 +99,24 @@ textarea:focus {
   @apply outline-none ring-2 ring-blue-300 border-blue-400;
 }
 
+button,
+[role="button"] {
+  min-height: 2.5rem;
+}
+
 label.input-label {
     @apply uppercase text-gray-400 text-xs mb-2 font-semibold;
 }
 
 .radio-togglers {
-    @apply p-1 bg-gray-200 inline-flex cursor-pointer;
+  @apply w-full max-w-full p-1.5 bg-gray-200 rounded-lg flex flex-wrap gap-1 cursor-pointer overflow-hidden;
+}
+
+.radio-togglers label {
+  @apply flex-1 min-w-[110px];
 }
 .radio-togglers div {
-    @apply p-2 px-4 text-gray-500 block flex items-center gap-2 cursor-pointer;
+  @apply w-full p-2 px-3 text-gray-600 text-sm sm:text-base block flex items-center justify-center gap-2 cursor-pointer rounded-md;
 }
 .radio-togglers input[type="radio"] {
     @apply hidden;
@@ -72,6 +134,17 @@ input#navCb:checked ~ aside {
 }
 input#navCb:checked ~ .backdrop {
     display: block;
+}
+
+@media (max-width: 640px) {
+  .radio-togglers label {
+    min-width: calc(50% - 0.25rem);
+  }
+
+  .page-shell {
+    padding-left: var(--space-fluid-sm);
+    padding-right: var(--space-fluid-sm);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

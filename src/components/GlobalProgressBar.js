@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function GlobalProgressBar() {
@@ -18,7 +18,7 @@ export default function GlobalProgressBar() {
     }
   };
 
-  const start = () => {
+  const start = useCallback(() => {
     if (active || finishingRef.current) return;
     setActive(true);
     setWidth(10);
@@ -31,9 +31,9 @@ export default function GlobalProgressBar() {
         return Math.min(90, prev + step);
       });
     }, 140);
-  };
+  }, [active]);
 
-  const done = () => {
+  const done = useCallback(() => {
     if (!active) return;
     finishingRef.current = true;
     stopInterval();
@@ -44,14 +44,14 @@ export default function GlobalProgressBar() {
       setWidth(0);
       finishingRef.current = false;
     }, 220);
-  };
+  }, [active]);
 
   useEffect(() => {
     done();
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, done]);
 
-  useEffect(() => {
-    const handleClick = (event) => {
+  const handleClick = useCallback(
+    (event) => {
       if (event.defaultPrevented) return;
       if (event.button !== 0) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -70,14 +70,20 @@ export default function GlobalProgressBar() {
       if (!isInternal) return;
 
       start();
-    };
+    },
+    [start]
+  );
 
-    const handleSubmit = (event) => {
+  const handleSubmit = useCallback(
+    (event) => {
       const form = event.target;
       if (!(form instanceof HTMLFormElement)) return;
       start();
-    };
+    },
+    [start]
+  );
 
+  useEffect(() => {
     document.addEventListener('click', handleClick, true);
     document.addEventListener('submit', handleSubmit, true);
 
@@ -85,7 +91,7 @@ export default function GlobalProgressBar() {
       document.removeEventListener('click', handleClick, true);
       document.removeEventListener('submit', handleSubmit, true);
     };
-  }, [active]);
+  }, [handleClick, handleSubmit]);
 
   return (
     <div

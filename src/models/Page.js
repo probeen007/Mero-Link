@@ -14,8 +14,8 @@ const THEME_VALUES = [
 
 const PageSchema = new Schema(
   {
-    uri: { type: String, required: true, min: 1, unique: true },
-    owner: { type: String, required: true },
+    uri: { type: String, required: true, min: 1, unique: true, index: true },
+    owner: { type: String, required: true, index: true },
     displayName: { type: String, default: "" },
     location: { type: String, default: "" },
     bio: { type: String, default: "" },
@@ -39,6 +39,9 @@ const PageSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// Compound index for faster owner lookups
+PageSchema.index({ owner: 1, createdAt: -1 });
 
 // Export theme values for use in other files
 export { THEME_VALUES };

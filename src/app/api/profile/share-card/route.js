@@ -5,6 +5,7 @@ import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import { Project } from "@/models/Project";
 import { notFound, ok, serverError, unauthorized } from "@/libs/apiResponse";
+import { cache, cacheKey, getCachedOrFetch } from "@/libs/cache";
 
 const SOCIAL_KEYS = new Set([
   "email",
@@ -40,8 +41,20 @@ export async function GET() {
 
     const email = session.user.email;
     const [page, user] = await Promise.all([
-      Page.findOne({ owner: email }).lean(),
-      User.findOne({ email }).lean(),
+      getCachedOrFetch(
+        cacheKey('sharecard:page', email),
+        () => Page.findOne({ owner: email })
+          .select('uri displayName bio buttons links owner theme')
+          .lean(),
+        120000 // Cache for 2 minutes
+      ),
+      getCachedOrFetch(
+        cacheKey('sharecard:user', email),
+        () => User.findOne({ email })
+          .select('_id name image')
+          .lean(),
+        300000 // Cache for 5 minutes
+      ),
     ]);
 
     if (!page) {

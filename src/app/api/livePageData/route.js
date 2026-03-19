@@ -2,6 +2,7 @@ import { Page } from '@/models/Page';
 import { User } from '@/models/User';
 import dbConnect from '@/libs/mongoClient';
 import { logger } from '@/libs/logger';
+import { cache, cacheKey, getCachedOrFetch } from '@/libs/cache';
 
 // Simple correlation id generator (avoids dependency) - format: ts-rand
 function correlationId() {
@@ -42,7 +43,16 @@ export async function GET(request) {
       });
     }
 
-    const page = await Page.findOne({ uri }).lean();
+    const page = await getCachedOrFetch(
+      cacheKey('page', uri),
+      async () => {
+        const data = await Page.findOne({ uri })
+          .select('uri owner displayName location bio bgType bgColor bgImage adaptBackground buttons links theme updatedAt')
+          .lean();
+        return data;
+      },
+      60000 // Cache for 60 seconds
+    );
     if (!page) {
       logger.info('livePageData page not found', { cid, uri });
       return new Response(JSON.stringify({ error: 'Page not found', cid }), {
@@ -51,7 +61,15 @@ export async function GET(request) {
       });
     }
 
-    const user = await User.findOne({ email: page.owner }).lean();
+    const user = await getCachedOrFetch(
+      cacheKey('user', page.owner),
+      async () => {
+        return User.findOne({ email: page.owner })
+          .select('_id name image isVerified')
+          .lean();
+      },
+      300000 // Cache user for 5 minutes
+    );
 
     page._id = page._id.toString();
     const safeUser = user

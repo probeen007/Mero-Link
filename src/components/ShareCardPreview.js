@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
+import Image from "next/image";
 import { themes } from "@/libs/themes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { socialIcons } from "@/libs/icons";
@@ -63,10 +64,13 @@ const ShareCardPreview = forwardRef(function ShareCardPreview({ data }, ref) {
 
       <div className="relative z-10 text-center">
         <div className="w-16 h-16 mx-auto rounded-full overflow-hidden border-4 border-white/90 shadow-lg">
-          <img
+          <Image
             src={data?.avatar || "/icon-192x192.png"}
             alt="avatar"
             className="w-full h-full object-cover"
+            width={64}
+            height={64}
+            priority
             crossOrigin="anonymous"
           />
         </div>
@@ -111,10 +115,12 @@ const ShareCardPreview = forwardRef(function ShareCardPreview({ data }, ref) {
 
         {data?.qrCodeUrl ? (
           <div className="w-[52px] h-[52px] rounded-lg bg-white p-1 shrink-0">
-            <img
+            <Image
               src={data.qrCodeUrl}
               alt="Profile QR"
               className="w-full h-full rounded object-contain"
+              width={52}
+              height={52}
             />
           </div>
         ) : null}

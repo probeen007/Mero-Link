@@ -5,6 +5,10 @@
 const CACHE_NAME = 'mero-link-v2';
 const STATIC_CACHE = 'mero-link-static-v2';
 const DYNAMIC_CACHE = 'mero-link-dynamic-v2';
+const IMAGE_CACHE = 'mero-link-images-v2';
+
+// Maximum number of images to keep in cache (LRU eviction)
+const MAX_IMAGE_CACHE_SIZE = 50;
 
 // Resources to cache immediately
 // Do NOT pre-cache HTML routes to avoid serving stale SSR markup
@@ -19,6 +23,17 @@ const STATIC_ASSETS = [
 const API_CACHE_PATTERNS = [
   '/api/livePageData',
   '/api/health'
+];
+
+// Image source patterns to aggressively cache (user avatars, QR codes, etc)
+const IMAGE_CACHE_PATTERNS = [
+  'lh3.googleusercontent.com', // Google avatars
+  'i.ibb.co', // ImgBB
+  'imgur.com', // Imgur
+  'i.imgur.com', // Imgur direct
+  'cdn.discordapp.com', // Discord
+  'media.discordapp.net', // Discord
+  '/api/qr' // QR code endpoint
 ];
 
 // Install event - cache static assets
@@ -62,8 +77,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip cross-origin requests
-  if (url.origin !== location.origin) {
+  // Skip cross-origin requests (except image sources)
+  if (url.origin !== location.origin && !isImageSource(url.origin)) {
     return;
   }
 
@@ -74,6 +89,10 @@ self.addEventListener('fetch', (event) => {
 
   // Handle different types of requests
   if (request.method === 'GET') {
+    if (isImageRequest(request.url)) {
+      event.respondWith(cacheFirstImages(request, IMAGE_CACHE));
+      return;
+    }
     if (isStaticAsset(request.url)) {
       event.respondWith(cacheFirst(request, STATIC_CACHE));
       return;
@@ -87,6 +106,50 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Cache strategies
+// Images: aggressively cache with size limit
+async function cacheFirstImages(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      // Enforce cache size limit
+      await enforceImageCacheSize(cacheName);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    console.error('Image fetch failed:', error);
+    // Return transparent 1x1 fallback for failed images
+    const fallback = new Response(
+      new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B]),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'image/gif', 'X-Fallback': 'true' }
+      }
+    );
+    return fallback;
+  }
+}
+
+async function enforceImageCacheSize(cacheName) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  
+  if (keys.length > MAX_IMAGE_CACHE_SIZE) {
+    // Remove oldest entries (simple FIFO, not true LRU)
+    const toRemove = keys.length - MAX_IMAGE_CACHE_SIZE + 5; // Remove 5 extra to reduce frequency
+    for (let i = 0; i < toRemove; i++) {
+      await cache.delete(keys[i]);
+    }
+  }
+}
+
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
@@ -138,6 +201,20 @@ async function staleWhileRevalidate(request, cacheName) {
 }
 
 // Helper functions
+function isImageRequest(url) {
+  // Check for image file extensions
+  if (/\.(png|jpeg|jpg|gif|webp|avif|svg)(\?|$)/i.test(url)) {
+    return true;
+  }
+  // Check for image source patterns
+  return IMAGE_CACHE_PATTERNS.some(pattern => url.includes(pattern));
+}
+
+function isImageSource(origin) {
+  // Check if origin is a known image source
+  return IMAGE_CACHE_PATTERNS.some(pattern => origin.includes(pattern));
+}
+
 function isStaticAsset(url) {
   // Exclude Next.js internals entirely; let the browser handle them
   if (url.includes('/_next/')) return false;

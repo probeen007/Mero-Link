@@ -4,6 +4,7 @@ import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import dbConnect from "@/libs/mongoClient";
 import {getServerSession} from "next-auth";
+import { cache, cacheKey } from "@/libs/cache";
 
 const ALLOWED_BUTTON_KEYS = new Set([
   'email', 'mobile', 'instagram', 'facebook', 'discord', 'tiktok', 'youtube',
@@ -52,6 +53,10 @@ export async function savePageSettings(formData) {
       {owner:session?.user?.email},
       dataToUpdate,
     );
+    
+    // Invalidate relevant caches
+    const userEmail = session?.user?.email;
+    cache.delete(cacheKey('sharecard:page', userEmail));
 
     if (formData.has('avatar')) {
       const avatarLink = toSafeString(formData.get('avatar'));
@@ -59,6 +64,8 @@ export async function savePageSettings(formData) {
         {email: session.user?.email},
         {image: avatarLink},
       );
+      cache.delete(cacheKey('user', userEmail));
+      cache.delete(cacheKey('sharecard:user', userEmail));
     }
 
     return true;
@@ -85,6 +92,10 @@ export async function savePageButtons(formData) {
       {owner:session?.user?.email},
       dataToUpdate,
     );
+    
+    // Invalidate cache after buttons update
+    const userEmail = session?.user?.email;
+    cache.delete(cacheKey('sharecard:page', userEmail));
     return true;
   }
   return false;
@@ -98,6 +109,11 @@ export async function savePageLinks(links) {
       {owner:session?.user?.email},
       {links},
     );
+    
+    // Invalidate cache after links update
+    const userEmail = session?.user?.email;
+    cache.delete(cacheKey('sharecard:page', userEmail));
+    return true;
   } else {
     return false;
   }

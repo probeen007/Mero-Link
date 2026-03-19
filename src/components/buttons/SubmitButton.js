@@ -11,9 +11,9 @@ export default function SubmitButton({ children, className = '' }) {
       disabled={pending}
       className={`
         group relative w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 
-        disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 px-6 rounded-xl 
-        transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg hover:shadow-xl 
-        disabled:shadow-md flex items-center justify-center gap-3 overflow-hidden
+        disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold text-sm sm:text-base py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl
+        transition-all duration-300 transform md:hover:scale-[1.02] disabled:scale-100 shadow-lg hover:shadow-xl
+        disabled:shadow-md flex items-center justify-center gap-2 sm:gap-3 overflow-hidden focus-ring
         ${className}
       `}
     >

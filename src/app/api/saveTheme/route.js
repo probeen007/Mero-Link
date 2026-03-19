@@ -3,6 +3,7 @@ import dbConnect from '@/libs/mongoClient';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { badRequest, notFound, ok, serverError, unauthorized, isValidObjectId } from '@/libs/apiResponse';
+import { cache, cacheKey } from '@/libs/cache';
 
 // Theme mapping: numeric keys to database enum values
 const themeMapping = {
@@ -64,6 +65,13 @@ export async function POST(req) {
 
     if (!updateResult.matchedCount) {
       return notFound('Page not found or forbidden');
+    }
+    
+    // Clear cache for this page on updates
+    const updatedPage = await Page.findById(pageId).select('uri owner').lean();
+    if (updatedPage) {
+      cache.delete(cacheKey('page', updatedPage.uri));
+      cache.delete(cacheKey('sharecard:page', updatedPage.owner));
     }
     
     // Return success with timestamp for live updates

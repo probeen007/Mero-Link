@@ -1,3 +1,5 @@
+'use client';
+
 // src/components/LazyComponents.js
 // Lazy loaded components for better performance
 

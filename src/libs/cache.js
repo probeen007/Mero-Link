@@ -1,6 +1,8 @@
 // src/libs/cache.js
 // Simple in-memory cache with TTL for production optimization
 
+import { cacheMonitor } from './cacheMonitor.js';
+
 class Cache {
   constructor() {
     this.cache = new Map();
@@ -15,18 +17,25 @@ class Cache {
 
     // Set value
     this.cache.set(key, value);
+    cacheMonitor.recordSet(key);
 
     // Set expiration timer
     const timer = setTimeout(() => {
       this.cache.delete(key);
       this.timers.delete(key);
+      cacheMonitor.recordEviction(key);
     }, ttl);
 
     this.timers.set(key, timer);
   }
 
   get(key) {
-    return this.cache.get(key);
+    if (this.cache.has(key)) {
+      cacheMonitor.recordHit(key);
+      return this.cache.get(key);
+    }
+    cacheMonitor.recordMiss(key);
+    return undefined;
   }
 
   has(key) {
@@ -38,6 +47,7 @@ class Cache {
       clearTimeout(this.timers.get(key));
       this.timers.delete(key);
     }
+    cacheMonitor.recordDelete(key);
     return this.cache.delete(key);
   }
 

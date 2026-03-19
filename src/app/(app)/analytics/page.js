@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import Chart from "@/components/Chart";
+import { LazyChart } from "@/components/LazyComponents";
 import { Event } from "@/models/Event";
 import { Page } from "@/models/Page";
 import { faLink, faChartLine, faEye, faMousePointer, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
@@ -147,7 +147,7 @@ export default async function AnalyticsPage() {
             </h2>
           </div>
           <div className="p-3 sm:p-6">
-            <Chart data={groupedViews.map(o => ({
+            <LazyChart data={groupedViews.map(o => ({
               date: o._id,
               views: o.count,
             }))} />

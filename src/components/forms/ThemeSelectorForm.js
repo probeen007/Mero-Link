@@ -18,7 +18,7 @@ export default function ThemeSelectorForm({ currentTheme, onThemeChange, savingT
                     </div>
                 )}
                 <div 
-                    className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-1 justify-center max-h-[560px] overflow-y-auto pr-2 pb-10 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 hover:scrollbar-thumb-blue-600 ${savingTheme ? 'opacity-80 pointer-events-none' : ''}`}
+                    className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 p-2 sm:p-3 content-start bg-gray-100/70 rounded-xl justify-center max-h-[560px] overflow-y-auto overflow-x-hidden pr-2 sm:pr-3 pb-10 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 hover:scrollbar-thumb-blue-600 ${savingTheme ? 'opacity-80 pointer-events-none' : ''}`}
                     style={{ 
                         scrollbarWidth: 'thin',
                         scrollbarColor: '#3b82f6 #e5e7eb'
@@ -32,7 +32,7 @@ export default function ThemeSelectorForm({ currentTheme, onThemeChange, savingT
                             <div
                                 key={key}
                                 onClick={() => !savingTheme && handleSelect(key)}
-                                className={`cursor-pointer relative rounded-xl overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${
+                                className={`w-full min-w-0 cursor-pointer relative rounded-xl overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${
                                     isSelected ? "ring-2 ring-blue-500 shadow-xl" : "border border-gray-200 shadow-md hover:border-blue-300"
                                 }`}
                                 style={{ aspectRatio: '4/3', minHeight: "128px" }}
@@ -77,8 +77,8 @@ export default function ThemeSelectorForm({ currentTheme, onThemeChange, savingT
                                     </div>
                                     
                                     {/* Theme name */}
-                                    <div className="z-10 relative px-1.5 py-0.5 rounded bg-black/20 backdrop-blur-[1px]">
-                                        <span className={`${theme.fontClass} text-[11px] font-bold text-center leading-snug block`}>
+                                    <div className="z-10 relative max-w-[92%] px-1.5 py-0.5 rounded bg-black/20 backdrop-blur-[1px]">
+                                        <span className={`${theme.fontClass} text-[11px] font-bold text-center leading-snug block truncate`}>
                                             {theme.name}
                                         </span>
                                     </div>

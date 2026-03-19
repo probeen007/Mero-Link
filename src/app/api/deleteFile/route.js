@@ -5,6 +5,7 @@ import { User } from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { badRequest, forbidden, serverError, unauthorized, ok, isLikelyUrl } from '@/libs/apiResponse';
+import { cache, cacheKey } from '@/libs/cache';
 
 async function userOwnsFileUrl(email, fileUrl) {
   const [page, user] = await Promise.all([
@@ -52,6 +53,9 @@ export async function DELETE(request) {
     
     const success = await deleteFromS3ByUrl(fileUrl);
 
+    // Clear cache for user's page(s)
+    cache.delete(cacheKey('sharecard:page', session.user.email));
+    
     return ok({ success: true, message: 'File deleted successfully' });
   } catch (err) {
     console.error('❌ Delete file error:', err);
