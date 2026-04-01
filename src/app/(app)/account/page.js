@@ -46,6 +46,17 @@ export default async function AccountPage({ searchParams }) {
   }
 
   page._id = page._id.toString();
+  if (Array.isArray(page.videos)) {
+    page.videos = page.videos.map((video) => ({
+      id: video?.id || (video?._id ? video._id.toString() : ''),
+      title: typeof video?.title === 'string' ? video.title : '',
+      url: typeof video?.url === 'string' ? video.url : '',
+      thumbnail: typeof video?.thumbnail === 'string' ? video.thumbnail : '',
+      platform: typeof video?.platform === 'string' ? video.platform : 'other',
+      videoId: typeof video?.videoId === 'string' ? video.videoId : '',
+      order: Number.isFinite(video?.order) ? video.order : 0,
+    }));
+  }
 
   // Pass data to client component including user verification status
   return <AccountPageClient page={page} user={session.user} isVerified={user?.isVerified || false} />;

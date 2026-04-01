@@ -47,7 +47,7 @@ export async function GET(request) {
       cacheKey('page', uri),
       async () => {
         const data = await Page.findOne({ uri })
-          .select('uri owner displayName location bio bgType bgColor bgImage adaptBackground buttons links theme updatedAt')
+          .select('uri owner displayName location bio bgType bgColor bgImage adaptBackground buttons links videos videoPosition theme updatedAt')
           .lean();
         return data;
       },

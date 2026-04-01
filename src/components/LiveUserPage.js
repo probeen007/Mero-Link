@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import VideoCarousel from "@/components/VideoCarousel";
 import { themes } from "@/libs/themes";
 import { faLocationDot, faMagic, faCheckCircle, faEnvelope, faPhone, faLink } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -140,6 +141,28 @@ export default function LiveUserPage({ initialData, uri }) {
   const { page, user } = pageData;
   const theme = themes[page?.theme] || themes["default"];
   const shouldAdaptBackground = page?.adaptBackground || page?.bgType === "adapt";
+  const hasVideos = Array.isArray(page?.videos) && page.videos.length > 0;
+  const showVideosBeforeLinks = (page?.videoPosition || 'before') === 'before';
+  const isLightTheme = page?.theme === 'light' || String(theme?.fontClass || '').includes('text-gray');
+  const videoDividerClass = isLightTheme
+    ? 'from-transparent via-gray-500/60 to-transparent'
+    : 'from-transparent via-white/45 to-transparent';
+  const videoLabelClass = isLightTheme
+    ? 'text-gray-700/90 bg-white/40 border-gray-500/30'
+    : 'text-white/85 bg-white/10 border-white/20';
+
+  const videoSection = hasVideos ? (
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 mt-6 mb-7 sm:mt-8 sm:mb-9">
+      <div className={`h-px w-full bg-gradient-to-r ${videoDividerClass}`} />
+      <div className="py-3 sm:py-4">
+        <div className={`mx-auto w-fit mb-3 px-2.5 py-1 rounded-full border text-[10px] sm:text-xs tracking-[0.18em] uppercase backdrop-blur-sm ${videoLabelClass}`}>
+          Videos
+        </div>
+        <VideoCarousel videos={page.videos} />
+      </div>
+      <div className={`h-px w-full bg-gradient-to-r ${videoDividerClass}`} />
+    </div>
+  ) : null;
 
   const getBannerStyle = () => {
     if (shouldAdaptBackground) return {};
@@ -151,7 +174,7 @@ export default function LiveUserPage({ initialData, uri }) {
     <>
 
       <div
-        className={clsx("min-h-screen overflow-hidden relative text-white", theme.bgClass, theme.fontClass)}
+        className={clsx("h-screen overflow-y-auto overflow-x-hidden overscroll-none no-scrollbar relative text-white", theme.bgClass, theme.fontClass)}
         style={{ fontFamily: theme.fontFamily || "inherit" }}
       >
         <div className="relative z-10">
@@ -226,6 +249,11 @@ export default function LiveUserPage({ initialData, uri }) {
             ))}
           </div>
 
+          {/* Videos Section */}
+          {hasVideos && showVideosBeforeLinks && (
+            videoSection
+          )}
+
           {/* Links */}
           <div className="max-w-2xl mx-auto grid gap-2 sm:gap-4 md:gap-6 md:grid-cols-2 p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full">
             {page?.links && page.links.map((link, idx) => (
@@ -259,18 +287,23 @@ export default function LiveUserPage({ initialData, uri }) {
             ))}
           </div>
 
+          {/* Videos Section */}
+          {hasVideos && !showVideosBeforeLinks && (
+            videoSection
+          )}
+
           {/* Footer */}
           <div className="relative flex justify-center mt-10 sm:mt-12 px-4">
             <a
               href="https://merolink.it.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-full shadow-lg flex items-center space-x-2 transition-transform hover:scale-105 mb-4 text-sm sm:text-base focus-ring-dark"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-1 sm:py-1.5 px-3 sm:px-3.5 rounded-full shadow-sm flex items-center space-x-1 transition-colors mb-4 text-[11px] sm:text-xs focus-ring-dark"
             >
-              <div className="bg-yellow-400 text-blue-700 p-2 rounded-full shadow-md">
-                <FontAwesomeIcon icon={faMagic} className="w-4 h-4" />
+              <div className="bg-yellow-400 text-blue-700 p-1 rounded-full shadow-sm">
+                <FontAwesomeIcon icon={faMagic} className="w-2.5 h-2.5" />
               </div>
-              <span className="text-sm md:text-base font-medium">Make your one</span>
+              <span className="text-[11px] sm:text-xs font-medium">Make your one</span>
             </a>
           </div>
         </div>

@@ -44,7 +44,7 @@ export async function GET() {
       getCachedOrFetch(
         cacheKey('sharecard:page', email),
         () => Page.findOne({ owner: email })
-          .select('uri displayName bio buttons links owner theme')
+          .select('uri displayName bio buttons links videos owner theme')
           .lean(),
         120000 // Cache for 2 minutes
       ),

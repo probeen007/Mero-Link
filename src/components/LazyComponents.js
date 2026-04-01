@@ -64,6 +64,14 @@ export const LazyChart = dynamic(
   }
 );
 
+export const LazyVideoForm = dynamic(
+  () => import('@/components/forms/VideoForm'),
+  {
+    loading: () => <FormSkeleton />,
+    ssr: false
+  }
+);
+
 // Higher order component for lazy loading with suspense
 export function withLazyLoading(Component, LoadingComponent = FormSkeleton) {
   return function LazyWrapper(props) {

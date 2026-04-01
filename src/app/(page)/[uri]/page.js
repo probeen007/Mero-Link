@@ -104,6 +104,17 @@ const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
     }
 
     page._id = page._id.toString();
+    if (Array.isArray(page.videos)) {
+      page.videos = page.videos.map((video) => ({
+        id: video?.id || (video?._id ? video._id.toString() : ''),
+        title: typeof video?.title === 'string' ? video.title : '',
+        url: typeof video?.url === 'string' ? video.url : '',
+        thumbnail: typeof video?.thumbnail === 'string' ? video.thumbnail : '',
+        platform: typeof video?.platform === 'string' ? video.platform : 'other',
+        videoId: typeof video?.videoId === 'string' ? video.videoId : '',
+        order: Number.isFinite(video?.order) ? video.order : 0,
+      }));
+    }
     if (user) user._id = user._id.toString();
 
     const data = { page, user };

@@ -1,12 +1,13 @@
 'use client';
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faEnvelope, faCog, faUser, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faEnvelope, faCog, faUser, faLink, faPlay } from "@fortawesome/free-solid-svg-icons";
 
 import ThemeSelectorWrapper from "@/components/forms/ThemeSelectorWrapper";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
 import PageButtonsForm from "@/components/forms/PageButtonsForm";
 import PageLinksForm from "@/components/forms/PageLinksForm";
+import { LazyVideoForm } from "@/components/LazyComponents";
 import ShareProfileSection from "@/components/ShareProfileSection";
 
 // Client-side component
@@ -113,6 +114,18 @@ export default function AccountPageClient({ page, user, isVerified }) {
             </div>
             <div className="p-3 sm:p-4">
               <PageButtonsForm page={page} user={user} />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-3 sm:px-4 py-2">
+              <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+                <FontAwesomeIcon icon={faPlay} className="w-4 h-4" />
+                Videos
+              </h3>
+            </div>
+            <div className="p-3 sm:p-4">
+              <LazyVideoForm page={page} uri={page.uri} />
             </div>
           </div>
 

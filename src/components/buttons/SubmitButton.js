@@ -3,12 +3,15 @@ import { useFormStatus } from 'react-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-export default function SubmitButton({ children, className = '' }) {
+export default function SubmitButton({ children, className = '', disabled = false, ...props }) {
   const { pending } = useFormStatus();
+  const isDisabled = pending || disabled;
+
   return (
     <button
-      type="submit"
-      disabled={pending}
+      type={props.type || 'submit'}
+      disabled={isDisabled}
+      {...props}
       className={`
         group relative w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 
         disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold text-sm sm:text-base py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl

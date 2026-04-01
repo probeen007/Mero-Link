@@ -25,6 +25,25 @@ const PageSchema = new Schema(
     adaptBackground: { type: Boolean, default: false },
     buttons: { type: Object, default: {} },
     links: { type: Object, default: [] },
+    videos: {
+      type: [
+        {
+          id: { type: String, required: true },
+          title: { type: String, default: "" },
+          url: { type: String, required: true },
+          thumbnail: { type: String, default: "" },
+          platform: { type: String, enum: ['youtube', 'vimeo', 'other'], default: 'youtube' },
+          videoId: { type: String, default: "" },
+          order: { type: Number, default: 0 }
+        }
+      ],
+      default: []
+    },
+    videoPosition: {
+      type: String,
+      enum: ['before', 'after'],
+      default: 'before'
+    },
     theme: {
       type: String,
       enum: THEME_VALUES,
