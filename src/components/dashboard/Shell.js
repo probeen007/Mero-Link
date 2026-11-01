@@ -9,6 +9,7 @@ import {
   PiCopyBold, PiDeviceMobileBold, PiXBold, PiCheckBold, PiWarningBold, PiCircleNotchBold,
 } from 'react-icons/pi';
 import { Logo } from '@/components/ui';
+import ThemeToggle from '@/components/ThemeToggle';
 import { useEditor } from './EditorProvider';
 import PhonePreview from './PhonePreview';
 
@@ -103,7 +104,7 @@ export default function Shell({ children }) {
           <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
             <Link href="/" className="lg:hidden"><Logo compact /></Link>
             <UrlPill />
-            <div className="ml-auto"><SaveStatus /></div>
+            <div className="ml-auto flex items-center gap-3"><SaveStatus /><ThemeToggle /></div>
           </div>
         </header>
 

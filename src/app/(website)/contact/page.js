@@ -3,12 +3,13 @@ import { FaLinkedinIn } from 'react-icons/fa6';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbLd } from '@/libs/structuredData';
 import { CONTACT_EMAIL, VERIFY_EMAIL } from '@/libs/site';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Contact',
   description: 'Get help with your Mero Link page, request a verified badge, or talk to us about partnerships.',
-  alternates: { canonical: '/contact' },
-};
+  path: '/contact',
+});
 
 const CHANNELS = [
   { icon: PiLifebuoyBold, title: 'Help with your page', body: 'Something broken or confusing? Tell us what happened.', href: `mailto:${CONTACT_EMAIL}?subject=Help%20with%20my%20page`, label: CONTACT_EMAIL, tone: 'bg-lime' },

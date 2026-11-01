@@ -3,12 +3,13 @@ import JsonLd from '@/components/JsonLd';
 import { Button } from '@/components/ui';
 import { breadcrumbLd, faqLd } from '@/libs/structuredData';
 import { CONTACT_EMAIL } from '@/libs/site';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Pricing: free link in bio',
   description: 'Mero Link is free: unlimited links, 16 animated themes, a theme builder, videos, QR codes and 30-day analytics. Pro with custom domains is coming.',
-  alternates: { canonical: '/pricing' },
-};
+  path: '/pricing',
+});
 
 const FREE = [
   'Your own merolink.me/name',

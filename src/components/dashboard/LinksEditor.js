@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { ReactSortable } from 'react-sortablejs';
 import {
   PiPlusBold, PiTextHBold, PiDotsSixVerticalBold, PiStarBold, PiStarFill, PiTrashBold,
-  PiImageBold, PiCursorClickBold, PiLinkSimpleBold, PiCaretDownBold,
+  PiImageBold, PiCursorClickBold, PiLinkSimpleBold, PiCaretDownBold, PiArrowUpBold, PiArrowDownBold,
 } from 'react-icons/pi';
 import { Button, Switch, EmptyState } from '@/components/ui';
 import { useEditor } from './EditorProvider';
@@ -17,13 +17,29 @@ function normalized(url) {
   try { return new URL(url).href; } catch { return url; }
 }
 
-function LinkCard({ link, onChange, onRemove, clicks, autoFocus }) {
+// Keyboard and screen-reader alternative to drag-and-drop.
+function MoveButtons({ onMove, first, last, label }) {
+  return (
+    <span className="inline-flex">
+      <button type="button" onClick={() => onMove(-1)} disabled={first} aria-label={`Move ${label} up`}
+        className="grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink disabled:opacity-30">
+        <PiArrowUpBold aria-hidden />
+      </button>
+      <button type="button" onClick={() => onMove(1)} disabled={last} aria-label={`Move ${label} down`}
+        className="grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink disabled:opacity-30">
+        <PiArrowDownBold aria-hidden />
+      </button>
+    </span>
+  );
+}
+
+function LinkCard({ link, onChange, onRemove, onMove, first, last, clicks, autoFocus }) {
   const [open, setOpen] = useState(!!(link.icon || link.subtitle));
   const urlInvalid = link.url && !/^https?:\/\/\S+\.\S/.test(link.url);
 
   return (
     <div className={clsx('group flex gap-2 rounded-card border bg-surface p-3 pr-4 transition-shadow hover:shadow-lift sm:gap-3', link.hidden ? 'border-dashed border-line opacity-70' : 'border-line')}>
-      <button type="button" className="handle mt-1 grid h-9 w-6 shrink-0 cursor-grab place-items-center text-muted active:cursor-grabbing" aria-label="Drag to reorder">
+      <button type="button" className="handle mt-1 grid h-9 w-6 shrink-0 cursor-grab place-items-center text-muted active:cursor-grabbing" aria-hidden tabIndex={-1}>
         <PiDotsSixVerticalBold className="h-5 w-5" aria-hidden />
       </button>
 
@@ -66,7 +82,9 @@ function LinkCard({ link, onChange, onRemove, clicks, autoFocus }) {
           <span className="inline-flex h-8 items-center gap-1.5 px-2.5 font-mono text-xs text-muted" title="All-time clicks">
             <PiCursorClickBold aria-hidden /> {clicks}
           </span>
-          <button type="button" onClick={onRemove} className="ml-auto grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-red-500/10 hover:text-red-600" aria-label="Delete link">
+          <span className="ml-auto" />
+          <MoveButtons onMove={onMove} first={first} last={last} label={link.title || 'link'} />
+          <button type="button" onClick={onRemove} className="grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-red-500/10 hover:text-red-600" aria-label="Delete link">
             <PiTrashBold aria-hidden />
           </button>
         </div>
@@ -77,10 +95,10 @@ function LinkCard({ link, onChange, onRemove, clicks, autoFocus }) {
   );
 }
 
-function HeaderCard({ link, onChange, onRemove, autoFocus }) {
+function HeaderCard({ link, onChange, onRemove, onMove, first, last, autoFocus }) {
   return (
     <div className="flex items-center gap-2 rounded-card border border-line bg-surface-2 p-3 pr-4 sm:gap-3">
-      <button type="button" className="handle grid h-9 w-6 shrink-0 cursor-grab place-items-center text-muted" aria-label="Drag to reorder">
+      <button type="button" className="handle grid h-9 w-6 shrink-0 cursor-grab place-items-center text-muted" aria-hidden tabIndex={-1}>
         <PiDotsSixVerticalBold className="h-5 w-5" aria-hidden />
       </button>
       <PiTextHBold className="shrink-0 text-muted" aria-hidden />
@@ -92,6 +110,7 @@ function HeaderCard({ link, onChange, onRemove, autoFocus }) {
         autoFocus={autoFocus}
         className="min-w-0 flex-1 rounded-md bg-transparent px-1 py-1 font-display font-bold outline-none focus:bg-surface"
       />
+      <MoveButtons onMove={onMove} first={first} last={last} label={link.title || 'section'} />
       <button type="button" onClick={onRemove} className="grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-red-500/10 hover:text-red-600" aria-label="Delete section">
         <PiTrashBold aria-hidden />
       </button>
@@ -113,6 +132,11 @@ export default function LinksEditor() {
   };
   const change = (key, patch) => setLinks(links.map((l) => (l.key === key ? { ...l, ...patch } : l)));
   const remove = (key) => setLinks(links.filter((l) => l.key !== key));
+  const move = (i, dir) => {
+    const next = [...links];
+    [next[i], next[i + dir]] = [next[i + dir], next[i]];
+    setLinks(next);
+  };
 
   return (
     <div className="grid gap-10">
@@ -138,12 +162,12 @@ export default function LinksEditor() {
               // Sortable calls setList on mount with an identical order; only save real moves.
               if (next.some((l, i) => l.key !== links[i]?.key)) setLinks(next.map(({ chosen, selected, ...l }) => l));
             }} handle=".handle" animation={180} className="grid gap-3">
-              {links.map((l) => (
+              {links.map((l, i) => (
                 <div key={l.key}>
                   {l.type === 'header' ? (
-                    <HeaderCard link={l} onChange={(p) => change(l.key, p)} onRemove={() => remove(l.key)} autoFocus={fresh === l.key} />
+                    <HeaderCard link={l} onChange={(p) => change(l.key, p)} onRemove={() => remove(l.key)} onMove={(d) => move(i, d)} first={i === 0} last={i === links.length - 1} autoFocus={fresh === l.key} />
                   ) : (
-                    <LinkCard link={l} onChange={(p) => change(l.key, p)} onRemove={() => remove(l.key)} clicks={clicks[normalized(l.url)] || 0} autoFocus={fresh === l.key} />
+                    <LinkCard link={l} onChange={(p) => change(l.key, p)} onRemove={() => remove(l.key)} onMove={(d) => move(i, d)} first={i === 0} last={i === links.length - 1} clicks={clicks[normalized(l.url)] || 0} autoFocus={fresh === l.key} />
                   )}
                 </div>
               ))}

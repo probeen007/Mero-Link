@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 import { PiListBold, PiXBold } from 'react-icons/pi';
 import { Button, Logo } from '@/components/ui';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const NAV = [
   { href: '/themes', label: 'Themes' },
@@ -23,11 +24,20 @@ export default function Header() {
   useEffect(() => setOpen(false), [path]);
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (!open) return () => { document.body.style.overflow = ''; };
+    const onKey = (e) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('keydown', onKey);
+    document.querySelector('#mobile-nav a')?.focus();
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur-md">
+    // No backdrop-filter while the menu is open: it would make the header the
+    // containing block for the fixed menu panel.
+    <header className={clsx('sticky top-0 z-40 border-b border-line/70', open ? 'bg-bg' : 'bg-bg/75 backdrop-blur-md')}>
       <div className="shell flex h-16 items-center gap-6">
         <Link href="/" aria-label="Mero Link home"><Logo /></Link>
 
@@ -41,6 +51,7 @@ export default function Header() {
         </nav>
 
         <div className="ml-auto hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           {authed ? (
             <Button href="/account" variant="ink">Dashboard</Button>
           ) : (
@@ -51,14 +62,15 @@ export default function Header() {
           )}
         </div>
 
-        <button type="button" onClick={() => setOpen(!open)} className="ml-auto grid h-11 w-11 place-items-center rounded-full hover:bg-ink/5 md:hidden"
+        <ThemeToggle className="ml-auto md:hidden" />
+        <button type="button" onClick={() => setOpen(!open)} className="grid h-11 w-11 place-items-center rounded-full hover:bg-ink/5 md:hidden"
           aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? 'Close menu' : 'Open menu'}>
           {open ? <PiXBold className="h-6 w-6" /> : <PiListBold className="h-6 w-6" />}
         </button>
       </div>
 
       {open && (
-        <div id="mobile-nav" className="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col gap-2 overflow-y-auto bg-bg px-4 pb-8 pt-4 md:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col gap-2 overflow-y-auto bg-bg px-4 pb-8 pt-4 md:hidden">
           {NAV.map(({ href, label }) => (
             <Link key={href} href={href} className="rounded-2xl px-4 py-4 font-display text-2xl font-bold hover:bg-surface-2">{label}</Link>
           ))}
@@ -72,7 +84,7 @@ export default function Header() {
               </>
             )}
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

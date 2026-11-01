@@ -18,11 +18,26 @@
   --sky: 156 203 255;
   --butter: 255 226 122;
   --pink: 255 184 217;
+  /* Strength of the decorative colour wash (hero glow, tinted bands). */
+  --glow: 1;
   color-scheme: light;
 }
 
+/* Dark: chosen explicitly via the toggle, or by the system when no choice is stored. */
+:root[data-theme='dark'] {
+  --bg: 17 16 20;
+  --surface: 27 26 31;
+  --surface-2: 38 37 43;
+  --ink: 245 244 240;
+  --muted: 168 166 176;
+  --line: 54 52 60;
+  --accent-ink: 17 16 20;
+  --accent-text: 255 128 102;
+  --glow: 0.22;
+  color-scheme: dark;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: 17 16 20;
     --surface: 27 26 31;
     --surface-2: 38 37 43;
@@ -31,6 +46,7 @@
     --line: 54 52 60;
     --accent-ink: 17 16 20;
     --accent-text: 255 128 102;
+    --glow: 0.22;
     color-scheme: dark;
   }
 }
@@ -80,6 +96,17 @@
 }
 
 @layer utilities {
+  /* Colourful sticker-palette wash; bright in light mode, a faint glow in dark. */
+  .bg-hero {
+    background:
+      radial-gradient(38% 48% at 88% 18%, rgb(var(--sky) / calc(0.7 * var(--glow))), transparent 70%),
+      radial-gradient(34% 44% at 6% 72%, rgb(var(--pink) / calc(0.65 * var(--glow))), transparent 70%),
+      radial-gradient(30% 40% at 52% 100%, rgb(var(--lime) / calc(0.6 * var(--glow))), transparent 70%),
+      radial-gradient(28% 36% at 30% 4%, rgb(var(--butter) / calc(0.8 * var(--glow))), transparent 70%);
+  }
+  .bg-tint-pink { background-color: rgb(var(--pink) / calc(0.28 * var(--glow))); }
+  .bg-tint-sky { background-color: rgb(var(--sky) / calc(0.28 * var(--glow))); }
+  .bg-tint-lime { background-color: rgb(var(--lime) / calc(0.3 * var(--glow))); }
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

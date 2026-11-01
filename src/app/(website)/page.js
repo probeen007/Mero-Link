@@ -15,17 +15,19 @@ import { FONT_CHOICES } from '@/libs/fontChoices';
 import { demoFor } from '@/libs/demo';
 import { HOME_FAQ } from '@/libs/faq';
 import { faqLd, softwareLd } from '@/libs/structuredData';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
-  title: { absolute: 'Mero Link: Free link in bio with animated themes' },
+export const metadata = pageMeta({
+  title: 'Mero Link: Free link in bio with animated themes',
   description: 'Put your links, videos and socials on one page that looks like you. 16 animated themes, live editor, QR codes and analytics. Free.',
-  alternates: { canonical: '/' },
-};
+  path: '/',
+  absolute: true,
+});
 
 const STEPS = [
-  { icon: PiAtBold, title: 'Claim your name', body: 'Sign in with Google and grab merolink.me/yourname before someone else does.' },
-  { icon: PiPlusCircleBold, title: 'Add what matters', body: 'Links, socials, videos and section headers. Pick a theme and watch it update live.' },
-  { icon: PiShareFatBold, title: 'Share it everywhere', body: 'Drop it in your Instagram and TikTok bio, print the QR code, post the share card.' },
+  { icon: PiAtBold, tone: 'bg-accent', title: 'Claim your name', body: 'Sign in with Google and grab merolink.me/yourname before someone else does.' },
+  { icon: PiPlusCircleBold, tone: 'bg-sky', title: 'Add what matters', body: 'Links, socials, videos and section headers. Pick a theme and watch it update live.' },
+  { icon: PiShareFatBold, tone: 'bg-lime', title: 'Share it everywhere', body: 'Drop it in your Instagram and TikTok bio, print the QR code, post the share card.' },
 ];
 
 const COMPARE = [
@@ -66,14 +68,14 @@ export default async function Home() {
       </section>
 
       {/* Theme marquee */}
-      <section aria-label="Theme names" className="overflow-hidden border-y-2 border-ink bg-ink py-5 text-bg">
-        <div className="flex w-max animate-marquee gap-10 motion-reduce:animate-none">
+      <section aria-hidden className="group overflow-hidden border-y-2 border-ink bg-lime py-5 text-on-sticker">
+        <div className="flex w-max animate-marquee gap-10 group-hover:[animation-play-state:paused] motion-reduce:animate-none">
           {[0, 1].map((copy) => (
-            <div key={copy} className="flex shrink-0 items-center gap-10" aria-hidden={copy === 1}>
+            <div key={copy} className="flex shrink-0 items-center gap-10">
               {THEME_KEYS.map((k) => (
                 <span key={k} className="flex items-center gap-10 whitespace-nowrap text-3xl" style={{ fontFamily: FONT_CHOICES[THEMES[k].display].stack }}>
                   {THEMES[k].name}
-                  <PiAsteriskBold className="h-5 w-5 text-accent" aria-hidden />
+                  <PiAsteriskBold className="h-5 w-5 text-[#C43218]" aria-hidden />
                 </span>
               ))}
             </div>
@@ -131,7 +133,7 @@ export default async function Home() {
       </section>
 
       {/* Theme strip */}
-      <section className="py-8" aria-labelledby="themes-h">
+      <section className="bg-tint-pink py-20" aria-labelledby="themes-h">
         <div className="shell flex flex-wrap items-end justify-between gap-4">
           <Reveal><h2 id="themes-h" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Pick a vibe. Swap it anytime.</h2></Reveal>
           <Button href="/themes" variant="secondary">Browse themes <PiArrowRightBold aria-hidden /></Button>
@@ -158,9 +160,9 @@ export default async function Home() {
           <p className="mt-4 max-w-sm text-muted">No design skills and no app needed. Just a browser.</p>
         </div>
         <ol className="relative grid gap-12 border-l-2 border-dashed border-line pl-10">
-          {STEPS.map(({ icon: Icon, title, body }, i) => (
+          {STEPS.map(({ icon: Icon, tone, title, body }, i) => (
             <Reveal as="li" key={title} delay={i * 0.08} className="relative">
-              <span className="absolute -left-[62px] grid h-11 w-11 place-items-center rounded-full border-2 border-ink bg-accent text-on-sticker">
+              <span className={`absolute -left-[62px] grid h-11 w-11 place-items-center rounded-full border-2 border-ink text-on-sticker ${tone}`}>
                 <Icon className="h-5 w-5" aria-hidden />
               </span>
               <h3 className="font-display text-2xl font-bold">{title}</h3>
@@ -171,7 +173,7 @@ export default async function Home() {
       </section>
 
       {/* Comparison */}
-      <section className="shell py-12" aria-labelledby="compare-h">
+      <section className="shell py-24" aria-labelledby="compare-h">
         <Reveal>
           <h2 id="compare-h" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Why switch</h2>
         </Reveal>
@@ -187,12 +189,12 @@ export default async function Home() {
               ))}
             </ul>
           </Reveal>
-          <Reveal delay={0.08} className="rounded-[28px] border-2 border-ink bg-surface p-7 shadow-sticker">
+          <Reveal delay={0.08} className="rounded-[28px] border-2 border-ink bg-sky p-7 text-on-sticker shadow-sticker">
             <h3 className="font-display text-xl font-bold">Mero Link</h3>
             <ul className="mt-6 grid gap-5">
               {COMPARE.map(([k, , us]) => (
                 <li key={k} className="flex gap-3">
-                  <PiCheckBold className="mt-1 shrink-0 text-accent-text" aria-hidden />
+                  <PiCheckBold className="mt-1 shrink-0" aria-hidden />
                   <span><span className="font-semibold">{k}:</span> {us}</span>
                 </li>
               ))}

@@ -2,12 +2,13 @@ import JsonLd from '@/components/JsonLd';
 import { Button } from '@/components/ui';
 import Reveal from '@/components/marketing/Reveal';
 import { breadcrumbLd } from '@/libs/structuredData';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'About',
   description: 'Mero means "mine" in Nepali. Mero Link is a link in bio page built in Kathmandu for creators, small shops and anyone with more than one thing to share.',
-  alternates: { canonical: '/about' },
-};
+  path: '/about',
+});
 
 const BELIEFS = [
   { title: 'Your page should look like you', body: 'Not like everyone else on the same template. That is why every theme animates and every part of it can be restyled.', tone: 'bg-lime' },

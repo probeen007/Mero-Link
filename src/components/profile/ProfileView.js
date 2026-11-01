@@ -84,6 +84,7 @@ export default function ProfileView({ page, user, preview = false, still = false
                     <span className="ml-btn-text">
                       <span className="ml-btn-title">{b.title || b.url.replace(/^https?:\/\/(www\.)?/, '')}</span>
                       {b.subtitle && <span className="ml-btn-sub">{b.subtitle}</span>}
+                      {!still && <span className="ml-sr"> (opens in a new tab)</span>}
                     </span>
                     <PiArrowUpRightBold className="ml-arrow" aria-hidden />
                   </A>

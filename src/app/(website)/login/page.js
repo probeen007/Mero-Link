@@ -5,12 +5,13 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import LoginWithGoogle from '@/components/buttons/LoginWithGoogle';
 import ThemeThumb from '@/components/profile/ThemeThumb';
 import { demoFor } from '@/libs/demo';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Log in or sign up',
   description: 'Sign in to Mero Link with Google to claim your link in bio and edit your page.',
-  alternates: { canonical: '/login' },
-};
+  path: '/login',
+});
 
 export default async function LoginPage({ searchParams }) {
   const session = await getServerSession(authOptions);

@@ -3,12 +3,13 @@ import JsonLd from '@/components/JsonLd';
 import HeroForm from '@/components/forms/HeroForm';
 import { Button } from '@/components/ui';
 import { breadcrumbLd, faqLd } from '@/libs/structuredData';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Free Linktree alternative with animated themes',
   description: 'Looking for a Linktree alternative? Mero Link gives you a free link in bio with 16 animated themes, live editing, video embeds and per-link analytics.',
-  alternates: { canonical: '/linktree-alternative' },
-};
+  path: '/linktree-alternative',
+});
 
 const REASONS = [
   { icon: PiPaletteBold, title: 'A page with personality', body: 'Sixteen animated themes, from falling sakura petals to a synthwave grid, and a builder for colors, fonts, buttons and backgrounds.', tone: 'bg-lime' },

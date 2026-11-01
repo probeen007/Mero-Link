@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import GlobalProgressBar from '@/components/GlobalProgressBar';
 import { brandFontVariables, themeFontVariables } from '@/libs/fonts';
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/libs/site';
+import { themeInitScript } from '@/libs/themeInit';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -16,6 +17,11 @@ export const metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   manifest: '/manifest.json',
+  category: 'social',
+  keywords: ['link in bio', 'linktree alternative', 'link in bio Nepal', 'bio link page', 'free link in bio', 'creator page'],
+  formatDetection: { telephone: false, email: false, address: false },
+  // Set GOOGLE_SITE_VERIFICATION in the environment to verify Search Console.
+  ...(process.env.GOOGLE_SITE_VERIFICATION && { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }),
   openGraph: {
     siteName: SITE_NAME,
     locale: 'en_US',
@@ -42,6 +48,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${brandFontVariables} ${themeFontVariables}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>
         <Suspense fallback={null}>
           <GlobalProgressBar />

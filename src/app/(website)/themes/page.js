@@ -5,12 +5,13 @@ import { THEMES, THEME_KEYS, BUTTON_STYLES } from '@/libs/themes';
 import { FONT_CHOICES } from '@/libs/fontChoices';
 import { demoFor } from '@/libs/demo';
 import { breadcrumbLd } from '@/libs/structuredData';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: '16 free animated link in bio themes',
   description: 'Browse every Mero Link theme: Sticker, Synthwave, Himalaya, Terminal, Sakura and more. Each one animates, and you can change colors, fonts and buttons.',
-  alternates: { canonical: '/themes' },
-};
+  path: '/themes',
+});
 
 export default function ThemesPage() {
   return (

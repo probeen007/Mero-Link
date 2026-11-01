@@ -1,11 +1,12 @@
 import LegalPage from '@/components/marketing/LegalPage';
 import { CONTACT_EMAIL } from '@/libs/site';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Privacy Policy',
   description: 'What Mero Link collects, why, and how to have it deleted.',
-  alternates: { canonical: '/privacy' },
-};
+  path: '/privacy',
+});
 
 export default function PrivacyPage() {
   return (

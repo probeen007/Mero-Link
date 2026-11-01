@@ -1,11 +1,12 @@
 import LegalPage from '@/components/marketing/LegalPage';
 import { CONTACT_EMAIL } from '@/libs/site';
+import { pageMeta } from '@/libs/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Terms of Service',
   description: 'The rules for using Mero Link.',
-  alternates: { canonical: '/terms' },
-};
+  path: '/terms',
+});
 
 export default function TermsPage() {
   return (

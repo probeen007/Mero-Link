@@ -9,16 +9,17 @@ import { THEMES } from '@/libs/themes';
 export default function HeroPhone() {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
   const demo = DEMO_PROFILES[i];
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || paused) return;
     const id = setInterval(() => setI((n) => (n + 1) % DEMO_PROFILES.length), 4200);
     return () => clearInterval(id);
-  }, [reduce]);
+  }, [reduce, paused]);
 
   return (
-    <div className="relative mx-auto w-[300px] sm:w-[320px]">
+    <div className="relative mx-auto w-[300px] sm:w-[320px]" aria-hidden onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div className="relative h-[620px] overflow-hidden rounded-[48px] border-[10px] border-[#111014] bg-[#111014] ring-1 ring-line shadow-[0_40px_80px_-30px_rgb(17_16_20/0.5)] sm:h-[660px]">
         <div className="absolute left-1/2 top-2 z-20 h-6 w-24 -translate-x-1/2 rounded-full bg-[#111014]" aria-hidden />
         <AnimatePresence initial={false}>
@@ -32,7 +33,7 @@ export default function HeroPhone() {
           >
             {/* Own transform so the profile's fixed background stays inside the phone. */}
             <div className="absolute inset-0 overflow-y-auto no-scrollbar [transform:translateZ(0)]">
-              <ProfileView page={{ ...demo.page, theme: demo.theme, bgMode: 'theme' }} user={demo.user} uri={demo.uri} preview />
+              <ProfileView page={{ ...demo.page, theme: demo.theme, bgMode: 'theme' }} user={demo.user} uri={demo.uri} preview still />
             </div>
           </motion.div>
         </AnimatePresence>
