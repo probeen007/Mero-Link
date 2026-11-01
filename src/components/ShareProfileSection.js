@@ -27,7 +27,7 @@ export default function ShareProfileSection() {
         const payload = await response.json();
 
         const canonicalProfileUrl = payload?.uri
-          ? `https://merolink.it.com/${payload.uri}`
+          ? `https://merolink.me/${payload.uri}`
           : payload?.profileUrl || "";
 
         let qrCodeUrl = "";
@@ -126,8 +126,8 @@ export default function ShareProfileSection() {
 
       {!loading && !error && data && (
         <div className="space-y-4">
-          <div className="overflow-x-auto pb-1">
-            <div className="min-w-[300px] sm:min-w-[360px] flex justify-center">
+          <div className="flex justify-center overflow-hidden py-2">
+            <div className="scale-[0.82] min-[380px]:scale-[0.9] sm:scale-100 origin-center -my-9 min-[380px]:-my-6 sm:my-0 transition-all duration-300">
               <ShareCardPreview ref={cardRef} data={data} />
             </div>
           </div>

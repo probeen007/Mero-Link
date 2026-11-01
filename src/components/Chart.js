@@ -35,16 +35,16 @@ export default function Chart({ data }) {
   });
 
   return (
-    <div>
-      <ResponsiveContainer width="100%" aspect={3}>
-        <LineChart width={730} height={250} data={dataWithoutGaps}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid horizontal={true} vertical={true} strokeWidth="2" stroke="#f5f5f5" />
-          <XAxis dataKey="date" axisLine={true} tickLine={true} tickMargin={10} tick={{ fill: '#aaa' }} />
-          <YAxis axisLine={true} tickLine={false} tickMargin={10} tick={{ fill: '#aaa' }} />
+    <div className="h-60 sm:h-72 w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={dataWithoutGaps}
+          margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+          <CartesianGrid horizontal={true} vertical={true} strokeWidth="1" stroke="#f1f5f9" />
+          <XAxis dataKey="date" axisLine={true} tickLine={true} tickMargin={8} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+          <YAxis axisLine={true} tickLine={false} tickMargin={8} tick={{ fill: '#94a3b8', fontSize: 11 }} />
           <Tooltip />
           <Line
-            type="monotone" dataKey={xLabelKey} stroke="blue" strokeWidth="2" />
+            type="monotone" dataKey={xLabelKey} stroke="#2563eb" strokeWidth="3" dot={{ r: 3 }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -76,7 +76,7 @@ export async function GET() {
     const publicBaseUrl = (
       process.env.NEXT_PUBLIC_APP_URL ||
       process.env.NEXT_PUBLIC_SITE_URL ||
-      "https://merolink.it.com"
+      "https://merolink.me"
     ).replace(/\/$/, "");
     const profileUrl = `${publicBaseUrl}/${page.uri}`;
 

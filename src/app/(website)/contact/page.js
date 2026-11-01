@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faHeadset, faShieldAlt, faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faHeadset, faShieldAlt, faBriefcase, faStar, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { faInstagramSquare, faLinkedinIn, faSquareXTwitter } from "@fortawesome/free-brands-svg-icons";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: 'Contact Mero Link',
     description: 'Reach out to the Mero Link team for support and inquiries.',
-    url: 'https://merolink.it.com/contact',
+    url: 'https://merolink.me/contact',
     type: 'website',
   },
   twitter: {
@@ -25,18 +25,18 @@ export const metadata = {
 export default function ContactPage() {
   const supportTypes = [
     {
-      title: 'General support',
-      description: 'Questions about account setup, profile configuration, and daily usage.',
+      title: 'General Support',
+      description: 'Questions about account claim, profile customization, and link layouts.',
       icon: faHeadset,
     },
     {
-      title: 'Verification and security',
-      description: 'Report suspicious activity, account concerns, or security-related issues.',
+      title: 'Verification Inquiries',
+      description: 'Report profile abuse, trademark claims, or identity concerns.',
       icon: faShieldAlt,
     },
     {
-      title: 'Business inquiries',
-      description: 'Partnerships, integrations, and professional collaboration requests.',
+      title: 'Business Partnerships',
+      description: 'Collaborations, integration requests, or promotional opportunities.',
       icon: faBriefcase,
     },
   ];
@@ -44,21 +44,12 @@ export default function ContactPage() {
   const socialChannels = [
     {
       title: 'X (Twitter)',
-      subtitle: 'Product updates and announcements',
       icon: faSquareXTwitter,
       href: 'https://x.com',
       label: '@MeroLink',
     },
     {
-      title: 'Instagram',
-      subtitle: 'Community highlights and visual updates',
-      icon: faInstagramSquare,
-      href: 'https://instagram.com',
-      label: '@MeroLink',
-    },
-    {
       title: 'LinkedIn',
-      subtitle: 'Company news and professional updates',
       icon: faLinkedinIn,
       href: 'https://www.linkedin.com/company/merolink/',
       label: 'Mero Link',
@@ -66,91 +57,114 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 py-10 md:py-14">
-      <div className="page-shell">
-        <section className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8 md:p-10 text-center">
-          <div className="inline-flex items-center gap-3">
-            <Image
-              src="https://i.ibb.co/HNVDd6R/merolinklogo.png"
-              alt="Mero Link Logo"
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-lg shadow-sm"
-            />
-            <span className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-              Mero <span className="text-blue-700">Link</span>
-            </span>
+    <div className="bg-white py-12 sm:py-16 md:py-20 text-gray-800">
+      <div className="page-shell max-w-5xl">
+        
+        {/* Header Title Section */}
+        <section className="text-center space-y-6 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full text-blue-700 font-semibold text-xs sm:text-sm">
+            <FontAwesomeIcon icon={faEnvelope} className="text-blue-500" />
+            <span>Customer & Creator Care</span>
           </div>
-          <p className="mt-3 text-sm text-gray-500">Support and inquiries</p>
-          <h1 className="mt-4 text-3xl sm:text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-gray-800 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
-            Contact the Mero Link team
+          
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+            Get in touch with us
           </h1>
-          <p className="mt-4 max-w-3xl text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mx-auto">
-            Reach out for product support, account assistance, verification help, or business inquiries.
-            We aim to provide clear responses and practical guidance.
+          
+          <p className="text-gray-600 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Have questions about Mero Link? Need support with your page setup? Choose your contact method below.
           </p>
         </section>
 
-        <section className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
-          <div className="flex items-start sm:items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-              <FontAwesomeIcon icon={faEnvelope} />
-            </div>
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Email support</h2>
-              <p className="mt-1 text-gray-600">For the fastest response, contact us directly by email.</p>
-            </div>
-          </div>
-
-          <a
-            href="mailto:pro.victus07@gmail.com"
-            className="mt-5 inline-flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-blue-700 font-semibold hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-          >
-            pro.victus07@gmail.com
-          </a>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {supportTypes.map((item) => (
-              <article key={item.title} className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                  <FontAwesomeIcon icon={item.icon} className="text-blue-600" />
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-gray-600 text-sm sm:text-base">{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Social channels</h2>
-          <p className="mt-2 text-gray-600">Follow us for product updates and community news.</p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {socialChannels.map((channel) => (
-              <article key={channel.title} className="rounded-xl border border-gray-200 bg-white p-5 hover:shadow-sm transition-shadow duration-200">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                  <FontAwesomeIcon icon={channel.icon} className="text-blue-600" />
-                  {channel.title}
-                </h3>
-                <p className="mt-2 text-gray-600 text-sm sm:text-base">{channel.subtitle}</p>
-                <a
-                  href={channel.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 text-blue-700 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded px-1"
+        {/* Contact Layout Columns */}
+        <section className="mt-12 sm:mt-16 grid gap-10 md:grid-cols-[1.2fr_1fr] items-start">
+          
+          {/* Left Column (Details and support channels) */}
+          <div className="space-y-8">
+            
+            {/* Primary Email Card */}
+            <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-100 rounded-3xl p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <FontAwesomeIcon icon={faEnvelope} className="text-blue-600" />
+                Direct Email Support
+              </h2>
+              <p className="text-gray-600 text-sm sm:text-base mt-2">
+                For account verification, feature requests, or technical issues, send us an email directly.
+              </p>
+              <div className="mt-5">
+                <a 
+                  href="mailto:pro.victus07@gmail.com"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-sm"
                 >
-                  {channel.label}
+                  pro.victus07@gmail.com
                 </a>
-              </article>
-            ))}
+              </div>
+            </div>
+
+            {/* Support Types Grids */}
+            <div className="space-y-4">
+              <h3 className="text-base font-bold text-gray-900 uppercase tracking-wider">Support Pipelines</h3>
+              <div className="grid gap-4">
+                {supportTypes.map((type) => (
+                  <div key={type.title} className="bg-white border border-gray-200 rounded-xl p-4 flex gap-3.5 items-start">
+                    <span className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={type.icon} className="text-sm" />
+                    </span>
+                    <div>
+                      <h4 className="font-bold text-gray-900 text-sm sm:text-base">{type.title}</h4>
+                      <p className="text-gray-500 text-xs sm:text-sm mt-1 leading-relaxed">{type.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
+
+          {/* Right Column (Contact Info and Social Channels) */}
+          <div className="space-y-6">
+            
+            {/* Social card */}
+            <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-lg font-bold text-gray-900">Follow us on Socials</h3>
+              <p className="text-gray-500 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                We announce updates, community spotlights, and design guides on Twitter and LinkedIn.
+              </p>
+              
+              <div className="grid gap-3 mt-6">
+                {socialChannels.map((channel) => (
+                  <a 
+                    key={channel.title}
+                    href={channel.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 bg-gray-50 hover:bg-blue-50/50 border border-gray-250 rounded-xl transition-all group"
+                  >
+                    <span className="flex items-center gap-3 text-sm sm:text-base font-bold text-slate-800">
+                      <FontAwesomeIcon icon={channel.icon} className="text-blue-600 text-lg shrink-0" />
+                      {channel.title}
+                    </span>
+                    <span className="text-xs text-blue-600 font-semibold group-hover:underline">{channel.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Note card */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex gap-3.5 items-start">
+              <FontAwesomeIcon icon={faQuestionCircle} className="text-blue-500 mt-1 shrink-0 text-lg" />
+              <div>
+                <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">Response Time SLA</h4>
+                <p className="text-gray-500 text-xs mt-1.5 leading-relaxed">
+                  We usually respond to all creator and support inquiries within 24 to 48 business hours. Please include your registered account username for faster routing.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
         </section>
 
-        <section className="mt-8 rounded-xl border border-gray-200 bg-white p-5 text-sm sm:text-base text-gray-600">
-          Support note: Please include your account email and a short issue summary when contacting support.
-          This helps our team resolve your request faster.
-        </section>
       </div>
     </div>
   );

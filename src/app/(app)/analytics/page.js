@@ -6,14 +6,13 @@ import { faLink, faChartLine, faEye, faMousePointer, faCalendarDay } from "@fort
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isToday } from "date-fns";
 import mongoose from "mongoose";
+import dbConnect from "@/libs/mongoClient";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export default async function AnalyticsPage() {
   // Connect to MongoDB
-  if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(process.env.MONGO_URI);
-  }
+  await dbConnect();
 
   // Get session
   const session = await getServerSession(authOptions);
@@ -35,33 +34,33 @@ export default async function AnalyticsPage() {
     );
   }
 
-  // Aggregate views by date
-  const groupedViews = await Event.aggregate([
-    {
-      $match: {
-        type: 'view',
-        uri: page.uri,
-      }
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$createdAt",
-            format: "%Y-%m-%d"
-          },
-        },
-        count: { $sum: 1 } // Changed from "$count" to "$sum: 1" to correctly count documents
+  // Aggregate views and fetch clicks in parallel
+  const [groupedViews, clicks] = await Promise.all([
+    Event.aggregate([
+      {
+        $match: {
+          type: 'view',
+          page: page.uri,
+        }
       },
-    },
-    { $sort: { _id: 1 } }
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$createdAt",
+              format: "%Y-%m-%d"
+            },
+          },
+          count: { $sum: 1 } // Changed from "$count" to "$sum: 1" to correctly count documents
+        },
+      },
+      { $sort: { _id: 1 } }
+    ]),
+    Event.find({
+      page: page.uri,
+      type: 'click',
+    })
   ]);
-
-  // Find clicks
-  const clicks = await Event.find({
-    page: page.uri,
-    type: 'click',
-  });
 
   // Calculate total views and clicks
   const totalViews = groupedViews.reduce((sum, view) => sum + view.count, 0);

@@ -81,7 +81,7 @@ export async function POST(request) {
         url: sanitizedUrl,
         platform: videoInfo.platform,
         videoId: videoInfo.videoId,
-        thumbnail: videoInfo.thumbnail,
+        thumbnail: videoInput.thumbnail || videoInfo.thumbnail,
         order: i
       };
 

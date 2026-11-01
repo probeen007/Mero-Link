@@ -1,5 +1,5 @@
 export default function robots() {
-  const baseUrl = 'https://merolink.it.com';
+  const baseUrl = 'https://merolink.me';
 
   return {
     rules: [

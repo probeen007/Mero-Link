@@ -15,28 +15,27 @@ export const authOptions = {
   
   // Production optimizations
   session: {
-    strategy: "database",
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
-    updateAge: 24 * 60 * 60, // 24 hours
   },
   
   // Callbacks for security and performance
   callbacks: {
-    async session({ session, user }) {
-      // Only include necessary data in session
-      return {
-        ...session,
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        }
-      };
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          id: token.sub,
+          name: token.name,
+          email: token.email,
+          image: token.picture || token.image,
+        };
+      }
+      return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
+        token.image = user.image;
       }
       return token;
     },

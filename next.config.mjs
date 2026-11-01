@@ -8,23 +8,22 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  typedRoutes: true,
+  typedRoutes: false,
 
   experimental: {
-    optimizePackageImports: ['@fortawesome/react-fontawesome', '@fortawesome/free-solid-svg-icons'],
+    optimizePackageImports: [
+      '@fortawesome/react-fontawesome', 
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/free-brands-svg-icons',
+      '@fortawesome/free-regular-svg-icons',
+      'react-icons'
+    ],
   },
 
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  webpack: (config, { dev }) => {
-    if (dev) {
-      config.watchOptions = { poll: 1000, aggregateTimeout: 300 };
-    }
-    config.resolve.alias = { ...config.resolve.alias, '@': path.resolve(__dirname, 'src') };
-    return config;
-  },
 
   images: {
     formats: ['image/webp', 'image/avif'],

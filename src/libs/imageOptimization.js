@@ -2,7 +2,7 @@
 // Client-side image optimization before upload
 
 export function compressImage(file, maxWidth = 800, maxHeight = 600, quality = 0.8) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
@@ -31,11 +31,17 @@ export function compressImage(file, maxWidth = 800, maxHeight = 600, quality = 0
       
       canvas.toBlob(
         (blob) => {
+          URL.revokeObjectURL(img.src);
           resolve(blob);
         },
         'image/jpeg',
         quality
       );
+    };
+    
+    img.onerror = (err) => {
+      URL.revokeObjectURL(img.src);
+      reject(err);
     };
     
     img.src = URL.createObjectURL(file);

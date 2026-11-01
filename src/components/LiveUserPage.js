@@ -2,22 +2,23 @@
 
 import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import dynamic from "next/dynamic";
 import Image from "next/image";
+import { motion, MotionConfig, AnimatePresence } from "framer-motion";
 import VideoCarousel from "@/components/VideoCarousel";
+import ThemeDecorations from "@/components/theme/ThemeDecorations";
+import SectionDivider from "@/components/theme/SectionDivider";
 import { themes } from "@/libs/themes";
-import { faLocationDot, faMagic, faCheckCircle, faEnvelope, faPhone, faLink } from "@fortawesome/free-solid-svg-icons";
+import { getShapeStyle } from "@/libs/shapeStyles";
+import { getLayoutArchetype } from "@/libs/layoutArchetypes";
+import { faLocationDot, faLink } from "@fortawesome/free-solid-svg-icons";
 import {
   faDiscord, faFacebook, faGithub, faInstagram, faLinkedin, faMedium,
   faPinterest, faReddit, faSnapchat, faSoundcloud, faSpotify, faTelegram,
   faTiktok, faTumblr, faTwitch, faTwitter, faWhatsapp, faYoutube
 } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
-// Dynamic FontAwesome to prevent SSR hydration mismatch
-const FontAwesomeIcon = dynamic(
-  async () => (await import("@fortawesome/react-fontawesome")).FontAwesomeIcon,
-  { ssr: false }
-);
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Social icons mapping
 export const buttonsIcons = {
@@ -44,60 +45,44 @@ export const buttonsIcons = {
   website: faLink,
 };
 
-// Shape helpers
-const getShapeClasses = (shape, isProfile = false) => {
-  const base = isProfile ? "w-28 h-28 sm:w-36 sm:h-36" : "w-12 h-12 sm:w-16 sm:h-16";
-  switch (shape) {
-    case "circle": return `${base} rounded-full`;
-    case "square": return `${base} rounded-lg`;
-    case "diamond": return `${base} transform rotate-45`;
-    default: return `${base} rounded-full`;
-  }
+// Link section item recipes per `linkStyle` (list/grid/compact) — complete
+// literal Tailwind strings so Tailwind's JIT scan always finds them.
+const LINK_ITEM_STYLES = {
+  list: { itemPad: 'p-3.5', iconSize: 44, gridColsClass: '' },
+  grid: { itemPad: 'p-3 flex-col justify-center text-center', iconSize: 40, gridColsClass: 'grid-cols-2 sm:grid-cols-3' },
+  compact: { itemPad: 'p-2.5', iconSize: 32, gridColsClass: 'grid-cols-1' },
 };
 
-const getLinkShapeClasses = (shape) => {
-  switch (shape) {
-    case "rounded": return "rounded-lg";
-    case "terminal": return "rounded-sm border-l-2";
-    case "elegant": return "rounded-2xl";
-    case "organic": return "rounded-full";
-    default: return "rounded-lg";
-  }
+// `list` defers its column count to the active layout archetype (so a
+// theme's personality still shows through); `grid`/`compact` are an explicit
+// user override and win outright.
+function getLinkLayoutConfig(linkStyle, archetype) {
+  const style = LINK_ITEM_STYLES[linkStyle] || LINK_ITEM_STYLES.list;
+  const gridColsClass = (linkStyle === 'grid' || linkStyle === 'compact')
+    ? style.gridColsClass
+    : archetype.linksCols;
+  return { ...style, gridClass: clsx('grid', gridColsClass, archetype.linksGap) };
+}
+
+// Framer-motion variants as module-level constants with a constant `animate`
+// target (not toggled by poll-driven state) — a 10s poll refresh (see
+// pollForUpdates below) updates existing motion instances in place instead
+// of replaying entrance animations mid-scroll. Deliberately never dip
+// opacity to 0: a screenshot/crawler/slow-hydration moment caught before
+// the transition finishes must never show the page as blank or washed out.
+const fadeUpVariants = {
+  hidden: { opacity: 1, y: 16 },
+  visible: { opacity: 1, y: 0 },
 };
 
-// Theme decorations
-const getThemeDecoration = (themeName) => {
-  const decorations = {
-    feminine: "💖",
-    nature: "🍃",
-    minecraft: "⛏️",
-    adventure: "🧭",
-    anime: "🌸",
-    cartoon: "🎈",
-    gamer: "⚡",
-    coder: "⌨️",
-    hacker: "💀",
-    elegant: "👑",
-    funky: "✨",
-    cosmic: "🌟",
-    retro: "🕹️",
-    galaxy: "🚀",
-    ocean: "🌊",
-    forest: "🌲",
-    egyptian: "🏺",
-    sakura: "🌸",
-    viking: "⚔️",
-    cyberpunk: "🤖",
-    medieval: "🏰",
-    tropical: "🏝️",
-    artdeco: "💎",
-  };
-  return decorations[themeName] || "";
+const avatarVariants = {
+  hidden: { opacity: 1, scale: 0.92 },
+  visible: { opacity: 1, scale: 1 },
 };
 
 export default function LiveUserPage({ initialData, uri }) {
   const [pageData, setPageData] = useState(initialData);
-  const [lastUpdated, setLastUpdated] = useState(initialData?.lastUpdated || "");
+  const lastUpdatedRef = useRef(initialData?.lastUpdated || "");
   const [isClient, setIsClient] = useState(false);
   const intervalRef = useRef(null);
 
@@ -106,28 +91,39 @@ export default function LiveUserPage({ initialData, uri }) {
     setIsClient(true);
   }, []);
 
+  // Hide the native scrollbar and stop rubber-band overscroll from revealing
+  // the app shell's background past the page edges — scoped to this page via
+  // a toggled class (see .mero-live-page in globals.css) so it doesn't leak
+  // into the dashboard/marketing routes.
+  useEffect(() => {
+    document.documentElement.classList.add('mero-live-page');
+    return () => {
+      document.documentElement.classList.remove('mero-live-page');
+    };
+  }, []);
+
   // Polling updates
   useEffect(() => {
     const pollForUpdates = async () => {
       try {
-  const encoded = encodeURIComponent(uri || '');
-  const res = await fetch(`/api/livePageData?uri=${encoded}`, { cache: "no-cache" });
+        const encoded = encodeURIComponent(uri || '');
+        const res = await fetch(`/api/livePageData?uri=${encoded}`, { cache: "no-cache" });
         if (!res.ok) return;
         const data = await res.json();
-        if (data.lastUpdated !== lastUpdated) {
+        if (data.lastUpdated !== lastUpdatedRef.current) {
           setPageData(data);
-          setLastUpdated(data.lastUpdated);
+          lastUpdatedRef.current = data.lastUpdated;
         }
       } catch (err) {
         console.error("Error polling updates:", err);
       }
     };
-    intervalRef.current = setInterval(pollForUpdates, 3000);
+    intervalRef.current = setInterval(pollForUpdates, 10000);
     return () => clearInterval(intervalRef.current);
-  }, [uri, lastUpdated]);
+  }, [uri]);
 
   // Simple loading state
-  if (!isClient || !pageData?.page) {
+  if (!pageData?.page) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="text-white text-center">
@@ -140,6 +136,7 @@ export default function LiveUserPage({ initialData, uri }) {
 
   const { page, user } = pageData;
   const theme = themes[page?.theme] || themes["default"];
+  const archetype = getLayoutArchetype(theme.layout);
   const shouldAdaptBackground = page?.adaptBackground || page?.bgType === "adapt";
   const hasVideos = Array.isArray(page?.videos) && page.videos.length > 0;
   const showVideosBeforeLinks = (page?.videoPosition || 'before') === 'before';
@@ -150,6 +147,14 @@ export default function LiveUserPage({ initialData, uri }) {
   const videoLabelClass = isLightTheme
     ? 'text-gray-700/90 bg-white/40 border-gray-500/30'
     : 'text-white/85 bg-white/10 border-white/20';
+
+  const linkLayout = getLinkLayoutConfig(page?.linkStyle, archetype);
+  const avatarShape = getShapeStyle(theme?.profileShape, 'profile');
+  const socialShape = getShapeStyle(theme?.socialShape, 'social');
+  const thumbnailShape = getShapeStyle(theme?.socialShape, 'thumbnail');
+  const displayFontStyle = theme.fontVar
+    ? { fontFamily: `var(${theme.fontVar})`, fontWeight: theme.displayFontWeight || undefined }
+    : {};
 
   const videoSection = hasVideos ? (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 mt-6 mb-7 sm:mt-8 sm:mb-9">
@@ -170,51 +175,119 @@ export default function LiveUserPage({ initialData, uri }) {
     return { backgroundImage: `url(${page?.bgImage || ""})` };
   };
 
-  return (
-    <>
+  const getPageBackgroundStyle = () => {
+    if (shouldAdaptBackground) return {};
+    if (page?.bgType === "color") return { backgroundColor: page?.bgColor || "#000" };
+    if (page?.bgType === "image") {
+      return {
+        backgroundImage: `url(${page?.bgImage || ""})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      };
+    }
+    return {};
+  };
 
+  return (
+    <MotionConfig reducedMotion="user">
       <div
-        className={clsx("h-screen overflow-y-auto overflow-x-hidden overscroll-none no-scrollbar relative text-white", theme.bgClass, theme.fontClass)}
-        style={{ fontFamily: theme.fontFamily || "inherit" }}
+        className={clsx("min-h-screen w-full relative text-white pb-12", theme.fontClass)}
       >
+        {/* Full-height background layer for rich animations and gradients.
+            Absolutely positioned (not fixed) so it spans the whole scrollable
+            page — a fixed/viewport-pinned layer only paints within the
+            original viewport in a full-page screenshot, leaving everything
+            below the fold showing the plain page background. The inner layer
+            is keyed by the effective background identity and cross-fades via
+            AnimatePresence, so switching themes (from the dashboard, picked
+            up here through the 10s live poll) blends smoothly instead of
+            snapping — background gradients can't be CSS-transitioned between
+            different theme classes, so this is done as an opacity crossfade
+            between the outgoing and incoming layers instead. */}
+        <div className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none">
+          <AnimatePresence mode="sync">
+            <motion.div
+              key={shouldAdaptBackground ? `theme-${page?.theme}` : `manual-${page?.bgType}-${page?.bgColor || ''}-${page?.bgImage || ''}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
+              className={clsx("bg-cover bg-center", shouldAdaptBackground ? theme.bgClass : "")}
+              style={{ position: 'absolute', inset: 0, ...getPageBackgroundStyle() }}
+            >
+              {shouldAdaptBackground && <ThemeDecorations themeKey={page?.theme} />}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
         <div className="relative z-10">
-          {/* Banner */}
-          <div className={clsx("h-32 sm:h-36 bg-cover bg-center relative", shouldAdaptBackground ? theme.bgClass : "")} style={getBannerStyle()} />
+          {/* Banner — left fully transparent when adapting to the theme so
+              the single full-page background layer shows through with no
+              seam; it only ever gets its own fill for an explicit color/image. */}
+          <div className="h-32 sm:h-36 bg-cover bg-center" style={getBannerStyle()} />
 
           {/* Avatar */}
-          <div className={clsx("aspect-square mx-auto relative -top-12 sm:-top-16 -mb-8 sm:-mb-12 shadow-lg", getShapeClasses(theme?.profileShape, true), theme.imageClass)}>
-            <Image
-              src={user?.image || "/icon-192x192.png"}
-              alt="avatar"
-              width={250}
-              height={250}
-              className="w-full h-full object-cover rounded-full"
-            />
-            {getThemeDecoration(page?.theme) && (
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 text-lg sm:text-2xl bg-white bg-opacity-90 rounded-full p-1 shadow-lg animate-pulse">
-                {getThemeDecoration(page?.theme)}
-              </div>
-            )}
-          </div>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={avatarVariants}
+            transition={{ type: 'spring', stiffness: archetype.entrance.stiffness, damping: archetype.entrance.damping }}
+            className={clsx("aspect-square mx-auto relative -top-12 sm:-top-16 -mb-8 sm:-mb-12 shadow-lg", avatarShape.className, archetype.avatarFrameClass, theme.imageClass)}
+            style={avatarShape.style}
+          >
+            <motion.div
+              className="w-full h-full"
+              animate={archetype.idle ? archetype.idle.keyframes : undefined}
+              transition={archetype.idle ? { duration: archetype.idle.duration, repeat: Infinity, ease: 'easeInOut' } : undefined}
+            >
+              <Image
+                src={user?.image || "/icon-192x192.png"}
+                alt="avatar"
+                width={250}
+                height={250}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </motion.div>
 
           {/* User Info */}
-          <div className="mt-1 px-3 flex flex-col items-center">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUpVariants}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="mt-1 px-3 flex flex-col items-center"
+          >
             {/* Display Name + Verified */}
-            <div className="w-full flex items-center justify-center max-w-sm sm:max-w-md">
+            <div className="flex items-center justify-center gap-2 max-w-sm sm:max-w-md w-full">
               <h1
-                className="flex-1 text-center text-xl sm:text-2xl md:text-3xl font-semibold leading-tight break-words select-text"
+                className="text-center text-xl sm:text-2xl md:text-3xl leading-tight break-words select-text"
+                style={displayFontStyle}
                 title={page?.displayName || '@randomuser'}
               >
                 {page?.displayName || '@randomuser'}
               </h1>
               {user?.isVerified && (
-                <span
-                  className="ml-2 inline-flex items-center justify-center shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white ring-2 ring-offset-2 ring-offset-gray-900 ring-blue-400 shadow-md shadow-blue-500/30 animate-in fade-in zoom-in duration-300"
-                  title="Verified User"
-                  aria-label="Verified user"
-                >
-                  <FontAwesomeIcon icon={faCheckCircle} className="w-4 h-4 drop-shadow" />
-                </span>
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 drop-shadow-[0_2px_8px_rgba(245,158,11,0.2)]" viewBox="0 0 24 24" fill="none" title="Verified User" aria-label="Verified user">
+                  <defs>
+                    <linearGradient id="verifiedGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#fbbf24" />
+                      <stop offset="50%" stopColor="#f59e0b" />
+                      <stop offset="100%" stopColor="#b45309" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M12 2l2.4 1.8 3-.2.8 2.9 2.9.8-.2 3 1.8 2.4-1.8 2.4.2 3-2.9.8-.8 2.9-3-.2-2.4 1.8-2.4-1.8-3 .2-.8-2.9-2.9-.8.2-3-1.8-2.4 1.8-2.4-.2-3 2.9-.8.8-2.9 3 .2L12 2z"
+                    fill="url(#verifiedGold)"
+                  />
+                  <path
+                    d="M9 12l2 2 4-4"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               )}
             </div>
 
@@ -230,22 +303,39 @@ export default function LiveUserPage({ initialData, uri }) {
             <p className="mt-2 text-center px-4 sm:px-8 max-w-md mx-auto text-[0.78rem] sm:text-base leading-relaxed text-white/85 break-words">
               {page?.bio || 'Bio...'}
             </p>
+          </motion.div>
+
+          <div className={archetype.sectionSpacing}>
+            <SectionDivider variant={archetype.dividerVariant} isLight={isLightTheme} />
           </div>
 
           {/* Social Buttons */}
           <div className="flex gap-2 sm:gap-3 justify-center mt-4 pb-4 px-3 sm:px-4 flex-wrap">
             {page?.buttons && Object.keys(page.buttons).map((key, idx) => (
-              <a
+              <motion.a
                 key={key}
                 href={page.buttons[key]}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Open ${key} profile`}
-                className={clsx(getShapeClasses(theme?.socialShape), "p-3 flex items-center justify-center shadow-md transition duration-200 hover:scale-105 focus-ring-dark", theme?.buttonClass || "bg-gray-700 text-white")}
-                style={{ animationDelay: `${idx * 0.1}s` }}
+                initial="hidden"
+                animate="visible"
+                variants={fadeUpVariants}
+                transition={{ duration: 0.4, delay: idx * archetype.entrance.stagger }}
+                whileHover={{ scale: 1.12, y: -2 }}
+                whileTap={{ scale: 0.94 }}
+                className={clsx(
+                  "flex items-center justify-center shadow-md focus-ring-dark",
+                  socialShape.className,
+                  theme?.buttonClass || "bg-gray-700 text-white"
+                )}
+                style={{ width: 36, height: 36, minWidth: 36, ...socialShape.style }}
               >
-                <FontAwesomeIcon icon={buttonsIcons[key] || faLink} className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
+                <FontAwesomeIcon
+                  icon={buttonsIcons[key] || faLink}
+                  style={{ width: 18, height: 18 }}
+                />
+              </motion.a>
             ))}
           </div>
 
@@ -255,35 +345,51 @@ export default function LiveUserPage({ initialData, uri }) {
           )}
 
           {/* Links */}
-          <div className="max-w-2xl mx-auto grid gap-2 sm:gap-4 md:gap-6 md:grid-cols-2 p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full">
+          <div className={clsx("max-w-2xl mx-auto p-3 sm:p-4 px-4 sm:px-6 overflow-hidden w-full", linkLayout.gridClass)}>
             {page?.links && page.links.map((link, idx) => (
-              <a
-                key={idx}
+              <motion.a
+                key={link.key || idx}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Open link ${link.title || idx + 1}`}
-                className={clsx("flex items-center transition duration-200 p-4 shadow-md min-w-0 md:hover:scale-[1.02] focus-ring-dark", getLinkShapeClasses(theme?.linkShape), theme?.cardClass || "bg-gray-800")}
-                style={{ animationDelay: `${idx * 0.1}s` }}
+                initial="hidden"
+                animate="visible"
+                variants={fadeUpVariants}
+                transition={{ duration: 0.45, delay: idx * archetype.entrance.stagger }}
+                whileHover={{ scale: 1.02, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+                className={clsx("flex items-center shadow-md min-w-0 focus-ring-dark", linkLayout.itemPad, theme?.cardClass || "bg-gray-800")}
               >
-                <div className={clsx("flex items-center justify-center bg-blue-700 mr-3 sm:mr-4", getShapeClasses(theme?.socialShape))}>
+                <div
+                  className={clsx("bg-blue-700 flex items-center justify-center shrink-0 overflow-hidden", linkLayout.itemPad.includes('flex-col') ? 'mb-2' : 'mr-3 sm:mr-4')}
+                  style={{
+                    width: linkLayout.iconSize,
+                    height: linkLayout.iconSize,
+                    minWidth: linkLayout.iconSize,
+                    ...thumbnailShape.style,
+                  }}
+                >
                   {link.icon ? (
                     <Image
                       src={link.icon}
                       alt="icon"
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover rounded-full"
+                      width={linkLayout.iconSize}
+                      height={linkLayout.iconSize}
+                      className="w-full h-full object-cover"
                     />
                   ) : (
-                    <FontAwesomeIcon icon={faLink} className="w-6 h-6 sm:w-8 sm:h-8 text-white/80" />
+                    <FontAwesomeIcon
+                      icon={faLink}
+                      style={{ width: 20, height: 20, opacity: 0.85 }}
+                    />
                   )}
                 </div>
                 <div className="flex-1 overflow-hidden">
                   <h3 className="text-base sm:text-lg font-medium truncate">{link.title}</h3>
                   <p className="text-white/50 text-xs sm:text-sm truncate">{link.subtitle}</p>
                 </div>
-              </a>
+              </motion.a>
             ))}
           </div>
 
@@ -293,21 +399,19 @@ export default function LiveUserPage({ initialData, uri }) {
           )}
 
           {/* Footer */}
-          <div className="relative flex justify-center mt-10 sm:mt-12 px-4">
+          <div className="relative flex justify-center mt-12 sm:mt-16 pb-8 px-4">
             <a
-              href="https://merolink.it.com"
+              href="https://merolink.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-1 sm:py-1.5 px-3 sm:px-3.5 rounded-full shadow-sm flex items-center space-x-1 transition-colors mb-4 text-[11px] sm:text-xs focus-ring-dark"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-white/60 hover:text-white/80 transition-all duration-200 text-[11px] sm:text-xs font-medium tracking-wide backdrop-blur-sm select-none shadow-sm"
             >
-              <div className="bg-yellow-400 text-blue-700 p-1 rounded-full shadow-sm">
-                <FontAwesomeIcon icon={faMagic} className="w-2.5 h-2.5" />
-              </div>
-              <span className="text-[11px] sm:text-xs font-medium">Make your one</span>
+              <span>Powered by</span>
+              <span className="font-bold text-white">Mero Link</span>
             </a>
           </div>
         </div>
       </div>
-    </>
+    </MotionConfig>
   );
 }

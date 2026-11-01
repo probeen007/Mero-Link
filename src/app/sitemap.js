@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = 'https://merolink.it.com';
+  const baseUrl = 'https://merolink.me';
   const now = new Date();
 
   return [

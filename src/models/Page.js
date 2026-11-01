@@ -32,7 +32,7 @@ const PageSchema = new Schema(
           title: { type: String, default: "" },
           url: { type: String, required: true },
           thumbnail: { type: String, default: "" },
-          platform: { type: String, enum: ['youtube', 'vimeo', 'other'], default: 'youtube' },
+          platform: { type: String, enum: ['youtube', 'vimeo', 'spotify', 'tiktok', 'other'], default: 'youtube' },
           videoId: { type: String, default: "" },
           order: { type: Number, default: 0 }
         }
@@ -43,6 +43,11 @@ const PageSchema = new Schema(
       type: String,
       enum: ['before', 'after'],
       default: 'before'
+    },
+    linkStyle: {
+      type: String,
+      enum: ['list', 'grid', 'compact'],
+      default: 'list'
     },
     theme: {
       type: String,

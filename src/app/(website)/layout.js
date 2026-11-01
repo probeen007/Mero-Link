@@ -13,7 +13,7 @@ const lato = Lato({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://merolink.it.com'),
+  metadataBase: new URL('https://merolink.me'),
   title: 'Mero Link - Unify Your Online Presence with Ease',
   description: 'Unify your online presence with Mero Link! Create personalized link trees for your social profiles and websites. Perfect for professionals and businesses.',
   keywords: ['Mero Link', 'custom link tree', 'link in bio', 'online presence', 'share links', 'digital identity'],
@@ -39,7 +39,7 @@ export const metadata = {
   openGraph: {
     title: 'Mero Link - Simplify Your Digital Presence with Custom Link Trees',
     description: 'Join Mero Link, a startup from Nepal, to effortlessly combine your social media and essential links into one shareable tree. Perfect for individuals and businesses alike!',
-    url: 'https://merolink.it.com',
+    url: 'https://merolink.me',
     siteName: 'Mero Link',
     type: 'website',
     images: [
@@ -72,7 +72,7 @@ const websiteJsonLd = {
     {
       '@type': 'Organization',
       name: 'Mero Link',
-      url: 'https://merolink.it.com',
+      url: 'https://merolink.me',
       logo: 'https://i.ibb.co/HNVDd6R/merolinklogo.png',
       sameAs: [
         'https://www.linkedin.com/company/merolink/',
@@ -81,7 +81,7 @@ const websiteJsonLd = {
     {
       '@type': 'WebSite',
       name: 'Mero Link',
-      url: 'https://merolink.it.com',
+      url: 'https://merolink.me',
     },
   ],
 };

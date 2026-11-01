@@ -125,7 +125,7 @@ export default function PageButtonsForm({ user, page }) {
                 <FontAwesomeIcon icon={b.icon} />
                 <span>{upperFirst(b.label)}:</span>
               </div>
-              <div className="grow flex flex-col sm:flex-row gap-2">
+              <div className="grow flex flex-row gap-2">
                 <input
                   placeholder={b.placeholder}
                   name={b.key}
@@ -137,7 +137,7 @@ export default function PageButtonsForm({ user, page }) {
                 <button
                   onClick={() => removeButton(b)}
                   type="button"
-                  className="py-2.5 px-4 bg-gray-200 hover:bg-red-100 text-gray-700 hover:text-red-700 cursor-pointer rounded-lg transition-colors"
+                  className="py-2.5 px-4 bg-gray-200 hover:bg-red-100 text-gray-700 hover:text-red-700 cursor-pointer rounded-lg transition-colors shrink-0"
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>

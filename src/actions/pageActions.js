@@ -13,9 +13,20 @@ const ALLOWED_BUTTON_KEYS = new Set([
 ]);
 
 const ALLOWED_BG_TYPES = new Set(['color', 'image']);
+const ALLOWED_LINK_STYLES = new Set(['list', 'grid', 'compact']);
 
 function toSafeString(value, maxLength = 500) {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
+}
+
+function isValidUrl(val) {
+  if (!val || typeof val !== 'string') return false;
+  try {
+    const parsed = new URL(val);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
 }
 
 export async function savePageSettings(formData) {
@@ -24,7 +35,7 @@ export async function savePageSettings(formData) {
   if (session) {
     const dataKeys = [
       'displayName','location',
-      'bio', 'bgType', 'bgColor', 'bgImage', 'adaptBackground',
+      'bio', 'bgType', 'bgColor', 'bgImage', 'adaptBackground', 'linkStyle',
     ];
 
     const dataToUpdate = {};
@@ -40,8 +51,13 @@ export async function savePageSettings(formData) {
           }
         } else if (key === 'bgColor') {
           const bgColor = toSafeString(formData.get(key), 20);
-          if (/^#[0-9A-Fa-f]{6}$/.test(bgColor)) {
+          if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(bgColor)) {
             dataToUpdate[key] = bgColor;
+          }
+        } else if (key === 'linkStyle') {
+          const linkStyle = toSafeString(formData.get(key), 20);
+          if (ALLOWED_LINK_STYLES.has(linkStyle)) {
+            dataToUpdate[key] = linkStyle;
           }
         } else {
           dataToUpdate[key] = toSafeString(formData.get(key));
@@ -57,6 +73,7 @@ export async function savePageSettings(formData) {
     // Invalidate relevant caches
     const userEmail = session?.user?.email;
     cache.delete(cacheKey('sharecard:page', userEmail));
+    await invalidatePageCache(userEmail);
 
     if (formData.has('avatar')) {
       const avatarLink = toSafeString(formData.get('avatar'));
@@ -72,6 +89,18 @@ export async function savePageSettings(formData) {
   }
 
   return false;
+}
+
+async function invalidatePageCache(email) {
+  try {
+    const pageDoc = await Page.findOne({ owner: email }).select('uri').lean();
+    if (pageDoc?.uri) {
+      cache.delete(cacheKey('page-data', pageDoc.uri));
+      cache.delete(cacheKey('page', pageDoc.uri));
+    }
+  } catch (err) {
+    console.error("❌ Failed to invalidate page cache:", err);
+  }
 }
 
 export async function savePageButtons(formData) {
@@ -96,6 +125,7 @@ export async function savePageButtons(formData) {
     // Invalidate cache after buttons update
     const userEmail = session?.user?.email;
     cache.delete(cacheKey('sharecard:page', userEmail));
+    await invalidatePageCache(userEmail);
     return true;
   }
   return false;
@@ -105,14 +135,34 @@ export async function savePageLinks(links) {
   await dbConnect();
   const session = await getServerSession(authOptions);
   if (session) {
+    const validatedLinks = [];
+    if (Array.isArray(links)) {
+      for (const link of links) {
+        if (!link || typeof link !== 'object') continue;
+        const url = toSafeString(link.url, 2048);
+        if (!isValidUrl(url)) continue; // skip links with invalid urls
+        
+        const icon = toSafeString(link.icon, 2048);
+        
+        validatedLinks.push({
+          key: toSafeString(link.key, 100) || `link-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          title: toSafeString(link.title, 100),
+          subtitle: toSafeString(link.subtitle, 200),
+          icon: isValidUrl(icon) ? icon : '',
+          url,
+        });
+      }
+    }
+
     await Page.updateOne(
       {owner:session?.user?.email},
-      {links},
+      {links: validatedLinks},
     );
     
     // Invalidate cache after links update
     const userEmail = session?.user?.email;
     cache.delete(cacheKey('sharecard:page', userEmail));
+    await invalidatePageCache(userEmail);
     return true;
   } else {
     return false;

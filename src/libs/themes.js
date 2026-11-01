@@ -12,6 +12,7 @@ export const themes = {
         socialShape: "circle",
         linkShape: "rounded",
         hasPageAnimation: false,
+        layout: "minimal",
     },
     aurora: {
         name: "Aurora Flow",
@@ -24,6 +25,7 @@ export const themes = {
         socialShape: "circle",
         linkShape: "rounded",
         hasPageAnimation: true,
+        layout: "cosmic-glass",
     },
     neon: {
         name: "Cyber Neon",
@@ -36,11 +38,12 @@ export const themes = {
         socialShape: "circle",
         linkShape: "rounded",
         hasPageAnimation: true,
-        fontFamily: "'Orbitron', monospace",
+        fontVar: "--font-orbitron",
+        layout: "tech-grid",
     },
     light: {
         name: "Light",
-        bgClass: "bg-gradient-to-br from-blue-50 to-indigo-100",
+        bgClass: "theme-light",
         fontClass: "font-sans text-gray-700",
         buttonClass: "btn-light",
         cardClass: "card-light",
@@ -49,6 +52,7 @@ export const themes = {
         socialShape: "circle",
         linkShape: "rounded",
         hasPageAnimation: false,
+        layout: "minimal",
     },
     starfield: {
         name: "Starfield",
@@ -61,7 +65,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "rounded",
         hasPageAnimation: true,
-        fontFamily: "'Space Grotesk', sans-serif",
+        fontVar: "--font-space-grotesk",
+        layout: "cosmic-glass",
     },
     gamer: {
         name: "Gaming Elite",
@@ -74,7 +79,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "gaming",
         hasPageAnimation: true,
-        fontFamily: "'Rajdhani', sans-serif",
+        fontVar: "--font-rajdhani",
+        layout: "tech-grid",
     },
     coder: {
         name: "Code Matrix",
@@ -87,7 +93,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "code",
         hasPageAnimation: true,
-        fontFamily: "'Fira Code', monospace",
+        fontVar: "--font-fira-code",
+        layout: "tech-grid",
     },
     hacker: {
         name: "Dark Hacker",
@@ -100,7 +107,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "hack",
         hasPageAnimation: true,
-        fontFamily: "'Source Code Pro', monospace",
+        fontVar: "--font-source-code-pro",
+        layout: "tech-grid",
     },
     elegant: {
         name: "Elegant Luxury",
@@ -113,7 +121,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "elegant",
         hasPageAnimation: true,
-        fontFamily: "'Playfair Display', serif",
+        fontVar: "--font-playfair-display",
+        layout: "heritage-ornate",
     },
     funky: {
         name: "Funky Groove",
@@ -126,7 +135,8 @@ export const themes = {
         socialShape: "blob",
         linkShape: "wavy",
         hasPageAnimation: true,
-        fontFamily: "'Fredoka One', cursive",
+        fontVar: "--font-fredoka",
+        layout: "playful-pop",
     },
     feminine: {
         name: "Feminine Bloom",
@@ -139,7 +149,8 @@ export const themes = {
         socialShape: "heart",
         linkShape: "soft",
         hasPageAnimation: true,
-        fontFamily: "'Dancing Script', cursive",
+        fontVar: "--font-dancing-script",
+        layout: "organic-flow",
     },
     retro: {
         name: "Retro Wave",
@@ -152,7 +163,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "retro",
         hasPageAnimation: true,
-        fontFamily: "'Righteous', cursive",
+        fontVar: "--font-righteous",
+        layout: "playful-pop",
     },
     nature: {
         name: "Nature Zen",
@@ -165,7 +177,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "organic",
         hasPageAnimation: true,
-        fontFamily: "'Nunito', sans-serif",
+        fontVar: "--font-nunito",
+        layout: "organic-flow",
     },
     corporate: {
         name: "Corporate Pro",
@@ -178,7 +191,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "business",
         hasPageAnimation: false,
-        fontFamily: "'Inter', sans-serif",
+        fontVar: "--font-inter",
+        layout: "minimal",
     },
     cosmic: {
         name: "Cosmic Dreams",
@@ -191,7 +205,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "cosmic",
         hasPageAnimation: true,
-        fontFamily: "'Comfortaa', cursive",
+        fontVar: "--font-comfortaa",
+        layout: "cosmic-glass",
     },
     nepal: {
         name: "Nepal Pride",
@@ -204,7 +219,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "nepal",
         hasPageAnimation: true,
-        fontFamily: "'Mukti', sans-serif",
+        fontVar: "--font-mukta",
+        layout: "heritage-ornate",
     },
     minecraft: {
         name: "Minecraft World",
@@ -217,7 +233,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "pixelated",
         hasPageAnimation: true,
-        fontFamily: "'Press Start 2P', monospace",
+        fontVar: "--font-press-start-2p",
+        layout: "tech-grid",
     },
     adventure: {
         name: "Adventure Explorer",
@@ -230,7 +247,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "compass",
         hasPageAnimation: true,
-        fontFamily: "'Merriweather', serif",
+        fontVar: "--font-merriweather",
+        layout: "heritage-ornate",
     },
     anime: {
         name: "Anime Aesthetic",
@@ -243,7 +261,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "anime",
         hasPageAnimation: true,
-        fontFamily: "'Noto Sans JP', sans-serif",
+        fontVar: "--font-noto-sans-jp",
+        layout: "cosmic-glass",
     },
     cartoon: {
         name: "Cartoon Fun",
@@ -256,7 +275,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "bubbly",
         hasPageAnimation: true,
-        fontFamily: "'Fredoka One', cursive",
+        fontVar: "--font-fredoka",
+        layout: "playful-pop",
     },
     galaxy: {
         name: "Galaxy Explorer",
@@ -269,7 +289,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "cosmic",
         hasPageAnimation: true,
-        fontFamily: "'Orbitron', monospace",
+        fontVar: "--font-orbitron",
+        layout: "cosmic-glass",
     },
     ocean: {
         name: "Ocean Depths",
@@ -282,7 +303,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "wave",
         hasPageAnimation: true,
-        fontFamily: "'Lato', sans-serif",
+        fontVar: "--font-lato",
+        layout: "cosmic-glass",
     },
     forest: {
         name: "Mystic Forest",
@@ -295,7 +317,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "organic",
         hasPageAnimation: true,
-        fontFamily: "'Merriweather', serif",
+        fontVar: "--font-merriweather",
+        layout: "organic-flow",
     },
     egyptian: {
         name: "Ancient Egypt",
@@ -308,7 +331,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "hieroglyph",
         hasPageAnimation: true,
-        fontFamily: "'Cinzel', serif",
+        fontVar: "--font-cinzel",
+        layout: "heritage-ornate",
     },
     sakura: {
         name: "Sakura Blossom",
@@ -321,7 +345,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "petal",
         hasPageAnimation: true,
-        fontFamily: "'Noto Sans JP', sans-serif",
+        fontVar: "--font-noto-sans-jp",
+        layout: "cosmic-glass",
     },
     viking: {
         name: "Viking Warrior",
@@ -334,7 +359,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "rune",
         hasPageAnimation: true,
-        fontFamily: "'Norse', serif",
+        fontVar: "--font-pirata-one",
+        layout: "heritage-ornate",
     },
     cyberpunk: {
         name: "Cyberpunk 2077",
@@ -347,7 +373,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "cyber",
         hasPageAnimation: true,
-        fontFamily: "'Rajdhani', sans-serif",
+        fontVar: "--font-rajdhani",
+        layout: "tech-grid",
     },
     medieval: {
         name: "Medieval Kingdom",
@@ -360,7 +387,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "scroll",
         hasPageAnimation: true,
-        fontFamily: "'Uncial Antiqua', serif",
+        fontVar: "--font-uncial-antiqua",
+        layout: "heritage-ornate",
     },
     tropical: {
         name: "Tropical Paradise",
@@ -373,7 +401,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "wave",
         hasPageAnimation: true,
-        fontFamily: "'Dancing Script', cursive",
+        fontVar: "--font-dancing-script",
+        layout: "organic-flow",
     },
     artdeco: {
         name: "Art Deco Vintage",
@@ -386,7 +415,9 @@ export const themes = {
         socialShape: "square",
         linkShape: "deco",
         hasPageAnimation: true,
-        fontFamily: "'Great Vibes', cursive",
+        fontVar: "--font-great-vibes",
+        displayFontWeight: "normal",
+        layout: "heritage-ornate",
     },
     rainycity: {
         name: "Rainy City Lights",
@@ -399,7 +430,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "rounded",
         hasPageAnimation: true,
-        fontFamily: "'Inter', sans-serif",
+        fontVar: "--font-inter",
+        layout: "organic-flow",
     },
     desertdune: {
         name: "Desert Dune",
@@ -412,7 +444,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "elegant",
         hasPageAnimation: true,
-        fontFamily: "'Merriweather', serif",
+        fontVar: "--font-merriweather",
+        layout: "organic-flow",
     },
     arcticglass: {
         name: "Arctic Glass",
@@ -425,7 +458,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "soft",
         hasPageAnimation: true,
-        fontFamily: "'Space Grotesk', sans-serif",
+        fontVar: "--font-space-grotesk",
+        layout: "cosmic-glass",
     },
     volcanicforge: {
         name: "Volcanic Forge",
@@ -438,7 +472,8 @@ export const themes = {
         socialShape: "diamond",
         linkShape: "sharp",
         hasPageAnimation: true,
-        fontFamily: "'Rajdhani', sans-serif",
+        fontVar: "--font-rajdhani",
+        layout: "organic-flow",
     },
     emeraldlake: {
         name: "Emerald Lake",
@@ -451,7 +486,8 @@ export const themes = {
         socialShape: "circle",
         linkShape: "organic",
         hasPageAnimation: true,
-        fontFamily: "'Nunito', sans-serif",
+        fontVar: "--font-nunito",
+        layout: "organic-flow",
     },
     sunsetcliff: {
         name: "Sunset Cliff",
@@ -464,7 +500,8 @@ export const themes = {
         socialShape: "square",
         linkShape: "rounded",
         hasPageAnimation: true,
-        fontFamily: "'Poppins', sans-serif",
+        fontVar: "--font-poppins",
+        layout: "organic-flow",
     },
 };
 

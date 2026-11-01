@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faEnvelope, faCog, faUser, faLink, faPlay } from "@fortawesome/free-solid-svg-icons";
 
 import ThemeSelectorWrapper from "@/components/forms/ThemeSelectorWrapper";
-import PageSettingsForm from "@/components/forms/PageSettingsForm";
-import PageButtonsForm from "@/components/forms/PageButtonsForm";
-import PageLinksForm from "@/components/forms/PageLinksForm";
-import { LazyVideoForm } from "@/components/LazyComponents";
-import ShareProfileSection from "@/components/ShareProfileSection";
+import { 
+  LazyPageSettingsForm, 
+  LazyPageButtonsForm, 
+  LazyPageLinksForm, 
+  LazyVideoForm, 
+  LazyShareProfileSection 
+} from "@/components/LazyComponents";
 
 // Client-side component
 export default function AccountPageClient({ page, user, isVerified }) {
@@ -43,7 +45,7 @@ export default function AccountPageClient({ page, user, isVerified }) {
               </h2>
               <p className="text-blue-600 text-sm sm:text-base font-medium flex items-center justify-center gap-2 mt-1 break-all">
                 <FontAwesomeIcon icon={faLink} className="w-4 h-4 shrink-0" />
-                <span>merolink.it.com/{page.uri}</span>
+                <span>merolink.me/{page.uri}</span>
               </p>
             </div>
           </div>
@@ -104,7 +106,7 @@ export default function AccountPageClient({ page, user, isVerified }) {
               <h3 className="text-base sm:text-lg font-semibold text-white">Profile Settings</h3>
             </div>
             <div className="p-3 sm:p-4">
-              <PageSettingsForm page={page} user={user} />
+              <LazyPageSettingsForm page={page} user={user} />
             </div>
           </div>
 
@@ -113,7 +115,7 @@ export default function AccountPageClient({ page, user, isVerified }) {
               <h3 className="text-base sm:text-lg font-semibold text-white">Social Buttons</h3>
             </div>
             <div className="p-3 sm:p-4">
-              <PageButtonsForm page={page} user={user} />
+              <LazyPageButtonsForm page={page} user={user} />
             </div>
           </div>
 
@@ -134,13 +136,13 @@ export default function AccountPageClient({ page, user, isVerified }) {
               <h3 className="text-base sm:text-lg font-semibold text-white">Custom Links</h3>
             </div>
             <div className="p-3 sm:p-4">
-              <PageLinksForm page={page} user={user} />
+              <LazyPageLinksForm page={page} user={user} />
             </div>
           </div>
         </div>
 
         <div className="pt-1 sm:pt-2">
-          <ShareProfileSection />
+          <LazyShareProfileSection />
         </div>
       </div>
     </div>

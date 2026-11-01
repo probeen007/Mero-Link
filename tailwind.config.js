@@ -12,10 +12,6 @@ module.exports = {
     "btn-default", "btn-aurora", "btn-neon", "btn-light", "btn-starfield",
     "card-default", "card-aurora", "card-neon", "card-light", "card-starfield",
     "img-default", "img-aurora", "img-neon", "img-light", "img-starfield",
-    // Animations used in marketing pages
-    "animate-fadeIn", "animate-fadeInDelay", "animate-fadeInDelay2",
-    // Generic pattern to keep dynamic classes
-    { pattern: /(bg|from|via|to|text|ring|animate|shadow|border|w|h|rounded|top|left|right|bottom)-.*/ },
   ],
 
   theme: {

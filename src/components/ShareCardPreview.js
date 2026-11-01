@@ -58,7 +58,7 @@ const ShareCardPreview = forwardRef(function ShareCardPreview({ data }, ref) {
     <div
       ref={ref}
       className="w-[360px] h-[400px] rounded-[28px] overflow-hidden relative shadow-2xl border border-white/20 flex flex-col gap-3 p-5"
-      style={{ background: cardBg, fontFamily: theme.fontFamily || "system-ui, sans-serif" }}
+      style={{ background: cardBg, fontFamily: theme.fontVar ? `var(${theme.fontVar})` : "system-ui, sans-serif" }}
     >
       <div className="absolute inset-0 bg-black/15 pointer-events-none" />
 
@@ -110,7 +110,7 @@ const ShareCardPreview = forwardRef(function ShareCardPreview({ data }, ref) {
       <div className="relative z-10 rounded-xl bg-black/20 border border-white/20 p-2.5 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs leading-tight text-white/80">Scan to visit profile</p>
-          <p className="text-[10px] leading-tight text-white/70 mt-1 truncate">merolink.it.com/{data?.uri || "username"}</p>
+          <p className="text-[10px] leading-tight text-white/70 mt-1 truncate">merolink.me/{data?.uri || "username"}</p>
         </div>
 
         {data?.qrCodeUrl ? (

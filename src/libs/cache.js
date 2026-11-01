@@ -75,7 +75,7 @@ export function cacheKey(...parts) {
 
 export function getCachedOrFetch(key, fetchFn, ttl = 300000) {
   const cached = cache.get(key);
-  if (cached) {
+  if (cached !== undefined) {
     return Promise.resolve(cached);
   }
 

@@ -15,6 +15,19 @@ body {
     overflow-x: hidden;
 }
 
+/* Scoped to the live profile page (toggled on <html> from LiveUserPage.js):
+   hide the native scrollbar for a cleaner, app-like full-bleed feel.
+   (`overscroll-behavior-y: none` was tried here to stop the rubber-band
+   flash but caused scroll to lock up entirely on some touchpads/mice —
+   removed. Scrolling itself is unaffected by hiding the scrollbar.) */
+html.mero-live-page {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+html.mero-live-page::-webkit-scrollbar {
+    display: none;
+}
+
 :root {
   --space-fluid-xs: clamp(0.25rem, 0.15rem + 0.4vw, 0.5rem);
   --space-fluid-sm: clamp(0.5rem, 0.3rem + 0.7vw, 0.9rem);
@@ -191,3677 +204,1053 @@ input#navCb:checked ~ .backdrop {
   animation: fadeIn 1s ease-out 0.6s both;
 }
 
-/* =======================
-   THEME 1 - Default Simple
-   ======================= */
-.theme-default {
-  background-color: #0f172a;
-  min-height: 100vh;
+/* ===================================================
+   SHARED THEME KEYFRAMES
+   =================================================== */
+@keyframes themeBreathe {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%       { opacity: 0.75; transform: scale(1.1); }
+}
+@keyframes themeDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(14px, -10px); }
+}
+@keyframes themeShimmerX {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
 
+/* ===================================================
+   THEME 1 — Default  ·  Clean midnight, minimal
+   =================================================== */
+.theme-default {
+  background: radial-gradient(ellipse 70% 45% at 80% 10%, rgba(56,189,248,.08) 0%, transparent 65%),
+              radial-gradient(ellipse 55% 65% at 10% 90%, rgba(139,92,246,.07) 0%, transparent 65%),
+              #0a0f1e;
+  position: relative;
+  overflow: clip;
+}
+.theme-default::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 350px at 75% 15%, rgba(56,189,248,.04) 0%, transparent 65%);
+  animation: themeBreathe 22s ease-in-out infinite;
+  pointer-events: none;
+}
 .btn-default {
-  background-color: white;
-  color: #0f172a;
-  transition: all 0.2s ease;
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-default:hover {
-  background-color: #e2e8f0;
+  background: rgba(255,255,255,.18);
+  box-shadow: 0 0 16px rgba(255,255,255,.14);
+  transform: translateY(-1px);
 }
-
 .card-default {
-  background-color: #1e293b;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  background: rgba(255,255,255,.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-
+.card-default:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+}
 .img-default {
-  border: 4px solid white;
-  border-radius: 50%;
-  transition: all 0.2s ease;
+  border: 2.5px solid rgba(255,255,255,.5);
+  box-shadow: 0 0 22px rgba(56,189,248,.18);
 }
 
-/* =======================
-   THEME 2 - Aurora Flow
-   ======================= */
+/* ===================================================
+   THEME 2 — Aurora Flow  ·  Northern lights depth
+   =================================================== */
 .theme-aurora {
-  background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43);
-  background-size: 400% 400%;
-  animation: auroraMove 15s ease infinite;
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16,185,129,.16) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 0%  80%,  rgba(99,102,241,.14) 0%, transparent 60%),
+              #060d1a;
+  position: relative;
+  overflow: clip;
 }
-@keyframes auroraMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.theme-aurora::before {
+  content: '';
+  position: absolute;
+  top: -28%; left: -8%; right: -8%;
+  height: 52%;
+  background: linear-gradient(180deg, rgba(16,185,129,.1) 0%, rgba(99,102,241,.08) 45%, transparent 100%);
+  filter: blur(38px);
+  animation: themeBreathe 20s ease-in-out infinite;
+  pointer-events: none;
 }
-
 .btn-aurora {
-  background-color: #2a5298;
-  color: white;
-  transition: all 0.3s ease;
+  background: rgba(16,185,129,.14);
+  color: #fff;
+  border: 1px solid rgba(16,185,129,.35);
+  backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-aurora:hover {
-  background-color: #1e3c72;
-  transform: scale(1.05);
+  background: rgba(16,185,129,.26);
+  box-shadow: 0 0 18px rgba(16,185,129,.3);
+  transform: translateY(-1px);
 }
-
 .card-aurora {
-  background-color: rgba(41, 63, 125, 0.8);
-  border: 2px solid #778da9;
-  transition: all 0.3s ease;
+  background: rgba(16,185,129,.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(16,185,129,.18);
+  border-radius: 14px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .card-aurora:hover {
-  border-color: #415a77;
   transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(16,185,129,.14);
 }
-
 .img-aurora {
-  border: 3px solid #1e3c72;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-.img-aurora:hover {
-  transform: scale(1.05);
+  border: 2.5px solid rgba(16,185,129,.6);
+  box-shadow: 0 0 24px rgba(16,185,129,.22);
 }
 
-/* =======================
-   THEME 3 - Cyber Neon
-   ======================= */
+/* ===================================================
+   THEME 3 — Cyber Neon  ·  Dark grid, cyan glow
+   =================================================== */
 .theme-neon {
-  background: radial-gradient(circle at 50% 50%, #0f0c29, #302b63, #24243e);
+  background: radial-gradient(ellipse 65% 45% at 50% -5%, rgba(0,245,255,.07) 0%, transparent 65%),
+              #07051a;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
+}
+.theme-neon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,245,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
 }
 .theme-neon::after {
-  content: "";
+  content: '';
   position: absolute;
-  width: 220%;
-  height: 220%;
-  top: -60%;
-  left: -60%;
-  background: repeating-linear-gradient(45deg, #00fff7, #00fff7 2px, transparent 2px, transparent 10px);
-  animation: neonMove 10s linear infinite;
-  z-index: 0;
-  opacity: 0.3;
+  bottom: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(0deg, rgba(0,245,255,.05) 0%, transparent 100%);
+  pointer-events: none;
 }
-@media (max-width: 640px) {
-  .theme-neon::after {
-    width: 260%;
-    height: 260%;
-    top: -80%;
-    left: -80%;
-  }
-}
-@keyframes neonMove {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .btn-neon {
-  background-color: #00fff7;
-  color: #0f0c29;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+  background: rgba(0,245,255,.1);
+  color: #00f5ff;
+  border: 1px solid rgba(0,245,255,.4);
+  backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-neon:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #00fff7, 0 0 40px #00fff7;
+  background: rgba(0,245,255,.2);
+  box-shadow: 0 0 20px rgba(0,245,255,.38);
+  transform: translateY(-1px);
 }
-
 .card-neon {
-  background-color: rgba(0, 255, 247, 0.1);
-  border: 2px solid #00fff7;
-  transition: all 0.3s ease;
+  background: rgba(0,245,255,.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,245,255,.14);
+  border-radius: 10px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .card-neon:hover {
-  border-color: #00fff7;
   transform: translateY(-3px);
+  box-shadow: 0 8px 26px rgba(0,245,255,.14);
 }
-
 .img-neon {
-  border: 2px solid #00fff7;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+  border: 2.5px solid rgba(0,245,255,.6);
+  box-shadow: 0 0 24px rgba(0,245,255,.28);
 }
 
-/* =======================
-   THEME 4 - Minimal Light
-   ======================= */
+/* ===================================================
+   THEME 4 — Minimal Light  ·  Clean, airy
+   =================================================== */
 .theme-light {
-  background: linear-gradient(120deg, #fdf6e3, #e0f7fa);
+  background: radial-gradient(ellipse 65% 45% at 85% 15%, rgba(99,102,241,.07) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 50% at 15% 85%, rgba(16,185,129,.05) 0%, transparent 60%),
+              #f4f6ff;
+  position: relative;
 }
-
 .btn-light {
-  background-color: #268bd2;
-  color: white;
-  transition: all 0.3s ease;
+  background: rgba(79,70,229,.12);
+  color: #312e81;
+  border: 1px solid rgba(79,70,229,.3);
+  backdrop-filter: blur(8px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-light:hover {
-  transform: scale(1.03);
+  background: rgba(79,70,229,.22);
+  box-shadow: 0 4px 14px rgba(79,70,229,.18);
+  transform: translateY(-1px);
 }
-
 .card-light {
-  background-color: white;
-  border: 1px solid #ccc;
-  transition: all 0.3s ease;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79,70,229,.1);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(79,70,229,.07);
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .card-light:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(79,70,229,.13);
 }
-
 .img-light {
-  border: 2px solid #268bd2;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+  border: 2.5px solid rgba(79,70,229,.5);
+  box-shadow: 0 0 20px rgba(79,70,229,.13);
 }
 
-/* =======================
-   THEME 5 - Starfield
-   ======================= */
+/* ===================================================
+   THEME 5 — Starfield  ·  Deep space, star texture
+   =================================================== */
 .theme-starfield {
-  background: black;
+  background: #000;
+  background-image:
+    radial-gradient(ellipse 55% 35% at 50% 20%, rgba(100,149,237,.07) 0%, transparent 60%);
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
-.theme-starfield::after {
-  content: "";
+.theme-starfield::before {
+  content: '';
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background: radial-gradient(white 1px, transparent 1px);
-  background-size: 3px 3px;
-  animation: starsTwinkle 20s linear infinite;
-  opacity: 0.7;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 12% 22%, rgba(255,255,255,.8) 0%, transparent 1px),
+    radial-gradient(circle 1px at 33% 61%, rgba(255,255,255,.6) 0%, transparent 1px),
+    radial-gradient(circle 1px at 54% 33%, rgba(255,255,255,.75) 0%, transparent 1px),
+    radial-gradient(circle 1px at 73% 78%, rgba(255,255,255,.5) 0%, transparent 1px),
+    radial-gradient(circle 1px at 86% 14%, rgba(255,255,255,.7) 0%, transparent 1px),
+    radial-gradient(circle 1px at 22% 84%, rgba(255,255,255,.55) 0%, transparent 1px),
+    radial-gradient(circle 1px at 61% 51%, rgba(255,255,255,.85) 0%, transparent 1px),
+    radial-gradient(circle 1px at 91% 68%, rgba(255,255,255,.5) 0%, transparent 1px),
+    radial-gradient(circle 1px at 44% 8%,  rgba(255,255,255,.65) 0%, transparent 1px),
+    radial-gradient(circle 1px at 17% 46%, rgba(255,255,255,.55) 0%, transparent 1px),
+    radial-gradient(circle 1px at 78% 37%, rgba(255,255,255,.4) 0%, transparent 1px),
+    radial-gradient(circle 1px at 28% 73%, rgba(255,255,255,.65) 0%, transparent 1px),
+    radial-gradient(circle 1px at 58% 89%, rgba(255,255,255,.5) 0%, transparent 1px);
+  animation: themeBreathe 28s ease-in-out infinite;
+  pointer-events: none;
 }
-@keyframes starsTwinkle {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(50px, -30px); }
-  100% { transform: translate(0,0); }
-}
-
 .btn-starfield {
-  background-color: #444;
-  color: white;
-  box-shadow: 0 0 10px #fff;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-starfield:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #fff;
+  background: rgba(255,255,255,.16);
+  box-shadow: 0 0 18px rgba(255,255,255,.18);
+  transform: translateY(-1px);
 }
-
 .card-starfield {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid #fff;
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .card-starfield:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 26px rgba(0,0,0,.5);
 }
-
 .img-starfield {
-  border: 2px solid #fff;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+  border: 2.5px solid rgba(255,255,255,.52);
+  box-shadow: 0 0 28px rgba(100,149,237,.28);
 }
 
-/* =======================
-   THEME 6 - Gamer Pulse
-   ======================= */
+/* ===================================================
+   THEME 6 — Gaming Elite  ·  Dark violet, magenta edge
+   =================================================== */
 .theme-gamer {
-  background: linear-gradient(45deg, #0a0a0a, #1a0033, #330066, #660099);
-  background-size: 400% 400%;
-  animation: gamerPulse 3s ease-in-out infinite;
+  background: radial-gradient(ellipse 70% 40% at 30% 20%, rgba(196,0,255,.12) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 60% at 80% 80%, rgba(255,0,100,.1) 0%, transparent 70%),
+              #080010;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
 .theme-gamer::before {
-  content: "";
+  content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.3), transparent);
-  animation: gamerScan 4s linear infinite;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(196,0,255,.9) 40%, rgba(255,0,100,.9) 60%, transparent 100%);
+  background-size: 200% 100%;
+  animation: themeShimmerX 5s linear infinite;
+  pointer-events: none;
 }
-@keyframes gamerPulse {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-@keyframes gamerScan {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
 .btn-gamer {
-  background: linear-gradient(45deg, #ff0066, #cc0099);
-  color: white;
-  border: 2px solid #ff0066;
-  transition: all 0.3s ease;
-  animation: gamerGlow 2s ease-in-out infinite alternate;
+  background: rgba(196,0,255,.14);
+  color: #fff;
+  border: 1px solid rgba(196,0,255,.4);
+  backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
 .btn-gamer:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #ff0066;
+  background: rgba(196,0,255,.26);
+  box-shadow: 0 0 20px rgba(196,0,255,.38);
+  transform: translateY(-1px);
 }
-@keyframes gamerGlow {
-  from { box-shadow: 0 0 5px #ff0066; }
-  to { box-shadow: 0 0 15px #ff0066, 0 0 25px #cc0099; }
-}
-
 .card-gamer {
-  background: linear-gradient(135deg, rgba(255, 0, 102, 0.1), rgba(204, 0, 153, 0.1));
-  border: 2px solid #ff0066;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  background: rgba(196,0,255,.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(196,0,255,.2);
+  border-radius: 12px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-.card-gamer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 0, 102, 0.2), transparent);
-  transition: left 0.5s;
+.card-gamer:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 26px rgba(196,0,255,.18);
 }
-.card-gamer:hover::before {
-  left: 100%;
-}
-
 .img-gamer {
-  border: 3px solid #ff0066;
-  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-  animation: gamerRotate 6s linear infinite;
-}
-@keyframes gamerRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  border: 2.5px solid rgba(196,0,255,.6);
+  box-shadow: 0 0 24px rgba(196,0,255,.28);
 }
 
-/* =======================
-   THEME 7 - Coder Matrix
-   ======================= */
+
+/* ===================================================
+   THEME 7 — Code Matrix  ·  Black terminal, green glow
+   =================================================== */
 .theme-coder {
-  background: #000;
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,255,65,.06) 0%, transparent 60%), #010800;
+  position: relative; overflow: clip;
 }
-.theme-coder::after {
-  content: "01001100 01101001 01101110 01101011";
-  position: absolute;
-  color: #00ff41;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  white-space: pre;
-  animation: matrixRain 10s linear infinite;
-  opacity: 0.3;
+.theme-coder::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(0,255,65,.02) 1px, transparent 1px);
+  background-size: 100% 22px; pointer-events: none;
 }
-@keyframes matrixRain {
-  0% { top: -100%; left: 0%; }
-  25% { top: 100%; left: 25%; }
-  50% { top: -100%; left: 50%; }
-  75% { top: 100%; left: 75%; }
-  100% { top: -100%; left: 100%; }
-}
-
 .btn-coder {
-  background: linear-gradient(90deg, #00ff41, #00cc33);
-  color: #000;
-  border: 2px solid #00ff41;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
+  background: rgba(0,255,65,.08); color: #00ff41;
+  border: 1px solid rgba(0,255,65,.35); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-.btn-coder:hover {
-  background: #000;
-  color: #00ff41;
-  box-shadow: 0 0 15px #00ff41;
-  transform: scale(1.05);
-}
-
+.btn-coder:hover { background: rgba(0,255,65,.18); box-shadow: 0 0 18px rgba(0,255,65,.32); transform: translateY(-1px); }
 .card-coder {
-  background: rgba(0, 255, 65, 0.1);
-  border: 1px solid #00ff41;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-  animation: coderFlicker 3s ease-in-out infinite;
+  background: rgba(0,255,65,.04); backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,255,65,.14); border-radius: 8px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-@keyframes coderFlicker {
-  0%, 98%, 100% { opacity: 1; }
-  99% { opacity: 0.95; }
-}
+.card-coder:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,255,65,.12); }
+.img-coder { border: 2.5px solid rgba(0,255,65,.6); box-shadow: 0 0 22px rgba(0,255,65,.25); border-radius: 10%; }
 
-.img-coder {
-  border: 2px solid #00ff41;
-  border-radius: 10%;
-  animation: coderScan 4s linear infinite;
-}
-@keyframes coderScan {
-  0%, 100% { border-color: #00ff41; }
-  50% { border-color: #00cc33; }
-}
-
-/* =======================
-   THEME 8 - Hacker Dark
-   ======================= */
+/* ===================================================
+   THEME 8 — Dark Hacker  ·  Near-black, red intensity
+   =================================================== */
 .theme-hacker {
-  background: radial-gradient(circle at center, #1a0000, #000);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 70% 40% at 20% 20%, rgba(220,0,0,.09) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 60% at 80% 80%, rgba(150,0,0,.07) 0%, transparent 60%), #0c0000;
+  position: relative; overflow: clip;
 }
 .theme-hacker::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(255, 0, 0, 0.03) 2px,
-    rgba(255, 0, 0, 0.03) 4px
-  );
-  animation: hackerLines 8s linear infinite;
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(220,0,0,.016) 3px, rgba(220,0,0,.016) 4px);
+  pointer-events: none;
 }
-@keyframes hackerLines {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(20px); }
-}
-
 .btn-hacker {
-  background: linear-gradient(45deg, #ff0000, #cc0000);
-  color: white;
-  border: 2px solid #ff0000;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+  background: rgba(220,0,0,.1); color: #ff4444;
+  border: 1px solid rgba(220,0,0,.4); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-.btn-hacker:hover {
-  background: #000;
-  color: #ff0000;
-  box-shadow: 0 0 20px #ff0000;
-  animation: hackerShake 0.5s ease-in-out;
-}
-@keyframes hackerShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
+.btn-hacker:hover { background: rgba(220,0,0,.22); box-shadow: 0 0 18px rgba(220,0,0,.38); transform: translateY(-1px); }
 .card-hacker {
-  background: rgba(255, 0, 0, 0.1);
-  border: 2px solid #ff0000;
-  border-radius: 0;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-  position: relative;
+  background: rgba(220,0,0,.05); backdrop-filter: blur(12px);
+  border: 1px solid rgba(220,0,0,.18); border-radius: 4px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-.card-hacker::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #ff0000;
-  animation: hackerProgress 3s ease-in-out infinite;
-}
-@keyframes hackerProgress {
-  0%, 100% { width: 0%; }
-  50% { width: 100%; }
-}
+.card-hacker:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(220,0,0,.2); }
+.img-hacker { border: 2.5px solid rgba(220,0,0,.6); box-shadow: 0 0 22px rgba(220,0,0,.28); }
 
-.img-hacker {
-  border: 3px solid #ff0000;
-  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
-  animation: hackerPulse 2s ease-in-out infinite;
-}
-@keyframes hackerPulse {
-  0%, 100% { border-color: #ff0000; }
-  50% { border-color: #cc0000; box-shadow: 0 0 20px #ff0000; }
-}
-
-/* =======================
-   THEME 9 - Elegant Gold
-   ======================= */
+/* ===================================================
+   THEME 9 — Elegant Luxury  ·  Midnight navy, gold
+   =================================================== */
 .theme-elegant {
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  background: radial-gradient(ellipse 55% 45% at 20% 80%, rgba(255,215,0,.08) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 45% at 80% 20%, rgba(255,215,0,.06) 0%, transparent 55%),
+              linear-gradient(145deg, #0d0c1a 0%, #12102e 60%, #0f1428 100%);
   position: relative;
 }
 .theme-elegant::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1), transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1), transparent 50%);
-  animation: elegantShimmer 8s ease-in-out infinite;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 50% 50%, rgba(255,215,0,.04) 0%, transparent 60%);
+  animation: themeBreathe 24s ease-in-out infinite; pointer-events: none;
 }
-@keyframes elegantShimmer {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-}
-
 .btn-elegant {
-  background: linear-gradient(45deg, #ffd700, #ffed4a);
-  color: #1a1a2e;
-  border: 2px solid #ffd700;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  background: rgba(255,215,0,.12); color: #ffd700;
+  border: 1px solid rgba(255,215,0,.4); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-.btn-elegant:hover {
-  background: linear-gradient(45deg, #ffed4a, #ffd700);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-}
-
+.btn-elegant:hover { background: rgba(255,215,0,.22); box-shadow: 0 0 20px rgba(255,215,0,.28); transform: translateY(-1px); }
 .card-elegant {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 237, 74, 0.05));
-  border: 1px solid #ffd700;
-  border-radius: 20px;
-  transition: all 0.3s ease;
+  background: rgba(255,215,0,.05); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,215,0,.18); border-radius: 18px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-.card-elegant:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
-}
+.card-elegant:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255,215,0,.12); }
+.img-elegant { border: 2.5px solid rgba(255,215,0,.65); box-shadow: 0 0 26px rgba(255,215,0,.22); }
 
-.img-elegant {
-  border: 4px solid #ffd700;
-  border-radius: 50%;
-  position: relative;
-  animation: elegantGlow 4s ease-in-out infinite;
-}
-@keyframes elegantGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-  50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
-}
-
-/* =======================
-   THEME 10 - Funky Pop
-   ======================= */
+/* ===================================================
+   THEME 10 — Funky Groove  ·  Bold multi-color vibes
+   =================================================== */
 .theme-funky {
-  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd);
-  background-size: 600% 600%;
-  animation: funkyRainbow 8s ease infinite;
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 60% 40% at 20% 30%, rgba(255,107,107,.18) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 50% at 80% 70%, rgba(72,219,251,.15) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 40% at 50% 10%,  rgba(254,202,87,.12) 0%, transparent 55%),
+              #1a0a1e;
+  position: relative; overflow: clip;
 }
-
 .theme-funky::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(254, 202, 87, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 40% 40%, rgba(72, 219, 251, 0.2) 0%, transparent 50%);
-  animation: funkyBubbles 12s ease-in-out infinite;
-  pointer-events: none;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 35% 35% at 70% 80%, rgba(255,159,243,.1) 0%, transparent 50%);
+  animation: themeBreathe 18s ease-in-out infinite; pointer-events: none;
 }
-
-@keyframes funkyRainbow {
-  0% { background-position: 0% 50%; }
-  25% { background-position: 100% 100%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 0% 0%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes funkyBubbles {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  33% { opacity: 0.7; transform: scale(1.1); }
-  66% { opacity: 0.5; transform: scale(0.9); }
-}
-
 .btn-funky {
-  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
-  background-size: 300% 300%;
-  color: white;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50px;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
-  transition: all 0.3s ease;
-  animation: funkyBounce 3s ease-in-out infinite, funkyShimmer 2s ease-in-out infinite;
-  position: relative;
-  overflow: hidden;
+  background: rgba(255,107,107,.18); color: #fff;
+  border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-
-.btn-funky::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: rotate(45deg);
-  animation: funkyGleam 3s ease-in-out infinite;
-}
-
-.btn-funky:hover {
-  transform: scale(1.1) rotate(2deg);
-  background-position: 100% 100%;
-  box-shadow: 0 12px 30px rgba(255, 107, 107, 0.6);
-}
-
-@keyframes funkyBounce {
-  0%, 100% { transform: scale(1) translateY(0px); }
-  50% { transform: scale(1.05) translateY(-5px); }
-}
-
-@keyframes funkyShimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes funkyGleam {
-  0% { left: -200%; }
-  100% { left: 200%; }
-}
-
+.btn-funky:hover { background: rgba(255,107,107,.3); box-shadow: 0 0 18px rgba(255,107,107,.3); transform: translateY(-1px); }
 .card-funky {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 107, 107, 0.15));
-  border: 3px solid transparent;
-  background-clip: padding-box;
-  border-radius: 25px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3), 
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  animation: funkyWobble 6s ease-in-out infinite;
-  position: relative;
-  overflow: hidden;
+  background: rgba(255,255,255,.08); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.18); border-radius: 20px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
+.card-funky:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255,107,107,.18); }
+.img-funky { border: 2.5px solid rgba(255,107,107,.7); box-shadow: 0 0 24px rgba(254,202,87,.2); }
 
-.card-funky::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.5s ease;
-}
-
-.card-funky:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.card-funky:hover::before {
-  left: 100%;
-}
-
-@keyframes funkyWobble {
-  0%, 100% { transform: rotate(0deg) translateY(0px); }
-  25% { transform: rotate(0.5deg) translateY(-2px); }
-  50% { transform: rotate(0deg) translateY(-3px); }
-  75% { transform: rotate(-0.5deg) translateY(-2px); }
-}
-
-.img-funky {
-  border: 4px solid rgba(255, 107, 107, 0.8);
-  background: linear-gradient(45deg, #feca57, #48dbfb, #ff9ff3);
-  background-size: 300% 300%;
-  animation: funkyImagePulse 4s ease-in-out infinite, funkyColorShift 6s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
-  position: relative;
-}
-
-.img-funky::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
-  background-size: 400% 400%;
-  animation: funkyBorderFlow 3s ease infinite;
-  z-index: -1;
-  border-radius: inherit;
-}
-
-@keyframes funkyImagePulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
-  50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 107, 107, 0.8); }
-}
-
-@keyframes funkyColorShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes funkyBorderFlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* =======================
-   THEME 11 - Feminine Bloom
-   ======================= */
+/* ===================================================
+   THEME 11 — Feminine Bloom  ·  Deep rose, soft glow
+   =================================================== */
 .theme-feminine {
-  background: linear-gradient(135deg, #d63384 0%, #e83e8c 30%, #c2185b 60%, #ad1457 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 70% 45% at 50% -10%, rgba(236,72,153,.2) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 55% at 10% 90%, rgba(192,38,211,.15) 0%, transparent 60%),
+              #1a0520;
+  position: relative; overflow: clip;
 }
-
-/* Elegant sparkles */
 .theme-feminine::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: feminineSparkle 8s linear infinite;
-  opacity: 0.4;
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle 1.5px at 15% 25%, rgba(255,255,255,.5) 0%, transparent 1.5px),
+    radial-gradient(circle 1.5px at 42% 68%, rgba(255,255,255,.4) 0%, transparent 1.5px),
+    radial-gradient(circle 1.5px at 72% 35%, rgba(255,255,255,.5) 0%, transparent 1.5px),
+    radial-gradient(circle 1.5px at 85% 78%, rgba(255,255,255,.35) 0%, transparent 1.5px),
+    radial-gradient(circle 1.5px at 30% 90%, rgba(255,255,255,.45) 0%, transparent 1.5px);
+  animation: themeBreathe 20s ease-in-out infinite; pointer-events: none;
 }
-
-/* Subtle floating elements */
-.theme-feminine::after {
-  content: '';
-  position: absolute;
-  top: 10%;
-  right: 10%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(232, 62, 140, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: feminineFlow 12s ease-in-out infinite;
-}
-
-@keyframes feminineSparkle {
-  0%, 100% { transform: translateY(0px); opacity: 0.4; }
-  50% { transform: translateY(-10px); opacity: 0.7; }
-}
-
-@keyframes feminineFlow {
-  0%, 100% { 
-    transform: translateY(0px) scale(1);
-    opacity: 0.3;
-  }
-  50% { 
-    transform: translateY(-20px) scale(1.1);
-    opacity: 0.5;
-  }
-}
-
 .btn-feminine {
-  background: linear-gradient(45deg, #c2185b, #e91e63);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(194, 24, 91, 0.3);
+  background: rgba(236,72,153,.15); color: #fff;
+  border: 1px solid rgba(236,72,153,.4); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-
-.btn-feminine:hover {
-  background: linear-gradient(45deg, #e91e63, #f06292);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(194, 24, 91, 0.4);
-}
-
+.btn-feminine:hover { background: rgba(236,72,153,.28); box-shadow: 0 0 18px rgba(236,72,153,.32); transform: translateY(-1px); }
 .card-feminine {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(232, 62, 140, 0.4);
-  border-radius: 16px;
-  transition: all 0.3s ease;
+  background: rgba(255,255,255,.07); backdrop-filter: blur(12px);
+  border: 1px solid rgba(236,72,153,.22); border-radius: 18px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
+.card-feminine:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(236,72,153,.16); }
+.img-feminine { border: 2.5px solid rgba(236,72,153,.65); box-shadow: 0 0 24px rgba(236,72,153,.25); }
 
-.card-feminine:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(232, 62, 140, 0.6);
-  transform: translateY(-2px);
-}
-
-.img-feminine {
-  border: 3px solid #e91e63;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
-}
-
-.img-feminine:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(233, 30, 99, 0.5);
-}
-
-/* =======================
-   THEME 12 - Retro Wave
-   ======================= */
+/* ===================================================
+   THEME 12 — Retro Wave  ·  Synthwave depth
+   =================================================== */
 .theme-retro {
-  background: linear-gradient(180deg, #2d1b69 0%, #11998e 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,0,128,.12) 0%, transparent 55%),
+              radial-gradient(ellipse 60% 50% at 0% 100%, rgba(0,255,128,.08) 0%, transparent 55%),
+              linear-gradient(170deg, #14063a 0%, #1a0250 50%, #050a2a 100%);
+  position: relative; overflow: clip;
 }
 .theme-retro::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 50px,
-    rgba(255, 0, 150, 0.1) 50px,
-    rgba(255, 0, 150, 0.1) 52px
-  );
-  animation: retroGrid 10s linear infinite;
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 45%;
+  background: repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,0,128,.06) 48px, rgba(255,0,128,.06) 50px);
+  pointer-events: none;
 }
-@keyframes retroGrid {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(52px); }
-}
-
 .btn-retro {
-  background: linear-gradient(45deg, #ff0080, #00ff80);
-  color: white;
-  border: 2px solid #ff0080;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-weight: bold;
+  background: rgba(255,0,128,.12); color: #fff;
+  border: 1px solid rgba(255,0,128,.4); backdrop-filter: blur(10px);
+  transition: background .4s, box-shadow .4s, transform .4s;
 }
-.btn-retro:hover {
-  background: linear-gradient(45deg, #00ff80, #ff0080);
-  box-shadow: 0 0 20px #ff0080;
-  transform: scale(1.1);
-}
-
+.btn-retro:hover { background: rgba(255,0,128,.24); box-shadow: 0 0 18px rgba(255,0,128,.35); transform: translateY(-1px); }
 .card-retro {
-  background: rgba(255, 0, 128, 0.1);
-  border: 2px solid #ff0080;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  animation: retroPulse 3s ease-in-out infinite;
+  background: rgba(255,0,128,.06); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,0,128,.2); border-radius: 12px;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
-@keyframes retroPulse {
-  0%, 100% { border-color: #ff0080; }
-  50% { border-color: #00ff80; }
-}
+.card-retro:hover { transform: translateY(-3px); box-shadow: 0 8px 26px rgba(255,0,128,.18); }
+.img-retro { border: 2.5px solid rgba(255,0,128,.6); box-shadow: 0 0 24px rgba(255,0,128,.22); }
 
-.img-retro {
-  border: 3px solid #ff0080;
-  border-radius: 50%;
-  animation: retroSpin 6s linear infinite;
-}
-@keyframes retroSpin {
-  from { transform: rotate(0deg); border-color: #ff0080; }
-  50% { border-color: #00ff80; }
-  to { transform: rotate(360deg); border-color: #ff0080; }
-}
-
-/* =======================
-   THEME 13 - Nature Zen
-   ======================= */
+/* ===================================================
+   THEME 13 — Nature Zen  ·  Lush forest, earthy depth
+   =================================================== */
 .theme-nature {
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 180, 80, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(80, 150, 120, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #1e3c14 0%, #2d5016 30%, #56ab2f 60%, #a8e6cf 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 65% 45% at 20% 20%, rgba(86,171,47,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 80% 80%, rgba(45,130,60,.12) 0%, transparent 55%),
+              #071a08;
+  position: relative; overflow: clip;
 }
-
-/* Gentle floating leaves */
 .theme-nature::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle, rgba(86, 171, 47, 0.4) 2px, transparent 2px),
-    radial-gradient(circle, rgba(168, 230, 207, 0.3) 1px, transparent 1px);
-  background-size: 60px 60px, 40px 40px;
-  background-position: 0 0, 30px 30px;
-  animation: naturalBreeze 25s linear infinite;
-  opacity: 0.7;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 35% at 50% 100%, rgba(86,171,47,.08) 0%, transparent 55%);
+  animation: themeBreathe 26s ease-in-out infinite; pointer-events: none;
 }
+.btn-nature { background: rgba(86,171,47,.14); color: #fff; border: 1px solid rgba(86,171,47,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-nature:hover { background: rgba(86,171,47,.26); box-shadow: 0 0 18px rgba(86,171,47,.3); transform: translateY(-1px); }
+.card-nature { background: rgba(86,171,47,.06); backdrop-filter: blur(12px); border: 1px solid rgba(86,171,47,.18); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-nature:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(86,171,47,.14); }
+.img-nature { border: 2.5px solid rgba(86,171,47,.65); box-shadow: 0 0 24px rgba(86,171,47,.22); }
 
-/* Subtle nature sounds visualization */
-.theme-nature::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40%;
-  background: 
-    linear-gradient(0deg, 
-      rgba(45, 80, 22, 0.8) 0%, 
-      rgba(86, 171, 47, 0.4) 30%, 
-      transparent 100%);
-  animation: naturalFlow 30s ease-in-out infinite;
-}
-
-@keyframes naturalBreeze {
-  0% { transform: translateX(0) translateY(0); }
-  25% { transform: translateX(-10px) translateY(-5px); }
-  50% { transform: translateX(5px) translateY(5px); }
-  75% { transform: translateX(-5px) translateY(-3px); }
-  100% { transform: translateX(0) translateY(0); }
-}
-
-@keyframes naturalFlow {
-  0%, 100% { opacity: 0.8; transform: scaleY(1); }
-  50% { opacity: 0.6; transform: scaleY(1.1); }
-}
-
-.btn-nature {
-  background: linear-gradient(45deg, #4a7c2a, #6ba644);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(86, 171, 47, 0.2);
-}
-
-.btn-nature:hover {
-  background: linear-gradient(45deg, #6ba644, #8ac460);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(86, 171, 47, 0.3);
-}
-
-.card-nature {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(86, 171, 47, 0.3);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.card-nature:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(86, 171, 47, 0.5);
-}
-
-.img-nature {
-  border: 3px solid #56ab2f;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.img-nature:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 15px rgba(86, 171, 47, 0.4);
-}
-
-/* =======================
-   THEME 14 - Corporate Pro
-   ======================= */
+/* ===================================================
+   THEME 14 — Corporate Pro  ·  Navy slate, precision
+   =================================================== */
 .theme-corporate {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
-}
-
-.btn-corporate {
-  background: #2c3e50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-.btn-corporate:hover {
-  background: #34495e;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
-}
-
-.card-corporate {
-  background: white;
-  border: 1px solid #e1e8ed;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.card-corporate:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.img-corporate {
-  border: 3px solid #2c3e50;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-/* =======================
-   THEME 15 - Cosmic Drift
-   ======================= */
-.theme-cosmic {
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse 60% 40% at 80% 15%, rgba(59,130,246,.09) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 50% at 10% 85%, rgba(30,58,138,.1) 0%, transparent 55%),
+              #060c1a;
   position: relative;
-  overflow: hidden;
+}
+.btn-corporate { background: rgba(59,130,246,.12); color: #fff; border: 1px solid rgba(59,130,246,.35); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-corporate:hover { background: rgba(59,130,246,.22); box-shadow: 0 0 16px rgba(59,130,246,.28); transform: translateY(-1px); }
+.card-corporate { background: rgba(255,255,255,.05); backdrop-filter: blur(12px); border: 1px solid rgba(59,130,246,.15); border-radius: 10px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-corporate:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(59,130,246,.14); }
+.img-corporate { border: 2.5px solid rgba(59,130,246,.55); box-shadow: 0 0 20px rgba(59,130,246,.18); }
+
+/* ===================================================
+   THEME 15 — Cosmic Dreams  ·  Purple nebula
+   =================================================== */
+.theme-cosmic {
+  background: radial-gradient(ellipse 70% 50% at 50% 20%, rgba(139,92,246,.18) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 60% at 10% 80%, rgba(59,130,246,.12) 0%, transparent 55%),
+              radial-gradient(ellipse 40% 40% at 90% 60%, rgba(236,72,153,.1) 0%, transparent 50%),
+              #05020f;
+  position: relative; overflow: clip;
 }
 .theme-cosmic::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: 
-    radial-gradient(2px 2px at 20px 30px, white, transparent),
-    radial-gradient(2px 2px at 40px 70px, white, transparent),
-    radial-gradient(1px 1px at 90px 40px, white, transparent),
-    radial-gradient(1px 1px at 130px 80px, white, transparent),
-    radial-gradient(2px 2px at 160px 30px, white, transparent);
-  background-repeat: repeat;
-  background-size: 200px 100px;
-  animation: cosmicDrift 50s linear infinite;
-  opacity: 0.5;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 35% at 60% 40%, rgba(139,92,246,.07) 0%, transparent 55%);
+  animation: themeBreathe 22s ease-in-out infinite; pointer-events: none;
 }
-@keyframes cosmicDrift {
-  from { transform: translateX(0px); }
-  to { transform: translateX(-200px); }
-}
+.btn-cosmic { background: rgba(139,92,246,.14); color: #fff; border: 1px solid rgba(139,92,246,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-cosmic:hover { background: rgba(139,92,246,.26); box-shadow: 0 0 20px rgba(139,92,246,.35); transform: translateY(-1px); }
+.card-cosmic { background: rgba(139,92,246,.06); backdrop-filter: blur(12px); border: 1px solid rgba(139,92,246,.2); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-cosmic:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(139,92,246,.18); }
+.img-cosmic { border: 2.5px solid rgba(139,92,246,.65); box-shadow: 0 0 26px rgba(139,92,246,.25); }
 
-.btn-cosmic {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  color: white;
-  border: 2px solid #667eea;
-  border-radius: 30px;
-  transition: all 0.3s ease;
-}
-.btn-cosmic:hover {
-  background: linear-gradient(45deg, #764ba2, #667eea);
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-  transform: scale(1.05);
-}
-
-.card-cosmic {
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid #667eea;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  animation: cosmicFloat 8s ease-in-out infinite;
-}
-@keyframes cosmicFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.img-cosmic {
-  border: 3px solid #667eea;
-  border-radius: 50%;
-  animation: cosmicOrbit 12s linear infinite;
-  position: relative;
-}
-.img-cosmic::after {
-  content: "";
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #764ba2;
-  border-radius: 50%;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: cosmicMoon 3s linear infinite;
-}
-@keyframes cosmicOrbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes cosmicMoon {
-  from { transform: translateX(-50%) rotate(0deg) translateX(60px) rotate(0deg); }
-  to { transform: translateX(-50%) rotate(360deg) translateX(60px) rotate(-360deg); }
-}
-
-/* =======================
-   THEME 16 - Nepal Heritage
-   ======================= */
+/* ===================================================
+   THEME 16 — Nepal Pride  ·  Crimson, gold heritage
+   =================================================== */
 .theme-nepal {
-  background:
-    radial-gradient(circle at 85% 15%, rgba(220, 20, 60, 0.2) 0%, transparent 52%),
-    radial-gradient(circle at 15% 85%, rgba(0, 56, 147, 0.2) 0%, transparent 52%),
-    linear-gradient(135deg, #0b1731 0%, #12305c 45%, #1d3f73 70%, #b91c3a 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 65% 45% at 30% 30%, rgba(185,28,28,.18) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 50% at 80% 75%, rgba(180,83,9,.12) 0%, transparent 55%),
+              #100305;
+  position: relative; overflow: clip;
 }
-
 .theme-nepal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.06) 0 1px,
-      transparent 1px 18px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.04) 0 1px,
-      transparent 1px 22px
-    );
-  animation: nepalPattern 18s linear infinite;
-  opacity: 0.55;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 70% 20%, rgba(234,179,8,.06) 0%, transparent 50%);
+  animation: themeBreathe 24s ease-in-out infinite; pointer-events: none;
 }
+.btn-nepal { background: rgba(185,28,28,.14); color: #fbbf24; border: 1px solid rgba(234,179,8,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-nepal:hover { background: rgba(185,28,28,.26); box-shadow: 0 0 18px rgba(234,179,8,.3); transform: translateY(-1px); }
+.card-nepal { background: rgba(185,28,28,.07); backdrop-filter: blur(12px); border: 1px solid rgba(234,179,8,.18); border-radius: 12px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-nepal:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(185,28,28,.18); }
+.img-nepal { border: 2.5px solid rgba(234,179,8,.65); box-shadow: 0 0 24px rgba(185,28,28,.25); }
 
-.theme-nepal::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 35%),
-    radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.15), transparent 30%);
-  animation: nepalMotif 9s ease-in-out infinite;
-  opacity: 0.6;
-}
-
-@keyframes nepalPattern {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-40px, -40px, 0); }
-}
-
-@keyframes nepalMotif {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.8; }
-}
-
-.btn-nepal {
-  background: linear-gradient(45deg, #e94560, #0f3460);
-  color: white;
-  border: 2px solid rgba(255, 215, 0, 0.4);
-  border-radius: 12px;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-nepal::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.2), transparent);
-  transform: rotate(45deg);
-  animation: nepalShimmer 4s ease-in-out infinite;
-}
-
-.btn-nepal:hover {
-  background: linear-gradient(45deg, #0f3460, #e94560);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
-}
-
-@keyframes nepalShimmer {
-  0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-}
-
-.card-nepal {
-  background: rgba(26, 26, 46, 0.4);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 215, 0, 0.3);
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.2);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.card-nepal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, transparent 50%, rgba(15, 52, 96, 0.1) 100%);
-  border-radius: 14px;
-  pointer-events: none;
-}
-
-.card-nepal:hover {
-  background: rgba(26, 26, 46, 0.6);
-  border-color: rgba(255, 215, 0, 0.5);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(233, 69, 96, 0.3);
-}
-
-.img-nepal {
-  border: 3px solid #ffd700;
-  border-radius: 12px;
-  position: relative;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-  transition: all 0.3s ease;
-}
-
-.img-nepal:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
-}
-
-/* =======================
-   THEME 17 - Minecraft World
-   ======================= */
+/* ===================================================
+   THEME 17 — Minecraft  ·  Pixelated dirt & grass
+   =================================================== */
 .theme-minecraft {
-  background:
-    linear-gradient(0deg, #4b7a3f 0%, #4b7a3f 32%, #6b4f2a 32%, #6b4f2a 100%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 16px),
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0 2px, transparent 2px 16px);
-  background-size: 100% 100%, 16px 16px, 16px 16px;
-  position: relative;
-  overflow: hidden;
-  animation: minecraftShift 14s steps(28) infinite;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34,197,94,.1) 0%, transparent 55%),
+              #0a1a0a;
+  position: relative; overflow: clip;
 }
-
 .theme-minecraft::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.06) 0 1px,
-      transparent 1px 32px
-    );
-  opacity: 0.35;
-  animation: minecraftSteve 8s linear infinite;
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(34,197,94,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,.03) 1px, transparent 1px);
+  background-size: 16px 16px; pointer-events: none;
 }
+.btn-minecraft { background: rgba(34,197,94,.12); color: #4ade80; border: 2px solid rgba(34,197,94,.4); backdrop-filter: blur(6px); transition: background .4s, box-shadow .4s, transform .4s; image-rendering: pixelated; }
+.btn-minecraft:hover { background: rgba(34,197,94,.22); box-shadow: 0 0 16px rgba(34,197,94,.3); transform: translateY(-1px); }
+.card-minecraft { background: rgba(34,197,94,.05); backdrop-filter: blur(8px); border: 2px solid rgba(34,197,94,.2); border-radius: 4px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-minecraft:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(34,197,94,.14); }
+.img-minecraft { border: 3px solid rgba(34,197,94,.6); box-shadow: 0 0 20px rgba(34,197,94,.22); border-radius: 6px; image-rendering: pixelated; }
 
-.theme-minecraft::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, transparent 65%, rgba(255, 255, 255, 0.09) 100%),
-    radial-gradient(circle at 75% 22%, rgba(79, 195, 247, 0.35) 0 6%, transparent 18%);
-  opacity: 0.65;
-  animation: minecraftItems 5s ease-in-out infinite;
-}
-
-@keyframes minecraftShift {
-  0% { background-position: 0 0, 0 0, 0 0; }
-  100% { background-position: 0 0, 32px 0, 0 32px; }
-}
-
-@keyframes minecraftSteve {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-18px); }
-}
-
-@keyframes minecraftItems {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.82; }
-}
-
-.btn-minecraft {
-  background: 
-    linear-gradient(135deg, #8b4513 0%, #8b4513 40%, #654321 40%, #654321 50%, #8b4513 50%);
-  color: white;
-  border: 2px solid #654321;
-  border-radius: 4px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
-  text-shadow: 1px 1px 0px #000;
-  box-shadow: 
-    inset 2px 2px 0px rgba(255, 255, 255, 0.3),
-    inset -2px -2px 0px rgba(0, 0, 0, 0.3),
-    2px 2px 4px rgba(0, 0, 0, 0.5);
-  transition: all 0.1s ease;
-  image-rendering: pixelated;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-minecraft::before {
-  content: '⛏️';
-  position: absolute;
-  top: 50%;
-  left: -25px;
-  transform: translateY(-50%);
-  font-size: 10px;
-  animation: minecraftTool 2.5s ease-in-out infinite;
-}
-
-.btn-minecraft:hover {
-  background: 
-    linear-gradient(135deg, #a0522d 0%, #a0522d 40%, #8b4513 40%, #8b4513 50%, #a0522d 50%);
-  transform: translate(1px, 1px);
-  box-shadow: 
-    inset 1px 1px 0px rgba(255, 255, 255, 0.3),
-    inset -1px -1px 0px rgba(0, 0, 0, 0.3),
-    1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-@keyframes minecraftTool {
-  0%, 100% { left: -25px; opacity: 0; }
-  50% { left: calc(100% + 10px); opacity: 1; }
-}
-
-.card-minecraft {
-  background: 
-    linear-gradient(135deg, #8b4513 0%, #8b4513 40%, #654321 40%, #654321 50%, #8b4513 50%);
-  border: 3px solid #654321;
-  border-radius: 4px;
-  box-shadow: 
-    inset 2px 2px 0px rgba(255, 255, 255, 0.3),
-    inset -2px -2px 0px rgba(0, 0, 0, 0.3),
-    4px 4px 8px rgba(0, 0, 0, 0.5);
-  image-rendering: pixelated;
-  position: relative;
-}
-
-.card-minecraft::before {
-  content: '🧱';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  font-size: 14px;
-  background: #8b4513;
-  border: 2px solid #654321;
-  border-radius: 2px;
-  padding: 2px;
-  animation: minecraftBlock 3s ease-in-out infinite;
-}
-
-@keyframes minecraftBlock {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(15deg) scale(1.1); }
-}
-
-.img-minecraft {
-  border: 4px solid #654321;
-  border-radius: 4px;
-  image-rendering: pixelated;
-  filter: contrast(1.2) saturate(1.1);
-  position: relative;
-  box-shadow: 0 0 15px rgba(101, 67, 33, 0.6);
-}
-
-.img-minecraft::before {
-  content: '🗡️';
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  font-size: 16px;
-  animation: minecraftSword 2s ease-in-out infinite;
-  z-index: 10;
-}
-
-@keyframes minecraftSword {
-  0%, 100% { 
-    transform: rotate(0deg) scale(1);
-    opacity: 0.9;
-  }
-  50% { 
-    transform: rotate(25deg) scale(1.2);
-    opacity: 1;
-  }
-}
-
-/* =======================
-   THEME 18 - Adventure Explorer
-   ======================= */
+/* ===================================================
+   THEME 18 — Adventure Explorer  ·  Warm parchment
+   =================================================== */
 .theme-adventure {
-  background:
-    radial-gradient(circle at 70% 25%, rgba(250, 204, 21, 0.2) 0%, transparent 40%),
-    linear-gradient(180deg, #1f3a2b 0%, #2f5d3d 42%, #4f7b4b 70%, #6f9460 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 65% 45% at 30% 25%, rgba(180,83,9,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 55% at 80% 75%, rgba(146,64,14,.12) 0%, transparent 55%),
+              #0f0804;
+  position: relative; overflow: clip;
 }
-
 .theme-adventure::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 44%;
-  background:
-    linear-gradient(20deg, transparent 34%, #1f2f24 35%, #1f2f24 58%, transparent 59%),
-    linear-gradient(-25deg, transparent 28%, #25372a 29%, #25372a 54%, transparent 55%),
-    linear-gradient(35deg, transparent 36%, #304535 37%, #304535 64%, transparent 65%);
-  background-size: 150px 100%, 130px 100%, 170px 100%;
-  background-position: 0 100%, 75px 100%, 145px 100%;
-  background-repeat: repeat-x;
-  animation: adventureDrift 14s ease-in-out infinite;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 60% 50%, rgba(251,191,36,.05) 0%, transparent 55%);
+  animation: themeBreathe 26s ease-in-out infinite; pointer-events: none;
 }
+.btn-adventure { background: rgba(180,83,9,.14); color: #fed7aa; border: 1px solid rgba(251,191,36,.35); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-adventure:hover { background: rgba(180,83,9,.26); box-shadow: 0 0 18px rgba(251,191,36,.28); transform: translateY(-1px); }
+.card-adventure { background: rgba(180,83,9,.07); backdrop-filter: blur(12px); border: 1px solid rgba(251,191,36,.18); border-radius: 12px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-adventure:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(180,83,9,.2); }
+.img-adventure { border: 2.5px solid rgba(251,191,36,.6); box-shadow: 0 0 24px rgba(180,83,9,.25); }
 
-.theme-adventure::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 35%),
-    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.22), transparent 16%);
-  opacity: 0.55;
-  animation: adventureCompass 10s ease-in-out infinite;
-}
-
-@keyframes adventureDrift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-18px); }
-}
-
-@keyframes adventureCompass {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.78; }
-}
-
-.btn-adventure {
-  background: linear-gradient(45deg, #8b4513, #cd853f);
-  color: #fff;
-  border: 2px solid #2f4f2f;
-  border-radius: 12px;
-  font-weight: bold;
-  box-shadow: 
-    inset 1px 1px 0 rgba(255, 255, 255, 0.3),
-    0 4px 12px rgba(139, 69, 19, 0.4);
-  transition: all 0.3s ease;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.btn-adventure:hover {
-  background: linear-gradient(45deg, #a0522d, #daa520);
-  transform: translateY(-2px);
-  box-shadow: 
-    inset 1px 1px 0 rgba(255, 255, 255, 0.4),
-    0 6px 18px rgba(139, 69, 19, 0.6);
-}
-
-.card-adventure {
-  background: rgba(139, 69, 19, 0.15);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(218, 165, 32, 0.6);
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(139, 69, 19, 0.3);
-  transition: all 0.3s ease;
-}
-
-.card-adventure:hover {
-  background: rgba(139, 69, 19, 0.25);
-  border-color: rgba(218, 165, 32, 0.8);
-  transform: translateY(-2px);
-}
-
-.img-adventure {
-  border: 3px solid #daa520;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(218, 165, 32, 0.4);
-  transition: all 0.3s ease;
-}
-
-.img-adventure:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(218, 165, 32, 0.6);
-}
-
-/* =======================
-   THEME 19 - Anime Aesthetic
-   ======================= */
+/* ===================================================
+   THEME 19 — Anime Aesthetic  ·  Pastel pink/purple
+   =================================================== */
 .theme-anime {
-  background:
-    radial-gradient(circle at 76% 24%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
-    radial-gradient(circle at 24% 78%, rgba(96, 165, 250, 0.24) 0%, transparent 45%),
-    linear-gradient(135deg, #181a4f 0%, #2d2b77 34%, #40229a 62%, #1f3f9d 100%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(ellipse 70% 50% at 50% 10%, rgba(244,114,182,.15) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 55% at 10% 85%, rgba(167,139,250,.14) 0%, transparent 55%),
+              #120818;
+  position: relative; overflow: clip;
 }
-
 .theme-anime::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    repeating-linear-gradient(60deg, transparent 0 18px, rgba(147, 51, 234, 0.11) 18px 20px),
-    repeating-linear-gradient(-60deg, transparent 0 22px, rgba(59, 130, 246, 0.09) 22px 24px);
-  animation: animeWaves 12s linear infinite;
-  opacity: 0.55;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 80% 30%, rgba(244,114,182,.06) 0%, transparent 50%);
+  animation: themeBreathe 20s ease-in-out infinite; pointer-events: none;
 }
+.btn-anime { background: rgba(244,114,182,.14); color: #fff; border: 1px solid rgba(244,114,182,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-anime:hover { background: rgba(244,114,182,.26); box-shadow: 0 0 18px rgba(244,114,182,.3); transform: translateY(-1px); }
+.card-anime { background: rgba(244,114,182,.06); backdrop-filter: blur(12px); border: 1px solid rgba(244,114,182,.2); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-anime:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(244,114,182,.16); }
+.img-anime { border: 2.5px solid rgba(244,114,182,.6); box-shadow: 0 0 24px rgba(167,139,250,.22); }
 
-.theme-anime::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.26) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 20% 78%, rgba(255, 255, 255, 0.2) 0 1px, transparent 1.8px);
-  background-size: 130px 130px, 100px 100px;
-  animation: animeFloat 8s ease-in-out infinite;
-  opacity: 0.7;
+/* ===================================================
+   THEME 20 — Cartoon Fun  ·  Bold primaries, pop
+   =================================================== */
+.theme-cartoon {
+  background: radial-gradient(ellipse 65% 45% at 30% 20%, rgba(251,191,36,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 50% at 75% 75%, rgba(59,130,246,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 45% 40% at 50% 50%, rgba(239,68,68,.1) 0%, transparent 50%),
+              #0c0a18;
+  position: relative; overflow: clip;
 }
+.btn-cartoon { background: rgba(251,191,36,.16); color: #fff; border: 2px solid rgba(251,191,36,.45); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-cartoon:hover { background: rgba(251,191,36,.28); box-shadow: 0 0 18px rgba(251,191,36,.3); transform: translateY(-1px); }
+.card-cartoon { background: rgba(255,255,255,.08); backdrop-filter: blur(12px); border: 2px solid rgba(251,191,36,.22); border-radius: 18px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-cartoon:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(251,191,36,.16); }
+.img-cartoon { border: 3px solid rgba(251,191,36,.65); box-shadow: 0 0 22px rgba(59,130,246,.2); }
 
-@keyframes animeWaves {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-64px, 0, 0); }
+/* ===================================================
+   THEME 21 — Galaxy Explorer  ·  Deep indigo, nebula
+   =================================================== */
+.theme-galaxy {
+  background: radial-gradient(ellipse 70% 50% at 50% 15%, rgba(99,102,241,.2) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 60% at 85% 80%, rgba(139,92,246,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 40% 35% at 10% 60%, rgba(56,189,248,.08) 0%, transparent 50%),
+              #030014;
+  position: relative; overflow: clip;
 }
-
-@keyframes animeFloat {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
+.theme-galaxy::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 18% 15%, rgba(255,255,255,.7) 0%, transparent 1px),
+    radial-gradient(circle 1px at 45% 72%, rgba(255,255,255,.5) 0%, transparent 1px),
+    radial-gradient(circle 1px at 82% 28%, rgba(255,255,255,.6) 0%, transparent 1px),
+    radial-gradient(circle 1px at 68% 88%, rgba(255,255,255,.45) 0%, transparent 1px),
+    radial-gradient(circle 1px at 35% 42%, rgba(255,255,255,.55) 0%, transparent 1px);
+  animation: themeBreathe 26s ease-in-out infinite; pointer-events: none;
 }
+.btn-galaxy { background: rgba(99,102,241,.14); color: #fff; border: 1px solid rgba(99,102,241,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-galaxy:hover { background: rgba(99,102,241,.26); box-shadow: 0 0 20px rgba(99,102,241,.35); transform: translateY(-1px); }
+.card-galaxy { background: rgba(99,102,241,.06); backdrop-filter: blur(12px); border: 1px solid rgba(99,102,241,.18); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-galaxy:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(99,102,241,.18); }
+.img-galaxy { border: 2.5px solid rgba(99,102,241,.6); box-shadow: 0 0 26px rgba(139,92,246,.25); }
 
-.btn-anime {
-  background: linear-gradient(45deg, #4c1d95, #3b82f6);
-  color: white;
-  border: 2px solid rgba(139, 92, 246, 0.6);
-  border-radius: 16px;
-  font-weight: 600;
-  font-family: 'Noto Sans JP', sans-serif;
-  box-shadow: 0 4px 15px rgba(76, 29, 149, 0.4);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+/* ===================================================
+   THEME 22 — Ocean Depths  ·  Deep teal, turquoise
+   =================================================== */
+.theme-ocean {
+  background: radial-gradient(ellipse 70% 45% at 50% -5%, rgba(6,182,212,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 10% 85%, rgba(14,116,144,.14) 0%, transparent 55%),
+              #031620;
+  position: relative; overflow: clip;
 }
-
-.btn-anime::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg, 
-    transparent, 
-    rgba(139, 92, 246, 0.3), 
-    transparent
-  );
-  transform: rotate(45deg);
-  animation: animeGlow 3s ease-in-out infinite;
+.theme-ocean::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 35% at 50% 100%, rgba(6,182,212,.08) 0%, transparent 55%);
+  animation: themeBreathe 24s ease-in-out infinite; pointer-events: none;
 }
+.btn-ocean { background: rgba(6,182,212,.14); color: #fff; border: 1px solid rgba(6,182,212,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-ocean:hover { background: rgba(6,182,212,.26); box-shadow: 0 0 18px rgba(6,182,212,.32); transform: translateY(-1px); }
+.card-ocean { background: rgba(6,182,212,.06); backdrop-filter: blur(12px); border: 1px solid rgba(6,182,212,.2); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-ocean:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(6,182,212,.16); }
+.img-ocean { border: 2.5px solid rgba(6,182,212,.6); box-shadow: 0 0 24px rgba(6,182,212,.25); }
 
-.btn-anime:hover {
-  background: linear-gradient(45deg, #6366f1, #8b5cf6);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 29, 149, 0.6);
+/* ===================================================
+   THEME 23 — Mystic Forest  ·  Dark emerald depth
+   =================================================== */
+.theme-forest {
+  background: radial-gradient(ellipse 65% 45% at 25% 15%, rgba(22,163,74,.15) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 80% 85%, rgba(21,128,61,.12) 0%, transparent 55%),
+              #020e05;
+  position: relative; overflow: clip;
 }
-
-@keyframes animeGlow {
-  0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+.theme-forest::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 30% at 60% 50%, rgba(22,163,74,.06) 0%, transparent 55%);
+  animation: themeBreathe 28s ease-in-out infinite; pointer-events: none;
 }
+.btn-forest { background: rgba(22,163,74,.14); color: #fff; border: 1px solid rgba(22,163,74,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-forest:hover { background: rgba(22,163,74,.26); box-shadow: 0 0 18px rgba(22,163,74,.3); transform: translateY(-1px); }
+.card-forest { background: rgba(22,163,74,.06); backdrop-filter: blur(12px); border: 1px solid rgba(22,163,74,.18); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-forest:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(22,163,74,.14); }
+.img-forest { border: 2.5px solid rgba(22,163,74,.6); box-shadow: 0 0 24px rgba(22,163,74,.22); }
 
-.card-anime {
-  background: rgba(30, 27, 75, 0.4);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(139, 92, 246, 0.5);
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(76, 29, 149, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
+/* ===================================================
+   THEME 24 — Ancient Egypt  ·  Sandy gold, dark
+   =================================================== */
+.theme-egyptian {
+  background: radial-gradient(ellipse 65% 45% at 30% 25%, rgba(217,119,6,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 50% at 80% 75%, rgba(180,83,9,.12) 0%, transparent 55%),
+              #0c0800;
+  position: relative; overflow: clip;
 }
+.theme-egyptian::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(217,119,6,.015) 1px, transparent 1px), linear-gradient(90deg, rgba(217,119,6,.015) 1px, transparent 1px);
+  background-size: 30px 30px; pointer-events: none;
+}
+.btn-egyptian { background: rgba(217,119,6,.14); color: #fbbf24; border: 1px solid rgba(217,119,6,.45); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-egyptian:hover { background: rgba(217,119,6,.26); box-shadow: 0 0 18px rgba(217,119,6,.3); transform: translateY(-1px); }
+.card-egyptian { background: rgba(217,119,6,.06); backdrop-filter: blur(12px); border: 1px solid rgba(217,119,6,.2); border-radius: 10px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-egyptian:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(217,119,6,.18); }
+.img-egyptian { border: 2.5px solid rgba(217,119,6,.65); box-shadow: 0 0 24px rgba(217,119,6,.25); }
 
-.card-anime::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg, 
-    rgba(139, 92, 246, 0.1) 0%, 
-    transparent 50%, 
-    rgba(59, 130, 246, 0.1) 100%
-  );
-  border-radius: 14px;
+/* ===================================================
+   THEME 25 — Sakura  ·  Soft cherry blossom pink
+   =================================================== */
+.theme-sakura {
+  background: radial-gradient(ellipse 70% 45% at 50% 10%, rgba(251,113,133,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 15% 80%, rgba(244,114,182,.12) 0%, transparent 55%),
+              #18060e;
+  position: relative; overflow: clip;
+}
+.theme-sakura::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 2px at 20% 30%, rgba(251,113,133,.35) 0%, transparent 2px),
+    radial-gradient(circle 2px at 55% 15%, rgba(244,114,182,.3) 0%, transparent 2px),
+    radial-gradient(circle 2px at 78% 65%, rgba(251,113,133,.25) 0%, transparent 2px),
+    radial-gradient(circle 2px at 40% 80%, rgba(244,114,182,.3) 0%, transparent 2px);
+  animation: themeBreathe 22s ease-in-out infinite; pointer-events: none;
+}
+.btn-sakura { background: rgba(251,113,133,.14); color: #fff; border: 1px solid rgba(251,113,133,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-sakura:hover { background: rgba(251,113,133,.26); box-shadow: 0 0 18px rgba(251,113,133,.3); transform: translateY(-1px); }
+.card-sakura { background: rgba(251,113,133,.06); backdrop-filter: blur(12px); border: 1px solid rgba(251,113,133,.2); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-sakura:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(251,113,133,.16); }
+.img-sakura { border: 2.5px solid rgba(251,113,133,.6); box-shadow: 0 0 24px rgba(244,114,182,.22); }
+
+/* ===================================================
+   THEME 26 — Viking  ·  Dark stone, rust iron
+   =================================================== */
+.theme-viking {
+  background: radial-gradient(ellipse 65% 45% at 20% 30%, rgba(180,83,9,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 50% at 80% 70%, rgba(120,53,15,.12) 0%, transparent 55%),
+              #0a0604;
+  position: relative; overflow: clip;
+}
+.theme-viking::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(180,83,9,.012) 3px, rgba(180,83,9,.012) 4px);
   pointer-events: none;
 }
+.btn-viking { background: rgba(180,83,9,.14); color: #fed7aa; border: 1px solid rgba(180,83,9,.45); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-viking:hover { background: rgba(180,83,9,.26); box-shadow: 0 0 18px rgba(180,83,9,.3); transform: translateY(-1px); }
+.card-viking { background: rgba(180,83,9,.07); backdrop-filter: blur(12px); border: 1px solid rgba(180,83,9,.22); border-radius: 8px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-viking:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(180,83,9,.2); }
+.img-viking { border: 2.5px solid rgba(180,83,9,.6); box-shadow: 0 0 22px rgba(120,53,15,.25); }
 
-.card-anime:hover {
-  background: rgba(30, 27, 75, 0.6);
-  border-color: rgba(139, 92, 246, 0.7);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(76, 29, 149, 0.4);
+/* ===================================================
+   THEME 27 — Cyberpunk  ·  Electric yellow, dark
+   =================================================== */
+.theme-cyberpunk {
+  background: radial-gradient(ellipse 65% 40% at 50% 0%, rgba(250,204,21,.1) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 55% at 85% 80%, rgba(6,182,212,.08) 0%, transparent 55%),
+              #080808;
+  position: relative; overflow: clip;
 }
-
-.img-anime {
-  border: 3px solid #8b5cf6;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-  transition: all 0.3s ease;
-  position: relative;
-  animation: animeProfile 4s ease-in-out infinite;
+.theme-cyberpunk::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(250,204,21,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(250,204,21,.02) 1px, transparent 1px);
+  background-size: 32px 32px; pointer-events: none;
 }
-
-.img-anime::before {
-  content: '⚡';
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  font-size: 18px;
-  color: #fbbf24;
-  animation: animeEnergy 2s ease-in-out infinite;
-  z-index: 10;
+.theme-cyberpunk::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(250,204,21,.8) 30%, rgba(6,182,212,.8) 70%, transparent 100%);
+  background-size: 200% 100%; animation: themeShimmerX 6s linear infinite; pointer-events: none;
 }
+.btn-cyberpunk { background: rgba(250,204,21,.1); color: #facc15; border: 1px solid rgba(250,204,21,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-cyberpunk:hover { background: rgba(250,204,21,.22); box-shadow: 0 0 18px rgba(250,204,21,.32); transform: translateY(-1px); }
+.card-cyberpunk { background: rgba(250,204,21,.04); backdrop-filter: blur(12px); border: 1px solid rgba(250,204,21,.16); border-radius: 8px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-cyberpunk:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(250,204,21,.16); }
+.img-cyberpunk { border: 2.5px solid rgba(250,204,21,.6); box-shadow: 0 0 22px rgba(250,204,21,.25); }
 
-.img-anime:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.7);
+/* ===================================================
+   THEME 28 — Medieval  ·  Stone, burgundy linen
+   =================================================== */
+.theme-medieval {
+  background: radial-gradient(ellipse 65% 45% at 30% 20%, rgba(127,29,29,.15) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 75% 80%, rgba(120,53,15,.12) 0%, transparent 55%),
+              #0a0505;
+  position: relative; overflow: clip;
 }
+.theme-medieval::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 50% 50%, rgba(127,29,29,.05) 0%, transparent 55%);
+  animation: themeBreathe 26s ease-in-out infinite; pointer-events: none;
+}
+.btn-medieval { background: rgba(127,29,29,.14); color: #fca5a5; border: 1px solid rgba(127,29,29,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-medieval:hover { background: rgba(127,29,29,.26); box-shadow: 0 0 18px rgba(127,29,29,.3); transform: translateY(-1px); }
+.card-medieval { background: rgba(127,29,29,.06); backdrop-filter: blur(12px); border: 1px solid rgba(127,29,29,.2); border-radius: 10px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-medieval:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(127,29,29,.18); }
+.img-medieval { border: 2.5px solid rgba(127,29,29,.6); box-shadow: 0 0 22px rgba(120,53,15,.22); }
 
-@keyframes animeProfile {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+/* ===================================================
+   THEME 29 — Tropical  ·  Turquoise, warm orange
+   =================================================== */
+.theme-tropical {
+  background: radial-gradient(ellipse 70% 45% at 50% 10%, rgba(6,182,212,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 80% 85%, rgba(249,115,22,.12) 0%, transparent 55%),
+              #061214;
+  position: relative; overflow: clip;
+}
+.theme-tropical::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 35% at 20% 70%, rgba(249,115,22,.06) 0%, transparent 50%);
+  animation: themeBreathe 22s ease-in-out infinite; pointer-events: none;
+}
+.btn-tropical { background: rgba(6,182,212,.14); color: #fff; border: 1px solid rgba(6,182,212,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-tropical:hover { background: rgba(6,182,212,.26); box-shadow: 0 0 18px rgba(6,182,212,.3); transform: translateY(-1px); }
+.card-tropical { background: rgba(6,182,212,.06); backdrop-filter: blur(12px); border: 1px solid rgba(6,182,212,.18); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-tropical:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(6,182,212,.14); }
+.img-tropical { border: 2.5px solid rgba(6,182,212,.6); box-shadow: 0 0 24px rgba(249,115,22,.2); }
+
+/* ===================================================
+   THEME 30 — Art Deco  ·  Black, champagne gold
+   =================================================== */
+.theme-artdeco {
+  background: radial-gradient(ellipse 55% 40% at 50% 10%, rgba(217,169,78,.1) 0%, transparent 55%),
+              #06060a;
+  position: relative; overflow: clip;
+}
+.theme-artdeco::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(217,169,78,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(217,169,78,.018) 1px, transparent 1px);
+  background-size: 36px 36px; pointer-events: none;
+}
+.btn-artdeco { background: rgba(217,169,78,.12); color: #d9a94e; border: 1px solid rgba(217,169,78,.45); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-artdeco:hover { background: rgba(217,169,78,.24); box-shadow: 0 0 18px rgba(217,169,78,.3); transform: translateY(-1px); }
+.card-artdeco { background: rgba(217,169,78,.05); backdrop-filter: blur(12px); border: 1px solid rgba(217,169,78,.2); border-radius: 6px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-artdeco:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(217,169,78,.16); }
+.img-artdeco { border: 2.5px solid rgba(217,169,78,.6); box-shadow: 0 0 24px rgba(217,169,78,.22); }
+
+/* ===================================================
+   THEME 31 — Rainy City  ·  Dark grey, blue highlights
+   =================================================== */
+.theme-rainycity {
+  background: radial-gradient(ellipse 60% 40% at 78% 14%, rgba(125,211,252,.1) 0%, transparent 55%),
+              linear-gradient(180deg, #070d1a 0%, #101a2c 50%, #1f2f48 100%);
+  position: relative; overflow: clip;
+}
+.theme-rainycity::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 30% at 30% 80%, rgba(125,211,252,.05) 0%, transparent 55%);
+  animation: themeBreathe 24s ease-in-out infinite; pointer-events: none;
+}
+.btn-rainycity { background: rgba(125,211,252,.1); color: #fff; border: 1px solid rgba(125,211,252,.35); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-rainycity:hover { background: rgba(125,211,252,.22); box-shadow: 0 0 16px rgba(125,211,252,.28); transform: translateY(-1px); }
+.card-rainycity { background: rgba(125,211,252,.05); backdrop-filter: blur(12px); border: 1px solid rgba(125,211,252,.15); border-radius: 12px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-rainycity:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(125,211,252,.12); }
+.img-rainycity { border: 2.5px solid rgba(125,211,252,.5); box-shadow: 0 0 22px rgba(125,211,252,.2); }
+
+/* ===================================================
+   THEME 32 — Desert Dune  ·  Sand, terracotta warmth
+   =================================================== */
+.theme-desertdune {
+  background: radial-gradient(ellipse 70% 50% at 50% 10%, rgba(217,119,6,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 10% 85%, rgba(180,83,9,.1) 0%, transparent 55%),
+              #100a04;
+  position: relative; overflow: clip;
+}
+.theme-desertdune::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 30% at 70% 80%, rgba(217,119,6,.06) 0%, transparent 55%);
+  animation: themeBreathe 28s ease-in-out infinite; pointer-events: none;
+}
+.btn-desertdune { background: rgba(217,119,6,.14); color: #fed7aa; border: 1px solid rgba(217,119,6,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-desertdune:hover { background: rgba(217,119,6,.26); box-shadow: 0 0 18px rgba(217,119,6,.3); transform: translateY(-1px); }
+.card-desertdune { background: rgba(217,119,6,.06); backdrop-filter: blur(12px); border: 1px solid rgba(217,119,6,.2); border-radius: 14px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-desertdune:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(217,119,6,.16); }
+.img-desertdune { border: 2.5px solid rgba(217,119,6,.6); box-shadow: 0 0 24px rgba(180,83,9,.22); }
+
+/* ===================================================
+   THEME 33 — Arctic Glass  ·  Ice white, frost blue
+   =================================================== */
+.theme-arcticglass {
+  background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(186,230,253,.14) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 10% 85%, rgba(125,211,252,.1) 0%, transparent 55%),
+              #070e14;
+  position: relative; overflow: clip;
+}
+.theme-arcticglass::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 30% at 80% 30%, rgba(186,230,253,.06) 0%, transparent 50%);
+  animation: themeBreathe 22s ease-in-out infinite; pointer-events: none;
+}
+.btn-arcticglass { background: rgba(186,230,253,.1); color: #e0f2fe; border: 1px solid rgba(186,230,253,.35); backdrop-filter: blur(14px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-arcticglass:hover { background: rgba(186,230,253,.2); box-shadow: 0 0 16px rgba(186,230,253,.28); transform: translateY(-1px); }
+.card-arcticglass { background: rgba(186,230,253,.06); backdrop-filter: blur(14px); border: 1px solid rgba(186,230,253,.16); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-arcticglass:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(186,230,253,.12); }
+.img-arcticglass { border: 2.5px solid rgba(186,230,253,.55); box-shadow: 0 0 24px rgba(125,211,252,.22); }
+
+/* ===================================================
+   THEME 34 — Volcanic Forge  ·  Dark, molten orange
+   =================================================== */
+.theme-volcanicforge {
+  background: radial-gradient(ellipse 65% 45% at 50% 100%, rgba(234,88,12,.18) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 40% at 20% 20%, rgba(220,38,38,.1) 0%, transparent 55%),
+              #0a0200;
+  position: relative; overflow: clip;
+}
+.theme-volcanicforge::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 25% at 50% 95%, rgba(234,88,12,.08) 0%, transparent 50%);
+  animation: themeBreathe 20s ease-in-out infinite; pointer-events: none;
+}
+.btn-volcanicforge { background: rgba(234,88,12,.14); color: #fed7aa; border: 1px solid rgba(234,88,12,.45); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-volcanicforge:hover { background: rgba(234,88,12,.28); box-shadow: 0 0 20px rgba(234,88,12,.35); transform: translateY(-1px); }
+.card-volcanicforge { background: rgba(234,88,12,.06); backdrop-filter: blur(12px); border: 1px solid rgba(234,88,12,.2); border-radius: 10px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-volcanicforge:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(234,88,12,.2); }
+.img-volcanicforge { border: 2.5px solid rgba(234,88,12,.65); box-shadow: 0 0 26px rgba(234,88,12,.28); }
+
+/* ===================================================
+   THEME 35 — Emerald Lake  ·  Dark teal, bright green
+   =================================================== */
+.theme-emeraldlake {
+  background: radial-gradient(ellipse 70% 50% at 50% 15%, rgba(16,185,129,.16) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 55% at 85% 80%, rgba(5,150,105,.12) 0%, transparent 55%),
+              #020f0a;
+  position: relative; overflow: clip;
+}
+.theme-emeraldlake::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 30% at 30% 70%, rgba(16,185,129,.06) 0%, transparent 55%);
+  animation: themeBreathe 24s ease-in-out infinite; pointer-events: none;
+}
+.btn-emeraldlake { background: rgba(16,185,129,.14); color: #fff; border: 1px solid rgba(16,185,129,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-emeraldlake:hover { background: rgba(16,185,129,.26); box-shadow: 0 0 18px rgba(16,185,129,.32); transform: translateY(-1px); }
+.card-emeraldlake { background: rgba(16,185,129,.06); backdrop-filter: blur(12px); border: 1px solid rgba(16,185,129,.18); border-radius: 16px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-emeraldlake:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(16,185,129,.14); }
+.img-emeraldlake { border: 2.5px solid rgba(16,185,129,.6); box-shadow: 0 0 24px rgba(5,150,105,.22); }
+
+/* ===================================================
+   THEME 36 — Sunset Cliff  ·  Warm orange/purple
+   =================================================== */
+.theme-sunsetcliff {
+  background: radial-gradient(ellipse 70% 50% at 50% 10%, rgba(249,115,22,.18) 0%, transparent 55%),
+              radial-gradient(ellipse 55% 55% at 10% 85%, rgba(168,85,247,.12) 0%, transparent 55%),
+              #100602;
+  position: relative; overflow: clip;
+}
+.theme-sunsetcliff::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 45% 30% at 74% 20%, rgba(249,115,22,.06) 0%, transparent 50%);
+  animation: themeBreathe 22s ease-in-out infinite; pointer-events: none;
+}
+.btn-sunsetcliff { background: rgba(249,115,22,.14); color: #fff; border: 1px solid rgba(249,115,22,.4); backdrop-filter: blur(10px); transition: background .4s, box-shadow .4s, transform .4s; }
+.btn-sunsetcliff:hover { background: rgba(249,115,22,.26); box-shadow: 0 0 18px rgba(249,115,22,.3); transform: translateY(-1px); }
+.card-sunsetcliff { background: rgba(249,115,22,.06); backdrop-filter: blur(12px); border: 1px solid rgba(249,115,22,.2); border-radius: 14px; transition: transform .22s ease, box-shadow .22s ease; }
+.card-sunsetcliff:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(249,115,22,.18); }
+.img-sunsetcliff { border: 2.5px solid rgba(249,115,22,.6); box-shadow: 0 0 24px rgba(168,85,247,.2); }
+
+/* 3D Floating Mockup Animation */
+@keyframes float3D {
+  0% {
+    transform: rotateY(-12deg) rotateX(8deg) translateY(0px);
   }
-  50% { 
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+  50% {
+    transform: rotateY(-6deg) rotateX(4deg) translateY(-14px);
   }
-}
-
-@keyframes animeEnergy {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg);
-    opacity: 0.8;
-  }
-  50% { 
-    transform: scale(1.3) rotate(180deg);
-    opacity: 1;
-  }
-}
-
-/* =======================
-   THEME 20 - Cartoon Fun
-   ======================= */
-.theme-cartoon {
-  background:
-    radial-gradient(circle at 18% 24%, rgba(255, 132, 132, 0.45) 0%, transparent 35%),
-    radial-gradient(circle at 78% 22%, rgba(96, 165, 250, 0.4) 0%, transparent 34%),
-    radial-gradient(circle at 52% 80%, rgba(250, 204, 21, 0.35) 0%, transparent 36%),
-    linear-gradient(135deg, #5ec8ff 0%, #8de6b7 35%, #f8b6d9 68%, #c6b7ff 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-cartoon::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.75) 0 5%, transparent 8%),
-    radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.65) 0 4%, transparent 8%),
-    radial-gradient(circle at 52% 18%, rgba(255, 255, 255, 0.7) 0 3%, transparent 6%);
-  animation: cartoonCloudDrift 10s ease-in-out infinite;
-  opacity: 0.7;
-}
-
-.theme-cartoon::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.35) 1px, transparent 2px);
-  background-size: 26px 26px;
-  animation: cartoonSparkle 7s linear infinite;
-}
-
-@keyframes cartoonCloudDrift {
-  0%, 100% { transform: translateX(0); opacity: 0.62; }
-  50% { transform: translateX(18px); opacity: 0.9; }
-}
-
-@keyframes cartoonSparkle {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
-}
-
-.btn-cartoon {
-  background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb);
-  background-size: 200% 200%;
-  color: white;
-  border: 3px solid #fff;
-  border-radius: 25px;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 
-    0 6px 15px rgba(255, 107, 107, 0.4),
-    inset 0 2px 0 rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  animation: cartoonShimmer 3s ease-in-out infinite;
-}
-
-.btn-cartoon:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 
-    0 8px 20px rgba(255, 107, 107, 0.6),
-    inset 0 2px 0 rgba(255, 255, 255, 0.4);
-  animation-duration: 1s;
-}
-
-@keyframes cartoonShimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.card-cartoon {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  border: 3px solid rgba(255, 107, 107, 0.6);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 20px rgba(255, 107, 107, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transition: all 0.3s ease;
-}
-
-.card-cartoon:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 107, 107, 0.8);
-  transform: translateY(-5px) rotate(1deg);
-  box-shadow: 
-    0 12px 25px rgba(255, 107, 107, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.img-cartoon {
-  border: 4px solid #ff6b6b;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.img-cartoon:hover {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 0 30px rgba(255, 107, 107, 0.7);
-}
-
-@keyframes cartoonFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-}
-
-/* =======================
-   RESPONSIVE DESIGN FIXES
-   ======================= */
-
-/* Ensure animations work well on mobile */
-@media (max-width: 768px) {
-  .page-enter {
-    animation-duration: 0.5s;
-  }
-  
-  .profile-enter {
-    animation-duration: 0.7s;
-  }
-  
-  .social-enter {
-    animation-duration: 0.4s;
-  }
-  
-  .links-enter {
-    animation-duration: 0.6s;
-  }
-  
-  /* Reduce motion for better mobile performance */
-  .theme-gamer::before,
-  .theme-aurora,
-  .theme-neon::after,
-  .theme-starfield::after {
-    animation-duration: 6s;
-  }
-  
-  /* Ensure social buttons wrap properly */
-  .social-diamond {
-    transform: rotate(45deg) scale(0.8);
-  }
-  
-  /* Adjust link shapes for mobile */
-  .link-wavy,
-  .link-soft,
-  .link-elegant {
-    border-radius: 1rem;
-  }
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  .page-enter,
-  .profile-enter,
-  .social-enter,
-  .links-enter {
-    animation: none;
+  100% {
+    transform: rotateY(-12deg) rotateX(8deg) translateY(0px);
   }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .theme-elegant .btn-elegant,
-  .theme-feminine .btn-feminine,
-  .theme-nature .btn-nature {
-    border: 2px solid currentColor;
-  }
-  
-  .social-heart::before,
-  .social-heart::after {
-    border: 1px solid currentColor;
-  }
+.animate-float3D {
+  animation: float3D 6s ease-in-out infinite;
 }
 
-/* Print styles */
-@media print {
-  .theme-gamer,
-  .theme-neon,
-  .theme-aurora,
-  .theme-starfield,
-  .theme-cosmic {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .page-enter,
-  .profile-enter,
-  .social-enter,
-  .links-enter {
-    animation: none;
-  }
+/* ===================================================
+   ADVANCED DECORATION KEYFRAMES (Premium UI Effects)
+   =================================================== */
+@keyframes themeRain {
+  0% { transform: translateY(-120px) translateX(-20px) rotate(15deg); opacity: 0; }
+  10% { opacity: 0.65; }
+  90% { opacity: 0.65; }
+  100% { transform: translateY(105vh) translateX(60px) rotate(15deg); opacity: 0; }
 }
 
-/* =======================
-   SHAPE UTILITIES
-   ======================= */
-
-/* Profile shape variations */
-.profile-hexagon {
-  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+@keyframes themeFloatUp {
+  0% { transform: translateY(110vh) translateX(0) scale(0.8); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) translateX(30px) scale(1.2); opacity: 0; }
 }
 
-.profile-diamond {
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+@keyframes themeSakuraPetal {
+  0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(110vh) translateX(80px) rotate(360deg); opacity: 0; }
 }
 
-.profile-star {
-  clip-path: polygon(50% 0%, 59% 30%, 85% 30%, 68% 50%, 76% 85%, 50% 70%, 24% 85%, 32% 50%, 15% 30%, 41% 30%);
-  animation: starRotate 4s ease-in-out infinite;
+@keyframes themeScanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
-@keyframes starRotate {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  25% { transform: rotate(5deg) scale(1.05); }
-  50% { transform: rotate(0deg) scale(1.1); }
-  75% { transform: rotate(-5deg) scale(1.05); }
+@keyframes themeWaveFlow {
+  0%, 100% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
+  33% { transform: scale(1.2) translate(30px, -40px) rotate(5deg); }
+  66% { transform: scale(0.9) translate(-20px, 20px) rotate(-5deg); }
 }
 
-.profile-shield {
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+@keyframes themeSunPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); opacity: 0.85; }
+  50% { transform: scale(1.05); filter: brightness(1.15); opacity: 0.95; }
 }
 
-.profile-leaf {
-  clip-path: ellipse(60% 80% at 50% 40%);
+@keyframes themeGlitch {
+  0%, 100% { transform: translate(0); }
+  92% { transform: translate(0); }
+  94% { transform: translate(-2px, 1px); }
+  96% { transform: translate(2px, -1px); }
+  98% { transform: translate(-1px, -2px); }
 }
 
-.profile-flower {
-  clip-path: circle(40% at 50% 50%);
-}
-
-.profile-planet {
-  clip-path: circle(50% at 50% 50%);
-}
-
-/* Social icon shape variations */
-.social-square {
-  border-radius: 0.5rem;
-}
-
-.social-diamond {
-  transform: rotate(45deg);
-  border-radius: 0.25rem;
-}
-
-.social-triangle {
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.social-heart {
-  position: relative;
-}
-
-.social-heart::before {
-  content: '';
-  width: 26px;
-  height: 40px;
-  position: absolute;
-  left: 50%;
-  top: 0;
-  background: currentColor;
-  border-radius: 26px 26px 0 0;
-  transform: rotate(-45deg);
-  transform-origin: 0 100%;
-}
-
-.social-heart::after {
-  content: '';
-  width: 26px;
-  height: 40px;
-  position: absolute;
-  left: 50%;
-  top: 0;
-  background: currentColor;
-  border-radius: 26px 26px 0 0;
-  transform: rotate(45deg);
-  transform-origin: 100% 100%;
-}
-
-.social-blob {
-  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-}
-
-.social-orbit {
-  border-radius: 50%;
-  position: relative;
-}
-
-.social-orbit::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  opacity: 0.5;
-  animation: orbitRing 3s linear infinite;
-}
-
-@keyframes orbitRing {
+@keyframes themeCompassSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* Link shape variations */
-.link-gaming {
-  border-left: 4px solid;
-  border-right: 4px solid;
-  border-radius: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+@keyframes themePopBounce {
+  0%, 100% { transform: scale(0.85); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 0.9; }
 }
 
-.link-terminal {
-  border-left: 2px solid;
-  border-radius: 0.125rem;
-  background: rgba(0, 0, 0, 0.3);
-  font-family: 'Courier New', monospace;
+@keyframes themeFlicker {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  25% { opacity: 0.8; transform: scale(1.05); }
+  50% { opacity: 0.5; transform: scale(0.97); }
+  75% { opacity: 0.75; transform: scale(1.03); }
 }
 
-.link-hacker {
-  border-radius: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.1), transparent);
-}
-
-.link-elegant {
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-}
-
-.link-wavy {
-  border-radius: 1.5rem;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1), transparent);
-}
-
-.link-soft {
-  border-radius: 1rem;
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-}
-
-.link-retro {
-  border-radius: 0.5rem;
-  background: linear-gradient(90deg, rgba(255, 0, 128, 0.1), rgba(0, 255, 128, 0.1));
-}
-
-.link-organic {
-  border-radius: 50px;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent);
-}
-
-.link-sharp {
-  border-radius: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-}
-
-.link-space {
-  border-radius: 0.75rem;
-  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1), transparent);
-}
-
-/* =======================
-   PAGE LOAD ANIMATIONS
-   ======================= */
-.page-enter {
-  animation: pageSlideIn 0.8s ease-out;
-}
-
-@keyframes pageSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.profile-enter {
-  animation: profileZoomIn 1s ease-out 0.2s both;
-}
-
-@keyframes profileZoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.social-enter {
-  animation: socialSlideIn 0.6s ease-out 0.4s both;
-}
-
-@keyframes socialSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.links-enter {
-  animation: linksSlideUp 0.8s ease-out 0.6s both;
-}
-
-@keyframes linksSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Custom Scrollbar Styles */
-.scrollbar-thin {
-  scrollbar-width: thin;
-}
-
-.scrollbar-thumb-blue-500 {
-  scrollbar-color: #3b82f6 transparent;
-}
-
-.scrollbar-track-gray-200 {
-  scrollbar-color: #3b82f6 #e5e7eb;
-}
-
-/* Webkit Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #e5e7eb;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #3b82f6;
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #2563eb;
-}
-
-/* Theme selector specific scrollbar */
-.theme-selector-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.theme-selector-scroll::-webkit-scrollbar-track {
-  background: rgba(229, 231, 235, 0.5);
-  border-radius: 10px;
-}
-
-.theme-selector-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-  border-radius: 10px;
-}
-
-.theme-selector-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #2563eb, #7c3aed);
-}
-
-/* =======================
-   THEME 21 - Galaxy Explorer
-   ======================= */
-.theme-galaxy {
-  background:
-    radial-gradient(circle at 30% 70%, rgba(167, 139, 250, 0.28) 0%, transparent 45%),
-    radial-gradient(circle at 70% 30%, rgba(96, 165, 250, 0.24) 0%, transparent 42%),
-    linear-gradient(145deg, #0a0b1f 0%, #1d2050 45%, #2a2150 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-galaxy::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.75) 0.9px, transparent 1.8px),
-    radial-gradient(circle, rgba(167, 139, 250, 0.4) 0.7px, transparent 1.6px);
-  background-size: 84px 84px, 110px 110px;
-  background-position: 0 0, 36px 36px;
-  animation: galaxyTwinkle 14s ease-in-out infinite;
-}
-
-.theme-galaxy::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 78% 24%, rgba(139, 92, 246, 0.33) 0%, transparent 30%),
-    radial-gradient(ellipse at 22% 76%, rgba(59, 130, 246, 0.22) 0%, transparent 28%);
-  animation: galaxyNebula 16s ease-in-out infinite;
-  opacity: 0.62;
-}
-
-@keyframes galaxyTwinkle {
-  0%, 100% { opacity: 0.62; }
-  50% { opacity: 0.95; }
-}
-
-@keyframes galaxyNebula {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.82; transform: scale(1.08); }
-}
-
-.btn-galaxy {
-  background: linear-gradient(45deg, #8b45ea, #1d4ed8);
-  color: white;
-  border: 2px solid rgba(139, 69, 234, 0.5);
-  border-radius: 20px;
-  font-weight: 600;
-  font-family: 'Orbitron', monospace;
-  box-shadow: 0 4px 15px rgba(139, 69, 234, 0.4);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-galaxy::before {
-  content: '✦';
-  position: absolute;
-  top: 50%;
-  left: -20px;
-  transform: translateY(-50%);
-  font-size: 12px;
-  animation: galaxyStardust 3s ease-in-out infinite;
-}
-
-.btn-galaxy:hover {
-  background: linear-gradient(45deg, #7c3aed, #2563eb);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 69, 234, 0.6);
-}
-
-@keyframes galaxyStardust {
-  0%, 100% { left: -20px; opacity: 0; }
-  50% { left: calc(100% + 10px); opacity: 1; }
-}
-
-.card-galaxy {
-  background: rgba(15, 12, 41, 0.6);
-  backdrop-filter: blur(12px);
-  border: 2px solid rgba(139, 69, 234, 0.4);
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(139, 69, 234, 0.3);
-  transition: all 0.3s ease;
-}
-
-.card-galaxy:hover {
-  border-color: rgba(139, 69, 234, 0.6);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(139, 69, 234, 0.4);
-}
-
-.img-galaxy {
-  border: 3px solid #8b45ea;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(139, 69, 234, 0.6);
-  animation: galaxyOrbit 8s linear infinite;
-}
-
-@keyframes galaxyOrbit {
-  0% { transform: rotate(0deg); box-shadow: 0 0 20px rgba(139, 69, 234, 0.6); }
-  50% { transform: rotate(180deg); box-shadow: 0 0 30px rgba(29, 78, 216, 0.7); }
-  100% { transform: rotate(360deg); box-shadow: 0 0 20px rgba(139, 69, 234, 0.6); }
-}
-
-/* =======================
-   THEME 22 - Ocean Depths
-   ======================= */
-.theme-ocean {
-  background:
-    radial-gradient(circle at 40% 14%, rgba(125, 211, 252, 0.25) 0%, transparent 35%),
-    radial-gradient(circle at 82% 86%, rgba(14, 116, 144, 0.25) 0%, transparent 42%),
-    linear-gradient(180deg, #03426b 0%, #03699a 38%, #0b8bb2 72%, #0e7490 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-ocean::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 220%;
-  height: 34%;
-  background:
-    radial-gradient(ellipse at 20% 100%, rgba(125, 211, 252, 0.28) 0%, transparent 60%),
-    radial-gradient(ellipse at 60% 100%, rgba(56, 189, 248, 0.22) 0%, transparent 58%);
-  background-size: 320px 110px, 280px 95px;
-  animation: oceanWaves 10s ease-in-out infinite;
-  opacity: 0.72;
-}
-
-.theme-ocean::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.28) 1.6px, transparent 2.4px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 2px);
-  background-size: 130px 130px, 86px 86px;
-  background-position: 0 0, 42px 42px;
-  animation: oceanBubbles 14s linear infinite;
-}
-
-@keyframes oceanWaves {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-46px); }
-}
-
-@keyframes oceanBubbles {
-  0% { transform: translateY(40px); opacity: 0.35; }
-  100% { transform: translateY(-40px); opacity: 0.7; }
-}
-
-.btn-ocean {
-  background: linear-gradient(45deg, #0891b2, #0284c7);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
-  transition: all 0.3s ease;
-}
-
-.btn-ocean:hover {
-  background: linear-gradient(45deg, #0284c7, #0369a1);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.6);
-}
-
-.card-ocean {
-  background: rgba(3, 105, 161, 0.3);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(59, 130, 246, 0.4);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.card-ocean:hover {
-  background: rgba(3, 105, 161, 0.4);
-  border-color: rgba(59, 130, 246, 0.6);
-  transform: translateY(-2px);
-}
-
-.img-ocean {
-  border: 3px solid #0891b2;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(8, 145, 178, 0.5);
-  animation: oceanFloat 4s ease-in-out infinite;
-}
-
-@keyframes oceanFloat {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-8px) scale(1.02); }
-}
-
-/* =======================
-   THEME 23 - Mystic Forest
-   ======================= */
-.theme-forest {
-  background:
-    radial-gradient(circle at 72% 24%, rgba(74, 222, 128, 0.2) 0%, transparent 42%),
-    radial-gradient(circle at 30% 76%, rgba(22, 163, 74, 0.23) 0%, transparent 44%),
-    linear-gradient(145deg, #0f3b26 0%, #14532d 40%, #166534 72%, #1c7a44 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-forest::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 42%;
-  background:
-    radial-gradient(ellipse at bottom, rgba(21, 128, 61, 0.7) 0%, transparent 68%),
-    radial-gradient(ellipse at bottom, rgba(74, 222, 128, 0.32) 0%, transparent 62%);
-  background-size: 220px 110px, 160px 90px;
-  background-position: 0 100%, 90px 100%;
-  background-repeat: repeat-x;
-  animation: forestSway 14s ease-in-out infinite;
-}
-
-.theme-forest::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(ellipse, rgba(187, 247, 208, 0.25) 0%, transparent 72%),
-    radial-gradient(ellipse, rgba(134, 239, 172, 0.18) 0%, transparent 65%);
-  background-size: 12px 16px, 8px 12px;
-  background-position: 0 0, 42px 28px;
-  animation: forestLeaves 24s linear infinite;
-  opacity: 0.55;
-}
-
-@keyframes forestSway {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(10px); }
-}
-
-@keyframes forestLeaves {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(45px) rotate(8deg); }
-}
-
-.btn-forest {
-  background: linear-gradient(45deg, #15803d, #22c55e);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
-  font-weight: 500;
-  font-family: 'Merriweather', serif;
-  box-shadow: 0 4px 15px rgba(21, 128, 61, 0.4);
-  transition: all 0.3s ease;
-}
-
-.btn-forest:hover {
-  background: linear-gradient(45deg, #22c55e, #16a34a);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(21, 128, 61, 0.6);
-}
-
-.card-forest {
-  background: rgba(20, 83, 45, 0.4);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(34, 197, 94, 0.4);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.card-forest:hover {
-  background: rgba(20, 83, 45, 0.6);
-  border-color: rgba(34, 197, 94, 0.6);
-}
-
-.img-forest {
-  border: 3px solid #22c55e;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
-  position: relative;
-}
-
-.img-forest:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
-}
-
-/* =======================
-   THEME 24 - Ancient Egypt
-   ======================= */
-.theme-egyptian {
-  background:
-    radial-gradient(circle at 78% 18%, rgba(251, 191, 36, 0.32) 0%, transparent 44%),
-    radial-gradient(circle at 18% 82%, rgba(180, 83, 9, 0.24) 0%, transparent 44%),
-    linear-gradient(140deg, #5b2a09 0%, #7c3f10 36%, #b4661b 72%, #eab14a 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-egyptian::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 16%;
-  width: 0;
-  height: 0;
-  border-left: 92px solid transparent;
-  border-right: 92px solid transparent;
-  border-bottom: 130px solid rgba(92, 42, 9, 0.55);
-  animation: egyptianPyramid 10s ease-in-out infinite;
-}
-
-.theme-egyptian::after {
-  content: '';
-  position: absolute;
-  top: 12%;
-  right: 8%;
-  width: 120px;
-  height: 220px;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 8px,
-      rgba(251, 191, 36, 0.2) 8px 10px,
-      transparent 10px 18px
-    );
-  background-repeat: repeat-y;
-  animation: egyptianHieroglyphs 12s ease-in-out infinite;
-  opacity: 0.65;
-}
-
-@keyframes egyptianPyramid {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.72; }
-}
-
-@keyframes egyptianHieroglyphs {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50% { transform: translateY(-8px); opacity: 0.85; }
-}
-
-.btn-egyptian {
-  background: linear-gradient(45deg, #d97706, #fbbf24);
-  color: #78350f;
-  border: 2px solid rgba(120, 53, 15, 0.5);
-  border-radius: 8px;
-  font-weight: bold;
-  font-family: 'Cinzel', serif;
-  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
-  transition: all 0.3s ease;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
-}
-
-.btn-egyptian:hover {
-  background: linear-gradient(45deg, #fbbf24, #f59e0b);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6);
-}
-
-.card-egyptian {
-  background: rgba(120, 53, 15, 0.3);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(251, 191, 36, 0.5);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.card-egyptian:hover {
-  background: rgba(120, 53, 15, 0.4);
-  border-color: rgba(251, 191, 36, 0.7);
-}
-
-.img-egyptian {
-  border: 3px solid #fbbf24;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  position: relative;
-}
-
-.img-egyptian:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
-}
-
-/* =======================
-   THEME 25 - Sakura Blossom
-   ======================= */
-.theme-sakura {
-  background:
-    radial-gradient(circle at 28% 18%, rgba(251, 113, 133, 0.28) 0%, transparent 46%),
-    radial-gradient(circle at 74% 82%, rgba(244, 114, 182, 0.2) 0%, transparent 46%),
-    linear-gradient(135deg, #f7d8e9 0%, #eddcf8 36%, #e0e7ff 70%, #d9ebff 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-sakura::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 0;
-  width: 100%;
-  height: 110%;
-  background-image:
-    radial-gradient(ellipse, rgba(251, 113, 133, 0.62) 0%, transparent 70%),
-    radial-gradient(ellipse, rgba(244, 114, 182, 0.48) 0%, transparent 65%);
-  background-size: 10px 14px, 7px 11px;
-  background-position: 0 0, 34px 18px;
-  animation: sakuraFall 18s linear infinite;
-  opacity: 0.78;
-}
-
-.theme-sakura::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 35%),
-    radial-gradient(circle at 16% 22%, rgba(255, 182, 193, 0.28), transparent 18%);
-  animation: sakuraBranch 12s ease-in-out infinite;
-}
-
-@keyframes sakuraFall {
-  0% { transform: translateY(-20px); }
-  100% { transform: translateY(40px); }
-}
-
-@keyframes sakuraBranch {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.85; }
-}
-
-.btn-sakura {
-  background: linear-gradient(45deg, #f472b6, #fb7185);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px;
-  font-weight: 400;
-  font-family: 'Noto Sans JP', sans-serif;
-  box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
-  transition: all 0.3s ease;
-}
-
-.btn-sakura:hover {
-  background: linear-gradient(45deg, #fb7185, #f472b6);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(244, 114, 182, 0.6);
-}
-
-.card-sakura {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(251, 113, 133, 0.3);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.card-sakura:hover {
-  background: rgba(255, 255, 255, 0.4);
-  border-color: rgba(251, 113, 133, 0.5);
-}
-
-.img-sakura {
-  border: 3px solid #f472b6;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
-  position: relative;
-}
-
-.img-sakura:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(244, 114, 182, 0.7);
-}
-
-/* =======================
-   THEME 26 - Viking Warrior
-   ======================= */
-.theme-viking {
-  background:
-    radial-gradient(circle at 58% 24%, rgba(148, 163, 184, 0.22) 0%, transparent 45%),
-    radial-gradient(circle at 22% 80%, rgba(71, 85, 105, 0.22) 0%, transparent 42%),
-    linear-gradient(145deg, #111827 0%, #1f2937 42%, #334155 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-viking::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 52%;
-  background:
-    linear-gradient(180deg, transparent, rgba(52, 211, 153, 0.2), transparent),
-    linear-gradient(180deg, transparent, rgba(96, 165, 250, 0.15), transparent);
-  background-size: 100% 220px, 100% 170px;
-  animation: vikingAurora 12s ease-in-out infinite;
-  opacity: 0.62;
-}
-
-.theme-viking::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 16px,
-      rgba(203, 213, 225, 0.14) 16px 18px,
-      transparent 18px 34px
-    );
-  background-repeat: repeat-y;
-  animation: vikingRunes 14s ease-in-out infinite;
-  opacity: 0.45;
-}
-
-@keyframes vikingAurora {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.85; }
-}
-
-@keyframes vikingRunes {
-  0%, 100% { transform: translateY(0); opacity: 0.35; }
-  50% { transform: translateY(-6px); opacity: 0.6; }
-}
-
-.btn-viking {
-  background: linear-gradient(45deg, #4b5563, #6b7280);
-  color: white;
-  border: 2px solid rgba(156, 163, 175, 0.6);
-  border-radius: 8px;
-  font-weight: bold;
-  font-family: 'Norse', serif;
-  box-shadow: 0 4px 15px rgba(75, 85, 99, 0.4);
-  transition: all 0.3s ease;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.btn-viking:hover {
-  background: linear-gradient(45deg, #6b7280, #9ca3af);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(75, 85, 99, 0.6);
-}
-
-.card-viking {
-  background: rgba(31, 41, 55, 0.6);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(107, 114, 128, 0.4);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.card-viking:hover {
-  background: rgba(31, 41, 55, 0.8);
-  border-color: rgba(107, 114, 128, 0.6);
-}
-
-.img-viking {
-  border: 3px solid #6b7280;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(107, 114, 128, 0.5);
-  position: relative;
-}
-
-.img-viking:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(107, 114, 128, 0.7);
-}
-
-/* =======================
-   THEME 27 - Cyberpunk 2077
-   ======================= */
-.theme-cyberpunk {
-  background:
-    radial-gradient(circle at 82% 18%, rgba(236, 72, 153, 0.24) 0%, transparent 44%),
-    radial-gradient(circle at 18% 82%, rgba(14, 165, 233, 0.2) 0%, transparent 44%),
-    linear-gradient(145deg, #070708 0%, #171421 48%, #1b2230 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-cyberpunk::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    linear-gradient(0deg, transparent 0%, rgba(236, 72, 153, 0.22) 1px, transparent 2px),
-    linear-gradient(90deg, transparent 0%, rgba(14, 165, 233, 0.18) 1px, transparent 2px);
-  background-size: 46px 46px;
-  animation: cyberpunkGrid 10s linear infinite;
-  opacity: 0.5;
-}
-
-.theme-cyberpunk::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.08), transparent),
-    linear-gradient(0deg, transparent, rgba(14, 165, 233, 0.08), transparent);
-  background-size: 220px 100%, 100% 220px;
-  animation: cyberpunkGlitch 6s ease-in-out infinite;
-  opacity: 0.65;
-}
-
-@keyframes cyberpunkGrid {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(46px, 46px); }
-}
-
-@keyframes cyberpunkGlitch {
-  0%, 100% { opacity: 0.55; transform: skew(0deg); }
-  50% { opacity: 0.8; transform: skew(0.3deg); }
-}
-
-.btn-cyberpunk {
-  background: linear-gradient(45deg, #ec4899, #0ea5e9);
-  color: white;
-  border: 2px solid rgba(236, 72, 153, 0.6);
-  border-radius: 4px;
-  font-weight: bold;
-  font-family: 'Rajdhani', sans-serif;
-  box-shadow: 
-    0 0 10px rgba(236, 72, 153, 0.5),
-    0 0 20px rgba(14, 165, 233, 0.3);
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.btn-cyberpunk:hover {
-  background: linear-gradient(45deg, #0ea5e9, #ec4899);
-  transform: translateY(-1px);
-  box-shadow: 
-    0 0 15px rgba(236, 72, 153, 0.7),
-    0 0 30px rgba(14, 165, 233, 0.5);
-}
-
-.card-cyberpunk {
-  background: rgba(12, 10, 9, 0.8);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(236, 72, 153, 0.4);
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
-  transition: all 0.3s ease;
-}
-
-.card-cyberpunk:hover {
-  border-color: rgba(236, 72, 153, 0.6);
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
-}
-
-.img-cyberpunk {
-  border: 3px solid #ec4899;
-  border-radius: 4px;
-  box-shadow: 
-    0 0 15px rgba(236, 72, 153, 0.6),
-    0 0 30px rgba(14, 165, 233, 0.3);
-  animation: cyberpunkPulse 3s ease-in-out infinite;
-}
-
-@keyframes cyberpunkPulse {
-  0%, 100% { 
-    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6), 0 0 30px rgba(14, 165, 233, 0.3);
-  }
-  50% { 
-    box-shadow: 0 0 25px rgba(236, 72, 153, 0.8), 0 0 50px rgba(14, 165, 233, 0.5);
-  }
-}
-
-/* =======================
-   THEME 28 - Medieval Kingdom
-   ======================= */
-.theme-medieval {
-  background:
-    radial-gradient(circle at 72% 24%, rgba(251, 191, 36, 0.2) 0%, transparent 45%),
-    radial-gradient(circle at 24% 78%, rgba(120, 53, 15, 0.26) 0%, transparent 44%),
-    linear-gradient(145deg, #341304 0%, #5f2510 42%, #7c3d14 72%, #ad6a1b 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-medieval::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  width: 220px;
-  height: 130px;
-  background:
-    linear-gradient(0deg, rgba(69, 26, 3, 0.75) 0%, rgba(69, 26, 3, 0.75) 64%, transparent 65%),
-    linear-gradient(0deg, transparent 42%, rgba(92, 42, 9, 0.82) 43%, rgba(92, 42, 9, 0.82) 82%, transparent 83%) 44px 0,
-    linear-gradient(0deg, transparent 38%, rgba(69, 26, 3, 0.7) 39%, rgba(69, 26, 3, 0.7) 78%, transparent 79%) 92px 0,
-    linear-gradient(0deg, transparent 34%, rgba(92, 42, 9, 0.8) 35%, rgba(92, 42, 9, 0.8) 74%, transparent 75%) 140px 0;
-  background-size: 44px 130px, 44px 130px, 44px 130px, 44px 130px;
-  background-repeat: no-repeat;
-  animation: medievalCastle 12s ease-in-out infinite;
-}
-
-.theme-medieval::after {
-  content: '';
-  position: absolute;
-  top: 15%;
-  right: 15%;
-  width: 32px;
-  height: 88px;
-  background: 
-    linear-gradient(0deg, rgba(185, 28, 28, 0.75) 0%, rgba(185, 28, 28, 0.75) 62%, transparent 100%),
-    linear-gradient(0deg, rgba(202, 138, 4, 0.55) 18%, rgba(202, 138, 4, 0.55) 38%, transparent 38%);
-  background-size: 32px 88px, 32px 22px;
-  animation: medievalBanner 8s ease-in-out infinite;
-}
-
-@keyframes medievalCastle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes medievalBanner {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(3deg); }
-}
-
-.btn-medieval {
-  background: linear-gradient(45deg, #7c2d12, #ca8a04);
-  color: white;
-  border: 2px solid rgba(185, 28, 28, 0.6);
-  border-radius: 12px;
-  font-weight: bold;
-  font-family: 'Uncial Antiqua', serif;
-  box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
-  transition: all 0.3s ease;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
-
-.btn-medieval:hover {
-  background: linear-gradient(45deg, #ca8a04, #eab308);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(124, 45, 18, 0.6);
-}
-
-.card-medieval {
-  background: rgba(69, 26, 3, 0.6);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(202, 138, 4, 0.5);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.card-medieval:hover {
-  background: rgba(69, 26, 3, 0.8);
-  border-color: rgba(202, 138, 4, 0.7);
-}
-
-.img-medieval {
-  border: 3px solid #ca8a04;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(202, 138, 4, 0.5);
-  position: relative;
-}
-
-.img-medieval:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(202, 138, 4, 0.7);
-}
-
-/* =======================
-   THEME 29 - Tropical Paradise
-   ======================= */
-.theme-tropical {
-  background:
-    radial-gradient(circle at 24% 16%, rgba(34, 197, 94, 0.25) 0%, transparent 42%),
-    radial-gradient(circle at 76% 82%, rgba(14, 165, 233, 0.25) 0%, transparent 42%),
-    linear-gradient(145deg, #0a82b4 0%, #0ea5b5 34%, #14b8a6 62%, #22c55e 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-tropical::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 220%;
-  height: 32%;
-  background:
-    radial-gradient(ellipse at bottom, rgba(56, 189, 248, 0.48) 0%, transparent 70%),
-    radial-gradient(ellipse at bottom, rgba(20, 184, 166, 0.35) 0%, transparent 62%);
-  background-size: 300px 100px, 220px 80px;
-  background-position: 0 100%, 140px 100%;
-  background-repeat: repeat-x;
-  animation: tropicalWaves 10s ease-in-out infinite;
-}
-
-.theme-tropical::after {
-  content: '';
-  position: absolute;
-  bottom: 32%;
-  left: 6%;
-  width: 110px;
-  height: 140px;
-  background:
-    linear-gradient(0deg, rgba(120, 53, 15, 0.65) 0%, rgba(120, 53, 15, 0.65) 82%, transparent 83%) 38px 76px,
-    radial-gradient(ellipse, rgba(34, 197, 94, 0.6) 0%, transparent 70%) 0 0,
-    radial-gradient(ellipse, rgba(16, 185, 129, 0.45) 0%, transparent 62%) 54px 20px;
-  background-size: 34px 140px, 78px 38px, 62px 30px;
-  background-repeat: no-repeat;
-  animation: tropicalPalm 14s ease-in-out infinite;
-}
-
-@keyframes tropicalWaves {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-45px); }
-}
-
-@keyframes tropicalPalm {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(2deg); }
-}
-
-.btn-tropical {
-  background: linear-gradient(45deg, #10b981, #06b6d4);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 25px;
-  font-weight: 400;
-  font-family: 'Dancing Script', cursive;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-  transition: all 0.3s ease;
-  font-size: 16px;
-}
-
-.btn-tropical:hover {
-  background: linear-gradient(45deg, #06b6d4, #0ea5e9);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
-}
-
-.card-tropical {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(16, 185, 129, 0.4);
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
-
-.card-tropical:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(16, 185, 129, 0.6);
-}
-
-.img-tropical {
-  border: 3px solid #10b981;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-  animation: tropicalFloat 4s ease-in-out infinite;
-}
-
-@keyframes tropicalFloat {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-5px) scale(1.02); }
-}
-
-/* =======================
-   THEME 30 - Art Deco Vintage
-   ======================= */
-.theme-artdeco {
-  background:
-    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.28) 0%, transparent 48%),
-    radial-gradient(circle at 22% 82%, rgba(17, 24, 39, 0.45) 0%, transparent 46%),
-    linear-gradient(145deg, #050505 0%, #1f1a18 42%, #5f3b20 72%, #d29c34 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-artdeco::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    repeating-linear-gradient(45deg, transparent 0 24px, rgba(251, 191, 36, 0.12) 24px 26px),
-    repeating-linear-gradient(-45deg, transparent 0 28px, rgba(251, 191, 36, 0.08) 28px 30px),
-    linear-gradient(0deg, transparent 48%, rgba(251, 191, 36, 0.14) 50%, transparent 52%);
-  background-size: 110px 110px, 90px 90px, 64px 64px;
-  animation: artdecoPattern 16s ease-in-out infinite;
-  opacity: 0.68;
-}
-
-.theme-artdeco::after {
-  content: '';
-  position: absolute;
-  top: 18%;
-  right: 14%;
-  width: 130px;
-  height: 130px;
-  background:
-    conic-gradient(from 0deg, rgba(251, 191, 36, 0.26), transparent, rgba(251, 191, 36, 0.26)),
-    radial-gradient(circle, rgba(251, 191, 36, 0.42) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: artdecoSunburst 14s linear infinite;
-  opacity: 0.62;
-}
-
-@keyframes artdecoPattern {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-}
-
-@keyframes artdecoSunburst {
-  0% { transform: rotate(0deg) scale(1); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-
-.btn-artdeco {
-  background: linear-gradient(45deg, #000000, #fbbf24);
-  color: white;
-  border: 2px solid rgba(251, 191, 36, 0.6);
-  border-radius: 4px;
-  font-weight: 600;
-  font-family: 'Great Vibes', cursive;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  letter-spacing: 1px;
-}
-
-.btn-artdeco:hover {
-  background: linear-gradient(45deg, #fbbf24, #f59e0b);
-  color: #000000;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
-}
-
-.card-artdeco {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(251, 191, 36, 0.5);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-.card-artdeco:hover {
-  background: rgba(0, 0, 0, 0.8);
-  border-color: rgba(251, 191, 36, 0.7);
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
-}
-
-.img-artdeco {
-  border: 3px solid #fbbf24;
-  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  position: relative;
-  animation: artdecoGlow 6s ease-in-out infinite;
-}
-
-@keyframes artdecoGlow {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-    filter: brightness(1);
-  }
-  50% { 
-    box-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
-    filter: brightness(1.1);
-  }
-}
-
-/* =======================
-   PREMIUM THEME POLISH
-   (Interactive + Alignment-safe overlays)
-   ======================= */
-
-.theme-nepal,
-.theme-minecraft,
-.theme-adventure,
-.theme-anime,
-.theme-cartoon,
-.theme-galaxy,
-.theme-ocean,
-.theme-forest,
-.theme-egyptian,
-.theme-sakura,
-.theme-viking,
-.theme-cyberpunk,
-.theme-medieval,
-.theme-tropical,
-.theme-artdeco,
-.theme-rainycity,
-.theme-desertdune,
-.theme-arcticglass,
-.theme-volcanicforge,
-.theme-emeraldlake,
-.theme-sunsetcliff {
-  isolation: isolate;
-}
-
-.theme-nepal::before,
-.theme-nepal::after,
-.theme-minecraft::before,
-.theme-minecraft::after,
-.theme-adventure::before,
-.theme-adventure::after,
-.theme-anime::before,
-.theme-anime::after,
-.theme-cartoon::before,
-.theme-cartoon::after,
-.theme-galaxy::before,
-.theme-galaxy::after,
-.theme-ocean::before,
-.theme-ocean::after,
-.theme-forest::before,
-.theme-forest::after,
-.theme-egyptian::before,
-.theme-egyptian::after,
-.theme-sakura::before,
-.theme-sakura::after,
-.theme-viking::before,
-.theme-viking::after,
-.theme-cyberpunk::before,
-.theme-cyberpunk::after,
-.theme-medieval::before,
-.theme-medieval::after,
-.theme-tropical::before,
-.theme-tropical::after,
-.theme-artdeco::before,
-.theme-artdeco::after,
-.theme-rainycity::before,
-.theme-rainycity::after,
-.theme-desertdune::before,
-.theme-desertdune::after,
-.theme-arcticglass::before,
-.theme-arcticglass::after,
-.theme-volcanicforge::before,
-.theme-volcanicforge::after,
-.theme-emeraldlake::before,
-.theme-emeraldlake::after,
-.theme-sunsetcliff::before,
-.theme-sunsetcliff::after {
-  pointer-events: none;
-}
-
-.btn-nepal,
-.btn-minecraft,
-.btn-adventure,
-.btn-anime,
-.btn-cartoon,
-.btn-galaxy,
-.btn-ocean,
-.btn-forest,
-.btn-egyptian,
-.btn-sakura,
-.btn-viking,
-.btn-cyberpunk,
-.btn-medieval,
-.btn-tropical,
-.btn-artdeco,
-.btn-rainycity,
-.btn-desertdune,
-.btn-arcticglass,
-.btn-volcanicforge,
-.btn-emeraldlake,
-.btn-sunsetcliff {
-  transition:
-    transform 220ms ease,
-    box-shadow 260ms ease,
-    filter 220ms ease,
-    border-color 220ms ease,
-    background-position 320ms ease;
-  will-change: transform, box-shadow;
-  transform-origin: center;
-}
-
-.btn-nepal:focus-visible,
-.btn-minecraft:focus-visible,
-.btn-adventure:focus-visible,
-.btn-anime:focus-visible,
-.btn-cartoon:focus-visible,
-.btn-galaxy:focus-visible,
-.btn-ocean:focus-visible,
-.btn-forest:focus-visible,
-.btn-egyptian:focus-visible,
-.btn-sakura:focus-visible,
-.btn-viking:focus-visible,
-.btn-cyberpunk:focus-visible,
-.btn-medieval:focus-visible,
-.btn-tropical:focus-visible,
-.btn-artdeco:focus-visible,
-.btn-rainycity:focus-visible,
-.btn-desertdune:focus-visible,
-.btn-arcticglass:focus-visible,
-.btn-volcanicforge:focus-visible,
-.btn-emeraldlake:focus-visible,
-.btn-sunsetcliff:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.75);
-  outline-offset: 2px;
-}
-
-.btn-nepal:active,
-.btn-minecraft:active,
-.btn-adventure:active,
-.btn-anime:active,
-.btn-cartoon:active,
-.btn-galaxy:active,
-.btn-ocean:active,
-.btn-forest:active,
-.btn-egyptian:active,
-.btn-sakura:active,
-.btn-viking:active,
-.btn-cyberpunk:active,
-.btn-medieval:active,
-.btn-tropical:active,
-.btn-artdeco:active,
-.btn-rainycity:active,
-.btn-desertdune:active,
-.btn-arcticglass:active,
-.btn-volcanicforge:active,
-.btn-emeraldlake:active,
-.btn-sunsetcliff:active {
-  transform: translateY(0) scale(0.985);
-  filter: saturate(1.06);
-}
 
-.card-nepal,
-.card-minecraft,
-.card-adventure,
-.card-anime,
-.card-cartoon,
-.card-galaxy,
-.card-ocean,
-.card-forest,
-.card-egyptian,
-.card-sakura,
-.card-viking,
-.card-cyberpunk,
-.card-medieval,
-.card-tropical,
-.card-artdeco,
-.card-rainycity,
-.card-desertdune,
-.card-arcticglass,
-.card-volcanicforge,
-.card-emeraldlake,
-.card-sunsetcliff {
-  transition:
-    transform 260ms ease,
-    box-shadow 300ms ease,
-    border-color 260ms ease,
-    background-color 260ms ease;
-  transform-origin: center;
-}
-
-.img-nepal,
-.img-minecraft,
-.img-adventure,
-.img-anime,
-.img-cartoon,
-.img-galaxy,
-.img-ocean,
-.img-forest,
-.img-egyptian,
-.img-sakura,
-.img-viking,
-.img-cyberpunk,
-.img-medieval,
-.img-tropical,
-.img-artdeco,
-.img-rainycity,
-.img-desertdune,
-.img-arcticglass,
-.img-volcanicforge,
-.img-emeraldlake,
-.img-sunsetcliff {
-  transition:
-    transform 260ms ease,
-    box-shadow 300ms ease,
-    filter 240ms ease;
-}
-
-/* =======================
-   NEW REALISTIC THEMES
-   ======================= */
-
-/* THEME 31 - Rainy City Lights */
-.theme-rainycity {
-  background:
-    radial-gradient(circle at 78% 14%, rgba(125, 211, 252, 0.2) 0%, transparent 30%),
-    linear-gradient(180deg, #070d1a 0%, #101a2c 45%, #1f2f48 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-rainycity::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to top,
-      rgba(15, 23, 42, 0.86) 0%,
-      rgba(15, 23, 42, 0.86) 18%,
-      transparent 18%
-    ),
-    repeating-linear-gradient(
-      to right,
-      rgba(148, 163, 184, 0.25) 0 10px,
-      rgba(30, 41, 59, 0.65) 10px 14px,
-      transparent 14px 26px
-    );
-  background-size: 100% 100%, 100% 22%;
-  background-position: center, bottom;
-  opacity: 0.72;
-}
-
-.theme-rainycity::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      165deg,
-      rgba(255, 255, 255, 0.16) 0 1px,
-      transparent 1px 16px
-    ),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%);
-  animation: rainyCityRain 2.4s linear infinite;
-  opacity: 0.35;
-}
-
-@keyframes rainyCityRain {
-  0% { transform: translateY(-14px); }
-  100% { transform: translateY(14px); }
-}
-
-.btn-rainycity {
-  background: linear-gradient(45deg, #1d4ed8, #2563eb);
-  color: #fff;
-  border: 2px solid rgba(125, 211, 252, 0.4);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
-}
-
-.btn-rainycity:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.38);
-}
-
-.card-rainycity {
-  background: rgba(15, 23, 42, 0.52);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(148, 163, 184, 0.28);
-  border-radius: 14px;
-}
-
-.img-rainycity {
-  border: 3px solid #93c5fd;
-  border-radius: 50%;
-  box-shadow: 0 0 18px rgba(147, 197, 253, 0.45);
-}
-
-/* THEME 32 - Desert Dune */
-.theme-desertdune {
-  background:
-    radial-gradient(circle at 78% 16%, rgba(254, 240, 138, 0.35) 0%, transparent 22%),
-    linear-gradient(160deg, #70411f 0%, #a45f2b 46%, #d69a56 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-desertdune::before {
-  content: '';
-  position: absolute;
-  inset: auto -10% 0 -10%;
-  height: 44%;
-  background:
-    radial-gradient(ellipse at 24% 100%, rgba(251, 191, 36, 0.36), transparent 62%),
-    radial-gradient(ellipse at 58% 100%, rgba(217, 119, 6, 0.32), transparent 64%),
-    radial-gradient(ellipse at 86% 100%, rgba(180, 83, 9, 0.28), transparent 66%);
-  background-size: 300px 130px, 340px 140px, 280px 120px;
-  animation: duneShift 18s ease-in-out infinite;
-}
-
-.theme-desertdune::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%),
-    repeating-linear-gradient(12deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 18px);
-  opacity: 0.4;
-}
-
-@keyframes duneShift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-28px); }
-}
-
-.btn-desertdune {
-  background: linear-gradient(45deg, #b45309, #f59e0b);
-  color: #fff;
-  border: 2px solid rgba(254, 215, 170, 0.45);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.35);
-}
-
-.btn-desertdune:hover { transform: translateY(-2px); }
-
-.card-desertdune {
-  background: rgba(120, 53, 15, 0.35);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(251, 191, 36, 0.35);
-  border-radius: 14px;
-}
-
-.img-desertdune {
-  border: 3px solid #fbbf24;
-  border-radius: 14px;
-  box-shadow: 0 0 18px rgba(251, 191, 36, 0.45);
-}
-
-/* THEME 33 - Arctic Glass */
-.theme-arcticglass {
-  background:
-    radial-gradient(circle at 22% 14%, rgba(224, 242, 254, 0.34) 0%, transparent 26%),
-    linear-gradient(150deg, #11334a 0%, #185b77 46%, #7ab4cf 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-arcticglass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(125deg, transparent 0 44%, rgba(255, 255, 255, 0.2) 50%, transparent 58%),
-    repeating-linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 20px);
-  animation: arcticSweep 12s ease-in-out infinite;
-}
-
-.theme-arcticglass::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.28), transparent 22%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%);
-  opacity: 0.72;
-}
-
-@keyframes arcticSweep {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(14px); }
-}
-
-.btn-arcticglass {
-  background: linear-gradient(45deg, #0ea5e9, #38bdf8);
-  color: #fff;
-  border: 2px solid rgba(186, 230, 253, 0.5);
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.32);
-}
-
-.btn-arcticglass:hover { transform: translateY(-2px); }
-
-.card-arcticglass {
-  background: rgba(15, 118, 140, 0.28);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(186, 230, 253, 0.32);
-  border-radius: 16px;
-}
-
-.img-arcticglass {
-  border: 3px solid #bae6fd;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(186, 230, 253, 0.5);
-}
-
-/* THEME 34 - Volcanic Forge */
-.theme-volcanicforge {
-  background:
-    radial-gradient(circle at 80% 16%, rgba(251, 146, 60, 0.18) 0%, transparent 40%),
-    linear-gradient(150deg, #120b0b 0%, #2a1211 44%, #4a1a17 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-volcanicforge::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      115deg,
-      transparent 0 24px,
-      rgba(249, 115, 22, 0.22) 24px 27px,
-      transparent 27px 46px
-    ),
-    linear-gradient(180deg, transparent 56%, rgba(220, 38, 38, 0.22) 100%);
-  animation: forgePulse 5.5s ease-in-out infinite;
-}
-
-.theme-volcanicforge::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 36%;
-  background: radial-gradient(ellipse at 50% 100%, rgba(239, 68, 68, 0.38), transparent 72%);
-}
-
-@keyframes forgePulse {
-  0%, 100% { opacity: 0.42; }
-  50% { opacity: 0.72; }
-}
-
-.btn-volcanicforge {
-  background: linear-gradient(45deg, #b91c1c, #f97316);
-  color: #fff;
-  border: 2px solid rgba(253, 186, 116, 0.45);
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(185, 28, 28, 0.35);
-}
-
-.btn-volcanicforge:hover { transform: translateY(-2px); }
-
-.card-volcanicforge {
-  background: rgba(24, 24, 27, 0.62);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(248, 113, 113, 0.28);
-  border-radius: 12px;
-}
-
-.img-volcanicforge {
-  border: 3px solid #fb923c;
-  border-radius: 10px;
-  box-shadow: 0 0 18px rgba(249, 115, 22, 0.45);
-}
-
-/* THEME 35 - Emerald Lake */
-.theme-emeraldlake {
-  background:
-    radial-gradient(circle at 82% 18%, rgba(110, 231, 183, 0.2) 0%, transparent 35%),
-    linear-gradient(150deg, #0b3a31 0%, #125547 46%, #1f7a68 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-emeraldlake::before {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 45%;
-  background:
-    linear-gradient(180deg, transparent, rgba(45, 212, 191, 0.22)),
-    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.16), transparent 40%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 24px);
-  animation: emeraldRipples 11s ease-in-out infinite;
-}
-
-.theme-emeraldlake::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to top,
-      rgba(6, 32, 28, 0.68) 0%,
-      rgba(6, 32, 28, 0.68) 22%,
-      transparent 22%
-    );
-  opacity: 0.75;
-}
-
-@keyframes emeraldRipples {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-16px); }
-}
-
-.btn-emeraldlake {
-  background: linear-gradient(45deg, #0d9488, #14b8a6);
-  color: #fff;
-  border: 2px solid rgba(167, 243, 208, 0.45);
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.34);
-}
-
-.btn-emeraldlake:hover { transform: translateY(-2px); }
-
-.card-emeraldlake {
-  background: rgba(15, 118, 110, 0.32);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(110, 231, 183, 0.3);
-  border-radius: 16px;
-}
-
-.img-emeraldlake {
-  border: 3px solid #6ee7b7;
-  border-radius: 50%;
-  box-shadow: 0 0 18px rgba(110, 231, 183, 0.45);
-}
-
-/* THEME 36 - Sunset Cliff */
-.theme-sunsetcliff {
-  background:
-    radial-gradient(circle at 74% 20%, rgba(253, 186, 116, 0.36) 0%, transparent 18%),
-    linear-gradient(160deg, #2b1a1a 0%, #6a3327 44%, #b86a3a 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-sunsetcliff::before {
-  content: '';
-  position: absolute;
-  inset: auto -8% 0 -8%;
-  height: 42%;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(120, 53, 15, 0.5)),
-    linear-gradient(25deg, transparent 24%, rgba(41, 22, 18, 0.8) 25%, rgba(41, 22, 18, 0.8) 52%, transparent 53%),
-    linear-gradient(-22deg, transparent 22%, rgba(56, 31, 22, 0.74) 23%, rgba(56, 31, 22, 0.74) 50%, transparent 51%);
-  background-size: 100% 100%, 220px 100%, 240px 100%;
-  background-position: center, 0 100%, 110px 100%;
-  background-repeat: repeat-x;
-}
-
-.theme-sunsetcliff::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%),
-    radial-gradient(circle at 74% 20%, rgba(255, 244, 214, 0.2), transparent 14%);
-  animation: sunsetBreathe 8s ease-in-out infinite;
-}
-
-@keyframes sunsetBreathe {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.72; }
-}
-
-.btn-sunsetcliff {
-  background: linear-gradient(45deg, #c2410c, #fb923c);
-  color: #fff;
-  border: 2px solid rgba(254, 215, 170, 0.45);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(194, 65, 12, 0.34);
-}
-
-.btn-sunsetcliff:hover { transform: translateY(-2px); }
-
-.card-sunsetcliff {
-  background: rgba(120, 53, 15, 0.33);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(251, 146, 60, 0.3);
-  border-radius: 14px;
-}
-
-.img-sunsetcliff {
-  border: 3px solid #fdba74;
-  border-radius: 50%;
-  box-shadow: 0 0 18px rgba(251, 146, 60, 0.45);
-}
-
-@media (max-width: 640px) {
-  .theme-rainycity::before,
-  .theme-rainycity::after,
-  .theme-desertdune::before,
-  .theme-arcticglass::before,
-  .theme-volcanicforge::before,
-  .theme-emeraldlake::before,
-  .theme-sunsetcliff::after,
-  .theme-sunsetcliff::before {
-    animation-duration: 12s;
-  }
-}
 

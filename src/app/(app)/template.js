@@ -3,15 +3,16 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import {Page} from "@/models/Page";
 import {faBars, faLink, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import mongoose from "mongoose";
+import dbConnect from "@/libs/mongoClient";
 import {getServerSession} from "next-auth";
 import {Lato} from 'next/font/google'
 import Image from "next/image";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 import {Toaster} from "react-hot-toast";
+import { themeFontVariables } from "@/libs/fonts";
 
-const lato = Lato({ subsets: ['latin'], weight: ['400','700'] })
+const lato = Lato({ subsets: ['latin'], weight: ['400','700'], variable: '--font-lato' })
 
 export const metadata = {
   title: 'Mero Link - Unify Your Online Presence with Ease',
@@ -29,11 +30,11 @@ export default async function AppTemplate({ children }) {
   if (!session) {
     return redirect('/');
   }
-  mongoose.connect(process.env.MONGO_URI);
-  const page = await Page.findOne({owner: session.user.email});
+  await dbConnect();
+  const page = await Page.findOne({owner: session.user.email}).lean();
   return (
    
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className={`min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 ${lato.variable} ${themeFontVariables}`}>
       <a
         href="#app-main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[120] focus:bg-white focus:text-blue-700 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -77,7 +78,7 @@ export default async function AppTemplate({ children }) {
                 <div className="w-full h-full rounded-2xl overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 p-1">
                   <div className="w-full h-full rounded-xl overflow-hidden">
                     <Image 
-                      src={session.user.image} 
+                      src={session.user.image || '/icon-192x192.png'} 
                       width={256} 
                       height={256} 
                       alt="avatar"

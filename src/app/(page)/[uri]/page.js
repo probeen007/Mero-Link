@@ -3,87 +3,15 @@ import { User } from "@/models/User";
 import { Event } from "@/models/Event";
 import dbConnect from "@/libs/mongoClient";
 import { cache, cacheKey } from "@/libs/cache";
+import { cache as reactCache } from "react";
 import { logger } from "@/libs/logger";
 import { measurePerformance } from "@/libs/performance";
 import { generatePersonStructuredData, generateWebPageStructuredData } from "@/libs/structuredData";
 import ClientLiveUserPage from "@/components/ClientLiveUserPage";
 import { generateCorrelationId } from "@/libs/correlation";
 
-// Dynamic metadata generation for each user page
-export async function generateMetadata({ params }) {
-  const { uri } = await params;
-
-  try {
-    await dbConnect();
-
-    const cacheKeyStr = cacheKey("page-metadata", uri);
-    const cached = cache.get(cacheKeyStr);
-    if (cached) return cached;
-
-    // Defensive fetch pattern to avoid exceptions mid-render
-    const page = await Page.findOne({ uri }).lean().catch(e => {
-      logger.error('Metadata page fetch failed', { uri, error: e.message });
-      return null;
-    });
-    let user = null;
-    if (page?.owner) {
-      user = await User.findOne({ email: page.owner }).lean().catch(e => {
-        logger.error('Metadata user fetch failed', { uri, error: e.message });
-        return null;
-      });
-    }
-
-    if (!page) {
-      return {
-        title: "Page Not Found - Mero Link",
-        description: "This page could not be found.",
-      };
-    }
-
-    const displayName = page.displayName || user?.name || uri;
-    const bio =
-      page.bio || `Connect with ${displayName} through their Mero Link page`;
-    const avatar = page.avatar || user?.image || "";
-
-    const metadata = {
-      title: `${displayName} - Mero Link`,
-      description: bio.length > 160 ? bio.substring(0, 157) + "..." : bio,
-      keywords: `${displayName}, Mero Link, social media, link tree, ${uri}`,
-      openGraph: {
-        title: `${displayName} - Mero Link`,
-        description: bio,
-        images: avatar ? [{ url: avatar, width: 400, height: 400 }] : [],
-        url: `https://merolink.it.com/${uri}`,
-        type: "profile",
-        siteName: "Mero Link",
-      },
-      twitter: {
-        card: "summary",
-        title: `${displayName} - Mero Link`,
-        description: bio,
-        images: avatar ? [avatar] : [],
-      },
-      robots: {
-        index: true,
-        follow: true,
-      },
-      alternates: {
-        canonical: `https://merolink.it.com/${uri}`,
-      },
-    };
-
-    cache.set(cacheKeyStr, metadata, 600000); // Cache 10 min
-    return metadata;
-  } catch (error) {
-    logger.error("Failed to generate metadata", { uri, error: error.message });
-    return {
-      title: "Mero Link",
-      description: "Unify your online presence with Mero Link",
-    };
-  }
-}
-
-const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
+// Shared, memoized page fetch to deduplicate database hits between generateMetadata and rendering
+const fetchPageData = reactCache(measurePerformance("fetchPageData", async (uri, cid) => {
   const start = performance.now();
   await dbConnect();
 
@@ -118,7 +46,7 @@ const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
     if (user) user._id = user._id.toString();
 
     const data = { page, user };
-    cache.set(cacheKeyStr, data, 30000); // Cache 30 sec
+    cache.set(cacheKeyStr, data, 30000); // Cross-request TTL cache (30 sec)
 
     const ms = (performance.now() - start).toFixed(2);
     logger.debug("Page data fetched", { uri, cid, ms });
@@ -128,7 +56,61 @@ const fetchPageData = measurePerformance("fetchPageData", async (uri, cid) => {
     logger.error("Failed fetching page data", { uri, cid, ms, error: error.message });
     throw error;
   }
-});
+}));
+
+// Dynamic metadata generation for each user page
+export async function generateMetadata({ params }) {
+  const { uri } = await params;
+  const cid = "metadata";
+
+  try {
+    const data = await fetchPageData(uri, cid);
+    if (!data) {
+      return {
+        title: "Page Not Found - Mero Link",
+        description: "This page could not be found.",
+      };
+    }
+
+    const { page, user } = data;
+    const displayName = page.displayName || user?.name || uri;
+    const bio = page.bio || `Connect with ${displayName} through their Mero Link page`;
+    const avatar = page.avatar || user?.image || "";
+
+    return {
+      title: `${displayName} - Mero Link`,
+      description: bio.length > 160 ? bio.substring(0, 157) + "..." : bio,
+      keywords: `${displayName}, Mero Link, social media, link tree, ${uri}`,
+      openGraph: {
+        title: `${displayName} - Mero Link`,
+        description: bio,
+        images: avatar ? [{ url: avatar, width: 400, height: 400 }] : [],
+        url: `https://merolink.me/${uri}`,
+        type: "profile",
+        siteName: "Mero Link",
+      },
+      twitter: {
+        card: "summary",
+        title: `${displayName} - Mero Link`,
+        description: bio,
+        images: avatar ? [avatar] : [],
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+      alternates: {
+        canonical: `https://merolink.me/${uri}`,
+      },
+    };
+  } catch (error) {
+    logger.error("Failed to generate metadata", { uri, error: error.message });
+    return {
+      title: "Mero Link",
+      description: "Unify your online presence with Mero Link",
+    };
+  }
+}
 
 export default async function UserPage({ params }) {
   const { uri } = await params;

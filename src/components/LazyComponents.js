@@ -72,6 +72,14 @@ export const LazyVideoForm = dynamic(
   }
 );
 
+export const LazyShareProfileSection = dynamic(
+  () => import('@/components/ShareProfileSection'),
+  {
+    loading: () => <FormSkeleton />,
+    ssr: false
+  }
+);
+
 // Higher order component for lazy loading with suspense
 export function withLazyLoading(Component, LoadingComponent = FormSkeleton) {
   return function LazyWrapper(props) {

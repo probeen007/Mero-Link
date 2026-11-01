@@ -1,7 +1,8 @@
 
 import { Lato } from 'next/font/google'
+import { themeFontVariables } from '@/libs/fonts'
 
-const lato = Lato({ subsets: ['latin'], weight: ['400', '700'] })
+const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-lato' })
 
 export const metadata = {
   title: 'Mero Link - Unify Your Online Presence with Ease',
@@ -15,7 +16,7 @@ export const metadata = {
   openGraph: {
     title: 'Mero Link - Simplify Your Digital Presence with Custom Link Trees',
     description: 'Join Mero Link, a startup from Nepal, to effortlessly combine your social media and essential links into one shareable tree. Perfect for individuals and businesses alike!',
-    url: 'https://merolink.it.com',
+    url: 'https://merolink.me',
     type: 'website',
     images: [
       {
@@ -30,7 +31,7 @@ export const metadata = {
 
 export default function PageLayout({ children }) {
   return (
-    <main className={lato.className}>
+    <main className={`${lato.className} ${lato.variable} ${themeFontVariables}`}>
       {children}
     </main>
   );

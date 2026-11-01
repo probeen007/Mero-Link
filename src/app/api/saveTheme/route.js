@@ -57,6 +57,7 @@ export async function POST(req) {
       {
         $set: {
           theme: dbThemeValue,
+          adaptBackground: true,
           updatedAt: new Date()
         }
       },
@@ -70,6 +71,7 @@ export async function POST(req) {
     // Clear cache for this page on updates
     const updatedPage = await Page.findById(pageId).select('uri owner').lean();
     if (updatedPage) {
+      cache.delete(cacheKey('page-data', updatedPage.uri));
       cache.delete(cacheKey('page', updatedPage.uri));
       cache.delete(cacheKey('sharecard:page', updatedPage.owner));
     }

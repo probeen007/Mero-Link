@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,12 +12,10 @@
     "type-check": "tsc --noEmit",
     "optimize": "npm run lint:fix && npm run build",
     "production": "NODE_ENV=production npm run build && npm start",
-    "test:build": "npm run build && npm run start & sleep 10 && curl -f http://localhost:3000/api/health && killall node",
-    "fix-s3": "node scripts/fix-s3-permissions.js"
+    "test:build": "npm run build && npm run start & sleep 10 && curl -f http://localhost:3000/api/health && killall node"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.5.0",
-    "@aws-sdk/client-s3": "^3.654.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
@@ -27,6 +25,7 @@
     "clone-deep": "^4.0.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.42.2",
     "html2canvas": "^1.4.1",
     "mongodb": "^6.9.0",
     "mongoose": "^8.6.3",

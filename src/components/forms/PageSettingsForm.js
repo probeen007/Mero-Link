@@ -4,7 +4,7 @@ import SubmitButton from "@/components/buttons/SubmitButton";
 import RadioTogglers from "@/components/formItems/radioTogglers";
 import SectionBox from "@/components/layout/SectionBox";
 import { themes } from "@/libs/themes";
-import { faImage, faPalette, faSave, faMagic, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faPalette, faSave, faMagic, faLink, faList, faTableCellsLarge, faGripLines } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -19,12 +19,10 @@ export default function PageSettingsForm({ page, user }) {
   const [bgImage, setBgImage] = useState(page.bgImage);
   const [adaptBackground, setAdaptBackground] = useState(initialAdapt);
   const [avatar, setAvatar] = useState(user?.image);
+  const [linkStyle, setLinkStyle] = useState(page.linkStyle || 'list');
   const [saving, setSaving] = useState(false);
 
-  // Update currentTheme when page theme changes (for real-time theme switching)
-  useEffect(() => {
-    // This will trigger a re-render when the parent component updates the page prop
-  }, [page.theme]);
+
 
   async function saveBaseSettings(formData) {
     try {
@@ -179,6 +177,18 @@ export default function PageSettingsForm({ page, user }) {
               id="bioIn"
               placeholder="Your bio goes here..."
             />
+            <label className="input-label">Link layout</label>
+            <RadioTogglers
+              name="linkStyle"
+              value={linkStyle}
+              onChange={setLinkStyle}
+              options={[
+                { value: 'list', icon: faList, label: 'List' },
+                { value: 'grid', icon: faTableCellsLarge, label: 'Grid' },
+                { value: 'compact', icon: faGripLines, label: 'Compact' },
+              ]}
+            />
+            <p className="text-xs text-gray-500 mb-3">How your links are arranged on your public page.</p>
             <div className="max-w-[240px] mx-auto mt-4">
               <SubmitButton disabled={saving}>
                 <FontAwesomeIcon icon={faSave} />

@@ -1,9 +1,9 @@
 // src/libs/videoExtractor.js
-// Handle video URL extraction, validation, and thumbnail generation
+// Handle video/audio URL extraction, validation, and thumbnail generation
 
 /**
- * Extract video information from URL
- * Supports YouTube, Vimeo, and generic video URLs
+ * Extract media information from URL
+ * Supports YouTube, Vimeo, Spotify, TikTok, and generic video URLs
  */
 export function extractVideoInfo(url) {
   if (!url || typeof url !== 'string') {
@@ -24,7 +24,7 @@ export function extractVideoInfo(url) {
       return {
         platform: 'youtube',
         videoId: match[1],
-        thumbnail: `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`,
+        thumbnail: `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`,
         embedUrl: `https://www.youtube.com/embed/${match[1]}`,
         title: `YouTube Video ${match[1].substring(0, 5)}`
       };
@@ -40,6 +40,33 @@ export function extractVideoInfo(url) {
       thumbnail: `https://vimeo.com/api/v2/video/${vimeoMatch[1]}.json`,
       embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`,
       title: `Vimeo Video ${vimeoMatch[1]}`
+    };
+  }
+
+  // Spotify patterns
+  const spotifyMatch = url.match(/open\.spotify\.com\/(track|playlist|album|artist|show|episode)\/([a-zA-Z0-9]+)/);
+  if (spotifyMatch) {
+    const type = spotifyMatch[1];
+    const id = spotifyMatch[2];
+    return {
+      platform: 'spotify',
+      videoId: id,
+      thumbnail: '', // Styled natively in UI
+      embedUrl: `https://open.spotify.com/embed/${type}/${id}`,
+      title: `Spotify ${type.charAt(0).toUpperCase() + type.slice(1)}`
+    };
+  }
+
+  // TikTok patterns
+  const tiktokMatch = url.match(/tiktok\.com\/@([a-zA-Z0-9_.]+)\/video\/(\d+)/) || url.match(/tiktok\.com\/v\/(\d+)/);
+  if (tiktokMatch) {
+    const videoId = tiktokMatch[1] && !isNaN(tiktokMatch[1]) ? tiktokMatch[1] : tiktokMatch[2];
+    return {
+      platform: 'tiktok',
+      videoId: videoId,
+      thumbnail: '', // Styled natively in UI
+      embedUrl: `https://www.tiktok.com/embed/v2/${videoId}`,
+      title: `TikTok Video`
     };
   }
 
@@ -125,7 +152,7 @@ export function validateVideosArray(videos) {
       video.url &&
       isValidVideoUrl(video.url) &&
       video.platform &&
-      ['youtube', 'vimeo', 'other'].includes(video.platform)
+      ['youtube', 'vimeo', 'spotify', 'tiktok', 'other'].includes(video.platform)
     );
   });
 }
@@ -139,14 +166,26 @@ export function sanitizeVideoUrl(url) {
   try {
     const urlObj = new URL(url);
     
-    // For YouTube, keep only the video ID
+    // For YouTube
     if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
       const videoInfo = extractVideoInfo(url);
       if (videoInfo) return videoInfo.embedUrl;
     }
     
-    // For Vimeo, keep clean URL
+    // For Vimeo
     if (urlObj.hostname.includes('vimeo.com')) {
+      const videoInfo = extractVideoInfo(url);
+      if (videoInfo) return videoInfo.embedUrl;
+    }
+
+    // For Spotify
+    if (urlObj.hostname.includes('spotify.com')) {
+      const videoInfo = extractVideoInfo(url);
+      if (videoInfo) return videoInfo.embedUrl;
+    }
+    
+    // For TikTok
+    if (urlObj.hostname.includes('tiktok.com')) {
       const videoInfo = extractVideoInfo(url);
       if (videoInfo) return videoInfo.embedUrl;
     }

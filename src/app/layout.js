@@ -1,9 +1,12 @@
 import './globals.css';
 import GlobalProgressBar from '@/components/GlobalProgressBar';
 import { Suspense } from 'react';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { config } from '@fortawesome/fontawesome-svg-core';
+config.autoAddCss = false;
 
 export const metadata = {
-  metadataBase: new URL('https://merolink.it.com'),
+  metadataBase: new URL('https://merolink.me'),
   title: {
     default: 'Mero Link - Unify Your Online Presence',
     template: '%s | Mero Link',
@@ -27,7 +30,7 @@ export const metadata = {
   openGraph: {
     title: 'Mero Link - Unify Your Online Presence',
     description: 'Create personalized link trees for your social profiles and websites. Perfect for professionals, creators, and businesses.',
-    url: 'https://merolink.it.com',
+    url: 'https://merolink.me',
     siteName: 'Mero Link',
     locale: 'en_US',
     type: 'website',

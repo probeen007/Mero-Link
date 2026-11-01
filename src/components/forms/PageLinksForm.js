@@ -13,8 +13,16 @@ export default function PageLinksForm({ page, user }) {
   const [links, setLinks] = useState(page.links || []);
   const nextId = useRef(1);
   async function save() {
-    await savePageLinks(links);
-    toast.success('Saved!');
+    try {
+      const result = await savePageLinks(links);
+      if (result) {
+        toast.success('Saved!');
+      } else {
+        toast.error('Failed to save links.');
+      }
+    } catch (err) {
+      toast.error('An error occurred while saving.');
+    }
   }
   function addNewLink() {
     setLinks(prev => {
@@ -30,14 +38,10 @@ export default function PageLinksForm({ page, user }) {
   }
   function handleLinkChange(keyOfLinkToChange, prop, ev) {
     setLinks(prev => {
-      const newLinks = [...prev];
-      newLinks.forEach((link) => {
-        if (link.key === keyOfLinkToChange) {
-          link[prop] = ev.target.value;
-        }
-      });
-      return [...prev];
-    })
+      return prev.map(link => 
+        link.key === keyOfLinkToChange ? { ...link, [prop]: ev.target.value } : link
+      );
+    });
   }
   function removeLink(linkKeyToRemove) {
     setLinks(prevLinks => [...prevLinks].filter(l => l.key !== linkKeyToRemove));
@@ -58,33 +62,34 @@ export default function PageLinksForm({ page, user }) {
             handle={'.handle'}
             list={links} setList={setLinks}>
             {links.map(l => (
-              <div key={l.key} className="mt-4 rounded-xl border border-gray-200 bg-gray-50/80 p-3 flex flex-col md:flex-row gap-4 md:gap-5 md:items-start">
-                <div className="handle self-start md:self-center mt-1">
-                  <FontAwesomeIcon
-                    className="text-gray-500 mr-2 cursor-ns-resize"
-                    icon={faGripLines} />
-                </div>
-                <div className="text-center md:text-left shrink-0">
-                  <div className="bg-gray-300 inline-block relative aspect-square overflow-hidden w-16 h-16 rounded-lg inline-flex justify-center items-center border border-gray-200">
-                    {l.icon && (
-                      <Image
-                        className="w-full h-full object-cover"
-                        src={l.icon}
-                        alt={'icon'}
-                        width={64} height={64} />
-                    )}
-                    {!l.icon && (
-                      <FontAwesomeIcon size="xl" icon={faLink} />
-                    )}
+              <div key={l.key} className="mt-4 rounded-xl border border-gray-200 bg-gray-50/80 p-3 sm:p-4 flex flex-col md:flex-row gap-4 md:gap-5">
+                <div className="flex md:flex-col items-center justify-between md:justify-start gap-3 md:gap-4 shrink-0 border-b md:border-b-0 pb-3 md:pb-0">
+                  <div className="flex items-center gap-3 md:flex-col">
+                    <div className="handle cursor-ns-resize text-gray-400 p-2 hover:text-gray-600 transition-colors">
+                      <FontAwesomeIcon
+                        className="text-gray-500"
+                        icon={faGripLines} />
+                    </div>
+                    <div className="bg-gray-300 relative aspect-square w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center border border-gray-200 shrink-0 overflow-hidden">
+                      {l.icon ? (
+                        <Image
+                          className="w-full h-full object-cover"
+                          src={l.icon}
+                          alt={'icon'}
+                          width={64} height={64} />
+                      ) : (
+                        <FontAwesomeIcon size="lg" icon={faLink} className="text-gray-500" />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <button
-                      onClick={() => removeLink(l.key)}
-                      type="button" className="w-full bg-gray-200 hover:bg-red-100 text-gray-700 hover:text-red-700 py-2 px-3 mt-2 h-full flex gap-2 items-center justify-center rounded-lg transition-colors">
-                      <FontAwesomeIcon icon={faTrash} />
-                      <span>Remove</span>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => removeLink(l.key)}
+                    type="button" 
+                    className="md:w-full bg-gray-200/80 hover:bg-red-100 text-gray-700 hover:text-red-700 py-2 px-3 flex gap-2 items-center justify-center rounded-lg transition-colors text-sm font-medium shrink-0"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                    <span>Remove</span>
+                  </button>
                 </div>
                 <div className="grow min-w-0">
                   <label className="input-label">Icon URL:</label>

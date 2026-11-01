@@ -84,7 +84,7 @@ export async function GET(request) {
     const responseData = {
       page,
       user: safeUser,
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: page.updatedAt ? new Date(page.updatedAt).toISOString() : new Date().toISOString(),
       cid
     };
 
