@@ -20,11 +20,11 @@
 
 ### Why Choose Mero Link?
 
-✅ **Beautiful Design** - 30+ premium themes to match your brand  
+✅ **Animated Themes** - 16 themes plus a builder for colors, fonts, buttons and backgrounds  
 ✅ **Real-time Analytics** - Track clicks, views, and engagement  
 ✅ **Mobile-Optimized** - Perfect experience on all devices  
 ✅ **Google Sign-in** - Quick authentication with OAuth  
-✅ **File Hosting** - Built-in S3 integration for avatars & backgrounds  
+✅ **Live Editor** - Real preview beside the editor, autosaved as you type  
 ✅ **QR Code Export** - Share your profile as QR code  
 ✅ **Lightning Fast** - Optimized database with caching & indexing  
 
@@ -34,7 +34,7 @@
 
 | Feature | Description |
 |---------|-------------|
-| 🎨 **30+ Themes** | Pre-designed themes from anime to corporate styles |
+| 🎨 **16 Themes** | Animated themes (Sticker, Synthwave, Himalaya, Terminal...) plus a theme builder |
 | 📊 **Analytics Dashboard** | Real-time insights into link performance and user engagement |
 | 🖼️ **Custom Branding** | Upload custom background images and adjust colors |
 | 📱 **Responsive Design** | Fluid typography and adaptive layouts for all screen sizes |
@@ -42,7 +42,7 @@
 | 🌙 **Dark/Light Mode** | Automatic theme switching based on system preference |
 | ⚡ **Performance** | Database indexes + response caching for instant loads |
 | 🔗 **Social Integration** | Link Instagram, Twitter, LinkedIn, GitHub, and more |
-| 📤 **File Upload** | S3-powered image hosting with automatic optimization |
+| 🖼️ **Share Cards** | Auto-generated Open Graph image and QR code for every profile |
 | 🔄 **Live Preview** | See changes in real-time before publishing |
 
 ---
@@ -53,7 +53,6 @@
 - **Node.js** 18+ 
 - **MongoDB** 6.0+
 - **Google OAuth** credentials
-- **AWS S3** bucket (optional, for file uploads)
 
 ### Installation
 
@@ -75,7 +74,6 @@ cp .env.example .env.local
 # - MONGO_URI
 # - NEXTAUTH_SECRET
 # - GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET
-# - AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY / S3_BUCKET_NAME
 ```
 
 4. **Run development server**
@@ -118,7 +116,7 @@ Navigate to `http://localhost:3000`
 | **Frontend** | Next.js 15, React 19, TailwindCSS |
 | **Backend** | Node.js, Next.js API Routes |
 | **Database** | MongoDB 6+ with Mongoose ORM |
-| **Storage** | AWS S3 for avatars & backgrounds |
+| **Images** | Avatar/background by URL; OG images via `next/og` |
 | **Auth** | NextAuth.js with Google OAuth |
 | **Caching** | In-memory TTL cache + response optimization |
 | **Monitoring** | Custom logging & performance tracking |

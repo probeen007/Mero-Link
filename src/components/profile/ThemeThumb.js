@@ -11,7 +11,7 @@ export default function ThemeThumb({ page, user, uri, scale = 0.4, className = '
       inert
     >
       <div className="absolute left-0 top-0 h-[700px] w-[390px] origin-top-left overflow-hidden" style={{ transform: `scale(${scale})` }}>
-        <ProfileView page={page} user={user} uri={uri} preview />
+        <ProfileView page={page} user={user} uri={uri} preview still />
       </div>
     </div>
   );

@@ -11,7 +11,8 @@ export default async function Image({ params }) {
   const data = await getPublicPage(uri);
   const { style } = resolveTheme(data?.page);
   const name = data?.page.displayName || data?.user?.name || `@${uri}`;
-  const bio = (data?.page.bio || '').slice(0, 120);
+  const raw = data?.page.bio || '';
+  const bio = raw.length > 120 ? `${raw.slice(0, 117).replace(/\s+\S*$/, '')}...` : raw;
   const avatar = data?.user?.image;
   const linkCount = (data?.page.links || []).filter((l) => l.url && !l.hidden).length;
   const fg = style['--p-fg'];
@@ -25,7 +26,7 @@ export default async function Image({ params }) {
         ) : null}
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>{name}</div>
-          <div style={{ fontSize: 34, marginTop: 14, opacity: 0.7 }}>merolink.me/{uri}</div>
+          <div style={{ fontSize: 34, marginTop: 14, opacity: 0.7 }}>{`merolink.me/${uri}`}</div>
           {bio && <div style={{ fontSize: 30, marginTop: 28, opacity: 0.85, lineHeight: 1.35 }}>{bio}</div>}
           <div style={{ display: 'flex', marginTop: 40 }}>
             <div style={{ display: 'flex', background: '#FF4D2E', color: '#111014', fontSize: 28, fontWeight: 700, padding: '12px 26px', borderRadius: 999 }}>

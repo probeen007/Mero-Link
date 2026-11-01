@@ -45,7 +45,7 @@ function ShareCard() {
             <Button size="sm" onClick={share}><PiShareNetworkBold aria-hidden /> Share</Button>
             <Button size="sm" variant="secondary" onClick={copy}><PiCopyBold aria-hidden /> Copy link</Button>
             {qr && <Button size="sm" variant="secondary" href={qr} download={`merolink-${uri}-qr.png`}><PiDownloadSimpleBold aria-hidden /> QR code</Button>}
-            <Button size="sm" variant="secondary" href={`/${uri}/opengraph-image`} download={`merolink-${uri}-card.png`} target="_blank"><PiDownloadSimpleBold aria-hidden /> Share card</Button>
+            <Button size="sm" variant="secondary" href={`/api/card/${uri}`} download={`merolink-${uri}-card.png`} target="_blank"><PiDownloadSimpleBold aria-hidden /> Share card</Button>
           </div>
           <p className="text-sm text-muted">The share card is the preview people see when your link is posted on WhatsApp, X or Facebook.</p>
         </div>

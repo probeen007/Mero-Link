@@ -13,7 +13,7 @@
   -webkit-font-smoothing: antialiased;
 }
 .ml-profile[data-preview] { min-height: 100%; }
-.ml-profile a { color: inherit; text-decoration: none; }
+.ml-profile a { text-decoration: none; }
 .ml-profile ul { list-style: none; margin: 0; padding: 0; }
 
 .ml-bg, .ml-overlay {
@@ -209,6 +209,10 @@
 .ml-media-poster:hover .ml-media-play { transform: scale(1.1); }
 .ml-media figcaption { margin-top: 8px; font-size: .875rem; font-weight: 600; text-align: center; }
 
+/* Arcade: white type needs a pixel drop shadow to read over the clouds. */
+[data-effect='pixels'] .ml-head { text-shadow: 2px 2px 0 #1B1B3A; }
+[data-effect='synth'] .ml-head { text-shadow: 0 2px 12px rgb(13 0 24 / .8); }
+
 /* ---------- Footer ---------- */
 .ml-foot { margin-top: auto; padding-top: 24px; display: flex; justify-content: center; }
 .ml-made {
@@ -319,7 +323,7 @@
 .fx-nebula { position: absolute; inset: 40% -20% -20%; background: radial-gradient(ellipse at center, rgb(130 90 255 / .22), transparent 65%); }
 
 /* synth (Synthwave) */
-.fx-sun { position: absolute; left: 50%; top: 46%; width: 62%; max-width: 420px; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%;
+.fx-sun { position: absolute; left: 50%; top: 54%; width: 62%; max-width: 420px; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%;
   background: linear-gradient(180deg, #FFD319 0%, #FF8C3A 40%, #FF2975 75%, #8C1EFF 100%);
   -webkit-mask: linear-gradient(180deg, #000 52%, transparent 52% 56%, #000 56% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80% 88%, transparent 88% 94%, #000 94%);
   mask: linear-gradient(180deg, #000 52%, transparent 52% 56%, #000 56% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80% 88%, transparent 88% 94%, #000 94%);

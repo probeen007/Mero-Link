@@ -19,18 +19,21 @@ export default function HeroPhone() {
 
   return (
     <div className="relative mx-auto w-[300px] sm:w-[320px]">
-      <div className="relative h-[620px] overflow-hidden rounded-[48px] border-[10px] border-ink bg-ink shadow-[0_40px_80px_-30px_rgb(17_16_20/0.5)] sm:h-[660px]">
-        <div className="absolute left-1/2 top-2 z-20 h-6 w-24 -translate-x-1/2 rounded-full bg-ink" aria-hidden />
+      <div className="relative h-[620px] overflow-hidden rounded-[48px] border-[10px] border-[#111014] bg-[#111014] ring-1 ring-line shadow-[0_40px_80px_-30px_rgb(17_16_20/0.5)] sm:h-[660px]">
+        <div className="absolute left-1/2 top-2 z-20 h-6 w-24 -translate-x-1/2 rounded-full bg-[#111014]" aria-hidden />
         <AnimatePresence initial={false}>
           <motion.div
             key={demo.uri}
-            className="absolute inset-0 overflow-hidden rounded-[38px] [transform:translateZ(0)]"
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
+            className="absolute inset-0 overflow-hidden rounded-[38px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <ProfileView page={{ ...demo.page, theme: demo.theme, bgMode: 'theme' }} user={demo.user} uri={demo.uri} preview />
+            {/* Own transform so the profile's fixed background stays inside the phone. */}
+            <div className="absolute inset-0 overflow-y-auto no-scrollbar [transform:translateZ(0)]">
+              <ProfileView page={{ ...demo.page, theme: demo.theme, bgMode: 'theme' }} user={demo.user} uri={demo.uri} preview />
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>

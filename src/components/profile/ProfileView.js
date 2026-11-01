@@ -9,7 +9,10 @@ import { SOCIAL_MAP, socialHref } from '@/libs/socials';
 import { Backdrop, Overlay } from './Effects';
 import VideoBlock from './VideoBlock';
 
-export default function ProfileView({ page, user, preview = false, uri }) {
+// `still`: thumbnail mode for galleries, rendered inside other links/buttons,
+// so it must not contain anchors or interactive elements of its own.
+export default function ProfileView({ page, user, preview = false, still = false, uri }) {
+  const A = still ? 'span' : 'a';
   const { attrs, style } = resolveTheme(page);
   const name = page?.displayName || user?.name || (uri ? `@${uri}` : '');
   const avatar = user?.image || '/icon-192x192.png';
@@ -17,7 +20,7 @@ export default function ProfileView({ page, user, preview = false, uri }) {
   const blocks = (page?.links || []).filter((l) => !l.hidden && (l.type === 'header' ? l.title : /^https?:\/\/\S+\.\S/.test(l.url || '')));
   const videos = (page?.videos || []).filter((v) => v?.url);
   const layout = ['grid', 'compact'].includes(page?.linkStyle) ? page.linkStyle : 'list';
-  const videoBlock = videos.length > 0 ? <VideoBlock videos={videos} /> : null;
+  const videoBlock = videos.length > 0 && !still ? <VideoBlock videos={videos} /> : null;
   const videosFirst = page?.videoPosition !== 'after';
   let i = 0;
 
@@ -50,9 +53,9 @@ export default function ProfileView({ page, user, preview = false, uri }) {
                 const { icon: Icon, label } = SOCIAL_MAP[key];
                 return (
                   <li key={key}>
-                    <a className="ml-social" href={socialHref(key, value)} target="_blank" rel="noopener noreferrer me" aria-label={label} data-track>
+                    <A className="ml-social" {...(!still && { href: socialHref(key, value), target: '_blank', rel: 'noopener noreferrer me', 'data-track': true })} aria-label={label}>
                       <Icon aria-hidden />
-                    </a>
+                    </A>
                   </li>
                 );
               })}
@@ -71,7 +74,7 @@ export default function ProfileView({ page, user, preview = false, uri }) {
                 </li>
               ) : (
                 <li key={b.key} className="ml-anim" data-featured={b.featured || undefined} style={{ '--i': i++ }}>
-                  <a className="ml-btn" href={b.url} target="_blank" rel="noopener noreferrer" data-track data-featured={b.featured || undefined}>
+                  <A className="ml-btn" {...(!still && { href: b.url, target: '_blank', rel: 'noopener noreferrer', 'data-track': true })} data-featured={b.featured || undefined}>
                     {b.icon ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img className="ml-thumb" src={b.icon} alt="" loading="lazy" width={40} height={40} />
@@ -83,7 +86,7 @@ export default function ProfileView({ page, user, preview = false, uri }) {
                       {b.subtitle && <span className="ml-btn-sub">{b.subtitle}</span>}
                     </span>
                     <PiArrowUpRightBold className="ml-arrow" aria-hidden />
-                  </a>
+                  </A>
                 </li>
               ),
             )}
@@ -95,9 +98,9 @@ export default function ProfileView({ page, user, preview = false, uri }) {
         {!videosFirst && videoBlock}
 
         <footer className="ml-foot">
-          <a className="ml-made" href={`/?ref=${encodeURIComponent(uri || 'profile')}`}>
+          <A className="ml-made" {...(!still && { href: `/?ref=${encodeURIComponent(uri || 'profile')}` })}>
             <span className="ml-made-mark">m</span> Made with Mero Link
-          </a>
+          </A>
         </footer>
       </div>
 
