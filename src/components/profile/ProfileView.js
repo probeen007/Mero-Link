@@ -15,7 +15,9 @@ export default function ProfileView({ page, user, preview = false, still = false
   const A = still ? 'span' : 'a';
   const { attrs, style } = resolveTheme(page);
   const name = page?.displayName || user?.name || (uri ? `@${uri}` : '');
-  const avatar = user?.image || '/icon-192x192.png';
+  // next/image throws on anything but a full https URL (e.g. a half-typed URL in
+  // the editor, or an old http:// avatar), so fall back to the default icon.
+  const avatar = /^https:\/\/[^\s/]+\.[^\s]+$/.test(user?.image || '') ? user.image : '/icon-192x192.png';
   const socials = Object.entries(page?.buttons || {}).filter(([k, v]) => SOCIAL_MAP[k] && v);
   const blocks = (page?.links || []).filter((l) => !l.hidden && (l.type === 'header' ? l.title : /^https?:\/\/\S+\.\S/.test(l.url || '')));
   const videos = (page?.videos || []).filter((v) => v?.url);
