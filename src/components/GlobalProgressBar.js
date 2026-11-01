@@ -74,29 +74,18 @@ export default function GlobalProgressBar() {
     [start]
   );
 
-  const handleSubmit = useCallback(
-    (event) => {
-      const form = event.target;
-      if (!(form instanceof HTMLFormElement)) return;
-      start();
-    },
-    [start]
-  );
-
   useEffect(() => {
     document.addEventListener('click', handleClick, true);
-    document.addEventListener('submit', handleSubmit, true);
 
     return () => {
       document.removeEventListener('click', handleClick, true);
-      document.removeEventListener('submit', handleSubmit, true);
     };
-  }, [handleClick, handleSubmit]);
+  }, [handleClick]);
 
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none fixed top-0 left-0 h-[3px] z-[10000] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-[width,opacity] duration-200 ${active ? 'opacity-100' : 'opacity-0'}`}
+      className={`pointer-events-none fixed top-0 left-0 h-[3px] z-[10000] bg-accent transition-[width,opacity] duration-200 ${active ? 'opacity-100' : 'opacity-0'}`}
       style={{ width: `${width}%` }}
     />
   );

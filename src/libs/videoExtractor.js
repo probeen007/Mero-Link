@@ -44,7 +44,7 @@ export function extractVideoInfo(url) {
   }
 
   // Spotify patterns
-  const spotifyMatch = url.match(/open\.spotify\.com\/(track|playlist|album|artist|show|episode)\/([a-zA-Z0-9]+)/);
+  const spotifyMatch = url.match(/open\.spotify\.com\/(?:embed\/)?(track|playlist|album|artist|show|episode)\/([a-zA-Z0-9]+)/);
   if (spotifyMatch) {
     const type = spotifyMatch[1];
     const id = spotifyMatch[2];
@@ -58,7 +58,7 @@ export function extractVideoInfo(url) {
   }
 
   // TikTok patterns
-  const tiktokMatch = url.match(/tiktok\.com\/@([a-zA-Z0-9_.]+)\/video\/(\d+)/) || url.match(/tiktok\.com\/v\/(\d+)/);
+  const tiktokMatch = url.match(/tiktok\.com\/@([a-zA-Z0-9_.]+)\/video\/(\d+)/) || url.match(/tiktok\.com\/(?:v|embed\/v2)\/(\d+)/);
   if (tiktokMatch) {
     const videoId = tiktokMatch[1] && !isNaN(tiktokMatch[1]) ? tiktokMatch[1] : tiktokMatch[2];
     return {

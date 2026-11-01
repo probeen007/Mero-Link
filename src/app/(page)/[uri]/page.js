@@ -1,185 +1,57 @@
-import { Page } from "@/models/Page";
-import { User } from "@/models/User";
-import { Event } from "@/models/Event";
-import dbConnect from "@/libs/mongoClient";
-import { cache, cacheKey } from "@/libs/cache";
-import { cache as reactCache } from "react";
-import { logger } from "@/libs/logger";
-import { measurePerformance } from "@/libs/performance";
-import { generatePersonStructuredData, generateWebPageStructuredData } from "@/libs/structuredData";
-import ClientLiveUserPage from "@/components/ClientLiveUserPage";
-import { generateCorrelationId } from "@/libs/correlation";
+import { notFound } from 'next/navigation';
+import { after } from 'next/server';
+import ProfileView from '@/components/profile/ProfileView';
+import ClickTracker from '@/components/profile/ClickTracker';
+import JsonLd from '@/components/JsonLd';
+import { getPublicPage } from '@/libs/pageData';
+import { profilePageLd } from '@/libs/structuredData';
+import { resolveTheme } from '@/libs/themes';
+import { Event } from '@/models/Event';
+import { logger } from '@/libs/logger';
+import { SITE_URL } from '@/libs/site';
 
-// Shared, memoized page fetch to deduplicate database hits between generateMetadata and rendering
-const fetchPageData = reactCache(measurePerformance("fetchPageData", async (uri, cid) => {
-  const start = performance.now();
-  await dbConnect();
-
-  const cacheKeyStr = cacheKey("page-data", uri);
-  const cached = cache.get(cacheKeyStr);
-  if (cached) {
-    logger.debug("Page data served from cache", { uri, cid });
-    return cached;
-  }
-
-  try {
-    const page = await Page.findOne({ uri }).lean();
-    if (!page) return null;
-
-    let user = null;
-    if (page.owner) {
-      user = await User.findOne({ email: page.owner }).lean();
-    }
-
-    page._id = page._id.toString();
-    if (Array.isArray(page.videos)) {
-      page.videos = page.videos.map((video) => ({
-        id: video?.id || (video?._id ? video._id.toString() : ''),
-        title: typeof video?.title === 'string' ? video.title : '',
-        url: typeof video?.url === 'string' ? video.url : '',
-        thumbnail: typeof video?.thumbnail === 'string' ? video.thumbnail : '',
-        platform: typeof video?.platform === 'string' ? video.platform : 'other',
-        videoId: typeof video?.videoId === 'string' ? video.videoId : '',
-        order: Number.isFinite(video?.order) ? video.order : 0,
-      }));
-    }
-    if (user) user._id = user._id.toString();
-
-    const data = { page, user };
-    cache.set(cacheKeyStr, data, 30000); // Cross-request TTL cache (30 sec)
-
-    const ms = (performance.now() - start).toFixed(2);
-    logger.debug("Page data fetched", { uri, cid, ms });
-    return data;
-  } catch (error) {
-    const ms = (performance.now() - start).toFixed(2);
-    logger.error("Failed fetching page data", { uri, cid, ms, error: error.message });
-    throw error;
-  }
-}));
-
-// Dynamic metadata generation for each user page
 export async function generateMetadata({ params }) {
   const { uri } = await params;
-  const cid = "metadata";
+  const data = await getPublicPage(uri);
+  if (!data) return { title: 'Profile not found', robots: { index: false } };
 
-  try {
-    const data = await fetchPageData(uri, cid);
-    if (!data) {
-      return {
-        title: "Page Not Found - Mero Link",
-        description: "This page could not be found.",
-      };
-    }
+  const { page, user } = data;
+  const name = page.displayName || user?.name || uri;
+  const description = (page.bio || `${name}'s links, socials and videos in one place.`).slice(0, 158);
+  const url = `${SITE_URL}/${uri}`;
 
-    const { page, user } = data;
-    const displayName = page.displayName || user?.name || uri;
-    const bio = page.bio || `Connect with ${displayName} through their Mero Link page`;
-    const avatar = page.avatar || user?.image || "";
-
-    return {
-      title: `${displayName} - Mero Link`,
-      description: bio.length > 160 ? bio.substring(0, 157) + "..." : bio,
-      keywords: `${displayName}, Mero Link, social media, link tree, ${uri}`,
-      openGraph: {
-        title: `${displayName} - Mero Link`,
-        description: bio,
-        images: avatar ? [{ url: avatar, width: 400, height: 400 }] : [],
-        url: `https://merolink.me/${uri}`,
-        type: "profile",
-        siteName: "Mero Link",
-      },
-      twitter: {
-        card: "summary",
-        title: `${displayName} - Mero Link`,
-        description: bio,
-        images: avatar ? [avatar] : [],
-      },
-      robots: {
-        index: true,
-        follow: true,
-      },
-      alternates: {
-        canonical: `https://merolink.me/${uri}`,
-      },
-    };
-  } catch (error) {
-    logger.error("Failed to generate metadata", { uri, error: error.message });
-    return {
-      title: "Mero Link",
-      description: "Unify your online presence with Mero Link",
-    };
-  }
+  return {
+    title: `${name} (@${uri})`,
+    description,
+    alternates: { canonical: url },
+    openGraph: { type: 'profile', url, title: `${name} on Mero Link`, description, username: uri },
+    twitter: { card: 'summary_large_image', title: `${name} on Mero Link`, description },
+  };
 }
 
-export default async function UserPage({ params }) {
+export async function generateViewport({ params }) {
   const { uri } = await params;
-  const cid = generateCorrelationId();
-  const renderStart = performance.now();
+  const data = await getPublicPage(uri);
+  const { theme } = resolveTheme(data?.page);
+  return { themeColor: theme.bg.startsWith('#') ? theme.bg : theme.dark ? '#0C0C10' : '#F7F7F5' };
+}
 
-  try {
-    const data = await fetchPageData(uri, cid);
+export default async function ProfilePage({ params }) {
+  const { uri } = await params;
+  const data = await getPublicPage(uri);
+  if (!data) notFound();
 
-    if (!data) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">404</h1>
-            <p className="text-xl">Page not found!</p>
-            <p className="text-gray-400 mt-2">
-              The page "{uri}" doesn't exist.
-            </p>
-          </div>
-        </div>
-      );
-    }
+  after(() =>
+    Event.create({ uri, page: uri, type: 'view' }).catch((error) =>
+      logger.error('Failed to log view event', { uri, error: error.message }),
+    ),
+  );
 
-    const { page, user } = data;
-
-    // Log view (fire and forget)
-    Event.create({ uri, page: uri, type: "view" }).catch((error) =>
-      logger.error("Failed to log view event", { uri, cid, error: error.message })
-    );
-
-    // Prepare consistent initialData for hydration
-    const initialData = {
-      page,
-      user,
-      lastUpdated:
-        page.updatedAt?.toISOString() ||
-        page.createdAt?.toISOString() ||
-        new Date(0).toISOString(),
-    };
-
-    // Generate structured data on server-side for SEO
-    const structuredData = generatePersonStructuredData(page, user);
-    const webPageData = generateWebPageStructuredData(page, user);
-
-    const totalMs = (performance.now() - renderStart).toFixed(2);
-    logger.debug("User page rendered", { uri, cid, ms: totalMs });
-
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([structuredData, webPageData])
-          }}
-        />
-        <ClientLiveUserPage initialData={initialData} uri={uri} />
-      </>
-    );
-  } catch (error) {
-    const totalMs = (performance.now() - renderStart).toFixed(2);
-    logger.error("Error rendering user page", { uri, cid, ms: totalMs, error: error.message });
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-center text-white">
-          <h1 className="text-4xl font-bold mb-4">Oops!</h1>
-          <p className="text-xl">Something went wrong.</p>
-          <p className="text-gray-400 mt-2">Please try again later.</p>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <>
+      <JsonLd data={profilePageLd(data.page, data.user)} />
+      <ProfileView page={data.page} user={data.user} uri={uri} />
+      <ClickTracker uri={uri} />
+    </>
+  );
 }

@@ -1,134 +1,59 @@
 'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn, useSession } from 'next-auth/react';
+import clsx from 'clsx';
+import { PiArrowRightBold } from 'react-icons/pi';
 
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useCallback, useRef, useState } from "react";
+const SAMPLES = ['aarya', 'rohanbeats', 'mira.clay', 'kathmandueats', 'yourname'];
 
-export default function HeroForm() {
+export default function HeroForm({ className, dark = false }) {
   const router = useRouter();
-  const inputRef = useRef(null); // Use ref for direct access to the input
-  const { data: session } = useSession();
-  const user = session?.user;
-  
-  const [isFocused, setIsFocused] = useState(false);
-  const [placeholder, setPlaceholder] = useState('');
+  const { status } = useSession();
+  const [value, setValue] = useState('');
+  const [hint, setHint] = useState(SAMPLES[0]);
 
-  // Auto-fill username if stored
+  // Rotate the placeholder through sample names while the field is empty.
   useEffect(() => {
-    const desiredUsername = localStorage.getItem('desiredUsername');
-    if (desiredUsername) {
-      localStorage.removeItem('desiredUsername');
-      router.replace(`/account?desiredUsername=${desiredUsername}`);
-    }
-  }, [router]);
+    if (value) return;
+    let i = 0;
+    const id = setInterval(() => setHint(SAMPLES[(i = (i + 1) % SAMPLES.length)]), 2200);
+    return () => clearInterval(id);
+  }, [value]);
 
-  // Typing animation for placeholder
-  useEffect(() => {
-    if (isFocused) {
-      setPlaceholder('username');
+  async function onSubmit(ev) {
+    ev.preventDefault();
+    const name = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 30);
+    if (status === 'authenticated') {
+      router.push(`/account${name ? `?desiredUsername=${encodeURIComponent(name)}` : ''}`);
       return;
     }
-
-    const names = [
-      'viratkohli', 
-      'cristiano', 
-      'leomessi', 
-      'lalisa', 
-      'shakira', 
-      'burnaboy', 
-      'badbunny', 
-      'khabylame', 
-      'anitta', 
-      'bts', 
-      'taylorswift', 
-      'mrbeast', 
-      'neymarjr',
-      'priyankachopra'
-    ];
-    let nameIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingTimeout;
-
-    const type = () => {
-      const currentName = names[nameIndex];
-      
-      if (isDeleting) {
-        setPlaceholder(currentName.substring(0, charIndex - 1));
-        charIndex--;
-      } else {
-        setPlaceholder(currentName.substring(0, charIndex + 1));
-        charIndex++;
-      }
-
-      let typeSpeed = isDeleting ? 60 : 120;
-
-      if (!isDeleting && charIndex === currentName.length) {
-        // Pause at the end of typing
-        typeSpeed = 1600;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        // Select next name
-        nameIndex = (nameIndex + 1) % names.length;
-        typeSpeed = 400;
-      }
-
-      typingTimeout = setTimeout(type, typeSpeed);
-    };
-
-    // Begin loop
-    typingTimeout = setTimeout(type, 300);
-
-    return () => clearTimeout(typingTimeout);
-  }, [isFocused]);
-
-  const handleSubmit = useCallback(async (ev) => {
-    ev.preventDefault();
-    const username = inputRef.current.value; // Directly access input value
-
-    if (username.length > 0) {
-      if (user) {
-        router.push(`/account?desiredUsername=${username}`);
-      } else {
-        localStorage.setItem('desiredUsername', username);
-        await signIn('google');
-      }
-    }
-  }, [user, router]);
+    try { if (name) localStorage.setItem('desiredUsername', name); } catch {}
+    await signIn('google', { callbackUrl: '/account' });
+  }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`flex flex-col sm:flex-row items-stretch sm:items-center bg-white border w-[95%] sm:w-[90%] md:w-[85%] lg:w-full max-w-xl rounded-2xl p-2 gap-2 transition-all duration-300 ${
-        isFocused 
-          ? 'border-blue-600 ring-4 ring-blue-500/20 shadow-[0_20px_40px_rgba(37,99,235,0.18)]' 
-          : 'border-slate-300 shadow-[0_12px_28px_rgba(0,0,0,0.08)] hover:border-slate-400 hover:shadow-[0_16px_36px_rgba(0,0,0,0.12)]'
-      }`}
-    >
-      <div className={`flex-grow flex items-center px-4 h-12 rounded-xl transition-colors duration-300 gap-2 ${
-        isFocused ? 'bg-blue-50/50' : 'bg-slate-50'
-      }`}>
-        <span className={`font-bold text-sm sm:text-base select-none transition-colors duration-300 ${
-          isFocused ? 'text-blue-600' : 'text-slate-600'
-        }`}>merolink.me/</span>
-        <input
-          type="text"
-          ref={inputRef}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          className="w-full bg-transparent focus:outline-none text-base pl-0.5 text-slate-900 font-bold border-none outline-none focus:ring-0"
-          placeholder={placeholder}
-          aria-label="Choose your username"
-          style={{ border: 'none', outline: 'none', padding: '0', boxShadow: 'none', height: 'auto', marginBottom: '0' }}
-        />
+    <form onSubmit={onSubmit} className={clsx('w-full max-w-lg', className)}>
+      <div className={clsx('flex flex-col gap-2 rounded-[22px] border-2 border-ink p-1.5 shadow-sticker sm:flex-row sm:items-center',
+        dark ? 'bg-white text-on-sticker' : 'bg-surface')}>
+        <label className="flex min-w-0 flex-1 items-center px-3.5">
+          <span className="shrink-0 font-semibold opacity-60">merolink.me/</span>
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value.replace(/\s/g, ''))}
+            placeholder={hint}
+            aria-label="Pick your username"
+            autoCapitalize="none"
+            spellCheck={false}
+            maxLength={30}
+            className="h-12 min-w-0 flex-1 bg-transparent font-semibold outline-none placeholder:opacity-40"
+          />
+        </label>
+        <button type="submit" className={clsx('inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-2xl px-6 font-semibold transition-transform hover:-translate-y-0.5 active:translate-y-0',
+          dark ? 'bg-[#111014] text-white' : 'bg-accent text-accent-ink')}>
+          Claim your link <PiArrowRightBold aria-hidden />
+        </button>
       </div>
-      <button
-        type="submit"
-        className="h-12 bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all duration-200 whitespace-nowrap font-bold text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-      >
-        Join for Free
-      </button>
     </form>
   );
 }

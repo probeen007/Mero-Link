@@ -1,101 +1,43 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { FaLinkedinIn } from 'react-icons/fa6';
+import { PiEnvelopeSimpleBold } from 'react-icons/pi';
+import { Logo } from '@/components/ui';
+import { CONTACT_EMAIL } from '@/libs/site';
+
+const COLUMNS = [
+  { title: 'Product', links: [['Themes', '/themes'], ['Pricing', '/pricing'], ['Linktree alternative', '/linktree-alternative'], ['Log in', '/login']] },
+  { title: 'Company', links: [['About', '/about'], ['Contact', '/contact']] },
+  { title: 'Legal', links: [['Privacy', '/privacy'], ['Terms', '/terms']] },
+];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-gradient-to-br from-gray-950 to-slate-900 text-white border-t border-slate-900">
-      <div className="page-shell">
-        {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <Image
-                src="https://i.ibb.co/HNVDd6R/merolinklogo.png"
-                alt="Mero Link Logo"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-lg shadow-md"
-              />
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Mero Link
-              </span>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-md">
-              Connect effortlessly in the digital realm. Create your personalized link hub and share your digital presence with the world.
-            </p>
-            <div className="flex items-center gap-2 text-gray-400 text-sm">
-              <span className="font-semibold text-slate-500">Contact:</span>
-              <a
-                href="mailto:pro.victus07@gmail.com"
-                className="text-gray-300 hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                pro.victus07@gmail.com
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-bold text-sm mb-4 text-white uppercase tracking-wider">Quick Links</h3>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal & Support */}
-          <div>
-            <h3 className="font-bold text-sm mb-4 text-white uppercase tracking-wider">Legal & Support</h3>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="mailto:pro.victus07@gmail.com" 
-                  className="text-gray-400 hover:text-blue-450 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-                >
-                  Get Verified
-                </a>
-              </li>
-            </ul>
+    <footer className="mt-24 border-t border-line">
+      <div className="shell grid gap-10 py-14 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div>
+          <Logo />
+          <p className="mt-4 max-w-xs text-sm text-muted">One link for everything you make. Built in Nepal, used everywhere.</p>
+          <div className="mt-5 flex gap-2">
+            <a href="https://www.linkedin.com/company/merolink/" target="_blank" rel="noopener noreferrer" aria-label="Mero Link on LinkedIn"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line hover:border-ink"><FaLinkedinIn aria-hidden /></a>
+            <a href={`mailto:${CONTACT_EMAIL}`} aria-label="Email Mero Link"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line hover:border-ink"><PiEnvelopeSimpleBold aria-hidden /></a>
           </div>
         </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-slate-900 py-6 text-sm text-gray-500">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-center md:text-left">
-              &copy; {currentYear} Mero Link. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6">
-              <span>Built for creators and professionals</span>
-            </div>
-          </div>
-        </div>
+        {COLUMNS.map((col) => (
+          <nav key={col.title} aria-label={col.title}>
+            <h2 className="text-sm font-semibold">{col.title}</h2>
+            <ul className="mt-4 grid gap-2.5">
+              {col.links.map(([label, href]) => (
+                <li key={href}><Link href={href} className="text-sm text-muted transition-colors hover:text-ink">{label}</Link></li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+      <div className="shell flex flex-wrap justify-between gap-2 border-t border-line py-6 text-sm text-muted">
+        <p>© {new Date().getFullYear()} Mero Link</p>
+        <p>Made in Kathmandu</p>
       </div>
     </footer>
   );

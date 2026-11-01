@@ -1,218 +1,144 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { LazyChart } from "@/components/LazyComponents";
-import { Event } from "@/models/Event";
-import { Page } from "@/models/Page";
-import { faLink, faChartLine, faEye, faMousePointer, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isToday } from "date-fns";
-import mongoose from "mongoose";
-import dbConnect from "@/libs/mongoClient";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { PiChartLineUpBold } from 'react-icons/pi';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import dbConnect from '@/libs/mongoClient';
+import { Event } from '@/models/Event';
+import { Page } from '@/models/Page';
+import { SOCIALS } from '@/libs/socials';
+import { Card, EmptyState } from '@/components/ui';
+import AnalyticsChart from '@/components/dashboard/AnalyticsChart';
+
+export const metadata = { title: 'Analytics' };
+
+const DAYS = 30;
+const fmt = new Intl.NumberFormat('en');
+
+function Stat({ label, value, sub, tone }) {
+  return (
+    <div className={`rounded-card p-5 ${tone || 'border border-line bg-surface'}`}>
+      <p className="text-sm font-medium opacity-75">{label}</p>
+      <p className="mt-2 font-mono text-3xl font-semibold tracking-tight">{value}</p>
+      {sub && <p className="mt-1 text-xs opacity-70">{sub}</p>}
+    </div>
+  );
+}
 
 export default async function AnalyticsPage() {
-  // Connect to MongoDB
-  await dbConnect();
-
-  // Get session
   const session = await getServerSession(authOptions);
-  if (!session) {
-    return redirect('/');
-  }
+  if (!session) redirect('/login');
+  await dbConnect();
+  const page = await Page.findOne({ owner: session.user.email }).select('uri links buttons').lean();
+  if (!page) redirect('/account');
 
-  // Find page by user email
-  const page = await Page.findOne({ owner: session.user.email });
-  if (!page) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-8 text-center max-w-md">
-          <FontAwesomeIcon icon={faChartLine} className="text-6xl text-gray-300 mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 mb-2">No Analytics Available</h2>
-          <p className="text-gray-600">Create your page first in the Dashboard to start tracking analytics.</p>
-        </div>
-      </div>
-    );
-  }
+  const since = new Date(Date.now() - (DAYS - 1) * 86400000);
+  since.setUTCHours(0, 0, 0, 0);
 
-  // Aggregate views and fetch clicks in parallel
-  const [groupedViews, clicks] = await Promise.all([
+  const [daily, totals, perLink] = await Promise.all([
     Event.aggregate([
-      {
-        $match: {
-          type: 'view',
-          page: page.uri,
-        }
-      },
-      {
-        $group: {
-          _id: {
-            $dateToString: {
-              date: "$createdAt",
-              format: "%Y-%m-%d"
-            },
-          },
-          count: { $sum: 1 } // Changed from "$count" to "$sum: 1" to correctly count documents
-        },
-      },
-      { $sort: { _id: 1 } }
+      { $match: { page: page.uri, createdAt: { $gte: since } } },
+      { $group: { _id: { d: { $dateToString: { date: '$createdAt', format: '%Y-%m-%d' } }, t: '$type' }, n: { $sum: 1 } } },
     ]),
-    Event.find({
-      page: page.uri,
-      type: 'click',
-    })
+    Event.aggregate([
+      { $match: { page: page.uri } },
+      { $group: { _id: '$type', n: { $sum: 1 } } },
+    ]),
+    Event.aggregate([
+      { $match: { page: page.uri, type: 'click' } },
+      { $group: { _id: '$uri', n: { $sum: 1 } } },
+    ]),
   ]);
 
-  // Calculate total views and clicks
-  const totalViews = groupedViews.reduce((sum, view) => sum + view.count, 0);
-  const totalClicks = clicks.length;
-  const todayViews = groupedViews.filter(view => view._id === new Date().toISOString().split('T')[0])[0]?.count || 0;
-  const todayClicks = clicks.filter(click => isToday(click.createdAt)).length;
+  // Fill every day in the window so the chart has no gaps.
+  const series = Array.from({ length: DAYS }, (_, i) => {
+    const date = new Date(since.getTime() + i * 86400000).toISOString().slice(0, 10);
+    return { date, views: 0, clicks: 0 };
+  });
+  const byDate = Object.fromEntries(series.map((s) => [s.date, s]));
+  for (const row of daily) {
+    const day = byDate[row._id.d];
+    if (day && row._id.t === 'view') day.views = row.n;
+    if (day && row._id.t === 'click') day.clicks = row.n;
+  }
+
+  const total = Object.fromEntries(totals.map((t) => [t._id, t.n]));
+  const views = total.view || 0;
+  const clicks = total.click || 0;
+  const views30 = series.reduce((s, d) => s + d.views, 0);
+  const clicks30 = series.reduce((s, d) => s + d.clicks, 0);
+  const ctr = views30 ? ((clicks30 / views30) * 100).toFixed(1) : '0.0';
+
+  const clickMap = Object.fromEntries(perLink.map((r) => [r._id, r.n]));
+  const norm = (u) => { try { return new URL(u).href; } catch { return u; } };
+  const linkRows = (page.links || [])
+    .filter((l) => l.type !== 'header' && l.url)
+    .map((l) => ({ key: l.key, title: l.title || l.url, url: l.url, n: clickMap[norm(l.url)] || 0 }))
+    .sort((a, b) => b.n - a.n);
+  const max = Math.max(1, ...linkRows.map((r) => r.n));
+  const socialRows = SOCIALS
+    .filter((s) => page.buttons?.[s.key])
+    .map((s) => ({ ...s, n: clickMap[norm(page.buttons[s.key])] || 0 }))
+    .filter((s) => s.n > 0)
+    .sort((a, b) => b.n - a.n);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-3 sm:px-4 md:px-6 py-4 sm:py-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Enhanced Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 gap-3 sm:gap-4">
-            <div className="bg-blue-100 p-3 rounded-full">
-              <FontAwesomeIcon icon={faChartLine} className="text-xl sm:text-2xl text-blue-600" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                Analytics Dashboard
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">Track your Mero Link performance and engagement</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-sm font-medium">Total Views</p>
-                <p className="text-2xl sm:text-3xl font-bold text-blue-600">{totalViews}</p>
-              </div>
-              <div className="bg-blue-100 p-3 rounded-full">
-                <FontAwesomeIcon icon={faEye} className="text-blue-600 text-xl" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-green-100 p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-sm font-medium">Total Clicks</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-600">{totalClicks}</p>
-              </div>
-              <div className="bg-green-100 p-3 rounded-full">
-                <FontAwesomeIcon icon={faMousePointer} className="text-green-600 text-xl" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-purple-100 p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-sm font-medium">Today's Views</p>
-                <p className="text-2xl sm:text-3xl font-bold text-purple-600">{todayViews}</p>
-              </div>
-              <div className="bg-purple-100 p-3 rounded-full">
-                <FontAwesomeIcon icon={faCalendarDay} className="text-purple-600 text-xl" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-orange-100 p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-sm font-medium">Today's Clicks</p>
-                <p className="text-2xl sm:text-3xl font-bold text-orange-600">{todayClicks}</p>
-              </div>
-              <div className="bg-orange-100 p-3 rounded-full">
-                <FontAwesomeIcon icon={faMousePointer} className="text-orange-600 text-xl" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Views Section */}
-        <div className="bg-white rounded-xl shadow-lg border border-blue-100 mb-8 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-white flex items-center">
-              <FontAwesomeIcon icon={faEye} className="mr-3" />
-              Page Views Over Time
-            </h2>
-          </div>
-          <div className="p-3 sm:p-6">
-            <LazyChart data={groupedViews.map(o => ({
-              date: o._id,
-              views: o.count,
-            }))} />
-          </div>
-        </div>
-
-        {/* Enhanced Clicks Section */}
-        <div className="bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-white flex items-center">
-              <FontAwesomeIcon icon={faMousePointer} className="mr-3" />
-              Link Performance
-            </h2>
-          </div>
-          <div className="p-4 sm:p-6">
-            {page.links && page.links.length > 0 ? (
-              <div className="space-y-4">
-                {page.links.map((link, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                      <div className="flex items-center space-x-3 flex-1">
-                        <div className="bg-blue-100 p-2 rounded-full">
-                          <FontAwesomeIcon icon={faLink} className="text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-800">{link.title || 'Untitled Link'}</h3>
-                          <p className="text-gray-600 text-sm">{link.subtitle || 'No description'}</p>
-                          <a 
-                            className="text-blue-500 text-sm hover:text-blue-700 transition-colors break-all" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            href={link.url}
-                          >
-                            {link.url}
-                          </a>
-                        </div>
-                      </div>
-                      
-                      <div className="flex space-x-4">
-                        <div className="bg-white border-2 border-blue-200 rounded-lg p-3 text-center min-w-[80px]">
-                          <div className="text-2xl font-bold text-blue-600">
-                            {clicks.filter(c => c.uri === link.url && isToday(c.createdAt)).length}
-                          </div>
-                          <div className="text-gray-500 text-xs font-medium uppercase">Today</div>
-                        </div>
-                        <div className="bg-white border-2 border-green-200 rounded-lg p-3 text-center min-w-[80px]">
-                          <div className="text-2xl font-bold text-green-600">
-                            {clicks.filter(c => c.uri === link.url).length}
-                          </div>
-                          <div className="text-gray-500 text-xs font-medium uppercase">Total</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <FontAwesomeIcon icon={faLink} className="text-6xl text-gray-300 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-2">No Links Added</h3>
-                <p className="text-gray-500">Add some links to your page to start tracking clicks!</p>
-              </div>
-            )}
-          </div>
-        </div>
+    <div className="grid gap-8">
+      <div>
+        <h1 className="font-display text-3xl font-extrabold tracking-tight">Analytics</h1>
+        <p className="mt-1 text-sm text-muted">Last {DAYS} days, updated live.</p>
       </div>
+
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Stat label="Views" value={fmt.format(views30)} sub={`${fmt.format(views)} all time`} tone="bg-lime text-on-sticker" />
+        <Stat label="Clicks" value={fmt.format(clicks30)} sub={`${fmt.format(clicks)} all time`} tone="bg-sky text-on-sticker" />
+        <Stat label="Click rate" value={`${ctr}%`} sub="Clicks per view" />
+        <Stat label="Today" value={fmt.format(series.at(-1).views)} sub={`${fmt.format(series.at(-1).clicks)} clicks`} />
+      </div>
+
+      <Card className="p-4 sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center gap-4 text-sm">
+          <h2 className="mr-auto font-display text-lg font-bold">Views and clicks</h2>
+          <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-accent" /> Views</span>
+          <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-ink" /> Clicks</span>
+        </div>
+        {views30 + clicks30 > 0 ? (
+          <AnalyticsChart data={series} />
+        ) : (
+          <EmptyState icon={PiChartLineUpBold} title="No visits yet">Share your link and the first views will show up here.</EmptyState>
+        )}
+      </Card>
+
+      <Card className="p-4 sm:p-6">
+        <h2 className="font-display text-lg font-bold">Top links</h2>
+        {linkRows.length === 0 ? (
+          <p className="mt-3 text-sm text-muted">Add links to see which ones people tap.</p>
+        ) : (
+          <ol className="mt-4 grid gap-4">
+            {linkRows.map((r) => (
+              <li key={r.key} className="grid gap-1.5">
+                <div className="flex items-baseline justify-between gap-4 text-sm">
+                  <span className="truncate font-medium">{r.title}</span>
+                  <span className="shrink-0 font-mono">{fmt.format(r.n)} <span className="text-muted">{views ? `${((r.n / views) * 100).toFixed(1)}%` : ''}</span></span>
+                </div>
+                <div className="h-2 rounded-full bg-accent" style={{ width: `${Math.max(2, (r.n / max) * 100)}%` }} aria-hidden />
+              </li>
+            ))}
+          </ol>
+        )}
+      </Card>
+
+      {socialRows.length > 0 && (
+        <Card className="p-4 sm:p-6">
+          <h2 className="font-display text-lg font-bold">Social icons</h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {socialRows.map(({ key, label, icon: Icon, n }) => (
+              <li key={key} className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-sm">
+                <Icon aria-hidden /> {label} <span className="font-mono text-muted">{fmt.format(n)}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }

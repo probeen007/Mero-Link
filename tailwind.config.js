@@ -1,70 +1,51 @@
 /** @type {import('tailwindcss').Config} */
+const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,jsx,mdx}",
+    "./src/app/**/*.{js,jsx,mdx}",
   ],
-
-  safelist: [
-    // Explicit theme/variant classes
-    "theme-default", "theme-aurora", "theme-neon", "theme-light", "theme-starfield",
-    "btn-default", "btn-aurora", "btn-neon", "btn-light", "btn-starfield",
-    "card-default", "card-aurora", "card-neon", "card-light", "card-starfield",
-    "img-default", "img-aurora", "img-neon", "img-light", "img-starfield",
-  ],
-
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "grid-neon": "repeating-linear-gradient(45deg, rgba(0,255,255,0.1) 0 1px, transparent 1px 20px)",
-      },
-      keyframes: {
-        "gradient-x": {
-          "0%, 100%": { "background-size": "200% 200%", "background-position": "left center" },
-          "50%": { "background-size": "200% 200%", "background-position": "right center" },
-        },
-        "gradient-y": {
-          "0%, 100%": { "background-size": "200% 200%", "background-position": "center top" },
-          "50%": { "background-size": "200% 200%", "background-position": "center bottom" },
-        },
-        "gradient-xy": {
-          "0%, 100%": { "background-size": "400% 400%", "background-position": "left top" },
-          "50%": { "background-size": "400% 400%", "background-position": "right bottom" },
-        },
-        "gridMove": {
-          "0%": { backgroundPosition: "0 0" },
-          "100%": { backgroundPosition: "100% 100%" },
-        },
-        "wave": {
-          "0%": { backgroundPosition: "0 50%" },
-          "100%": { backgroundPosition: "100% 50%" },
-        },
-        fadeIn: {
-          '0%': { opacity: 0, transform: 'translateY(8px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
-        },
-      },
-      animation: {
-        "gradient-x": "gradient-x 15s ease infinite",
-        "gradient-y": "gradient-y 15s ease infinite",
-        "gradient-xy": "gradient-xy 15s ease infinite",
-        "gridMove": "gridMove 15s linear infinite",
-        "wave": "wave 20s linear infinite",
-        fadeIn: 'fadeIn 600ms ease-out both',
-        fadeInDelay: 'fadeIn 900ms ease-out both',
-        fadeInDelay2: 'fadeIn 1200ms ease-out both',
-      },
-      boxShadow: {
-        neon: "0 0 8px #ff00ff, 0 0 16px #ff00ff",
-        "neon-lg": "0 0 12px #ff00ff, 0 0 24px #ff00ff",
+      colors: {
+        bg: token('bg'),
+        surface: token('surface'),
+        'surface-2': token('surface-2'),
+        ink: token('ink'),
+        muted: token('muted'),
+        line: token('line'),
+        accent: token('accent'),
+        'accent-ink': token('accent-ink'),
+        'accent-text': token('accent-text'),
+        lime: token('lime'),
+        sky: token('sky'),
+        butter: token('butter'),
+        pink: token('pink'),
+        // Sticker tiles always carry dark text, in both modes.
+        'on-sticker': '#111014',
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui"],
-        heading: ["Poppins", "ui-sans-serif", "system-ui"],
-        mono: ["Fira Code", "monospace"],
+        sans: ['var(--font-geist)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-bricolage)', 'var(--font-geist)', 'ui-sans-serif', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: {
+        card: '1.5rem',
+        field: '0.75rem',
+      },
+      boxShadow: {
+        sticker: '4px 4px 0 0 rgb(var(--ink))',
+        'sticker-sm': '2px 2px 0 0 rgb(var(--ink))',
+        lift: '0 1px 2px rgb(var(--ink) / 0.06), 0 12px 32px -12px rgb(var(--ink) / 0.18)',
+      },
+      keyframes: {
+        marquee: { to: { transform: 'translateX(-50%)' } },
+        'fade-up': { from: { opacity: 0, transform: 'translateY(12px)' }, to: { opacity: 1, transform: 'none' } },
+      },
+      animation: {
+        marquee: 'marquee 40s linear infinite',
+        'fade-up': 'fade-up .6s cubic-bezier(.16,1,.3,1) both',
       },
     },
   },

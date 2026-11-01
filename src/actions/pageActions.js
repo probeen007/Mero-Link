@@ -1,170 +1,135 @@
 'use server';
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import dbConnect from "@/libs/mongoClient";
-import {getServerSession} from "next-auth";
 import { cache, cacheKey } from "@/libs/cache";
+import { THEMES, BUTTON_STYLES, RADII, GRADIENTS, BG_MODES } from "@/libs/themes";
+import { FONT_CHOICES } from "@/libs/fontChoices";
+import { SOCIAL_MAP } from "@/libs/socials";
+import { extractVideoInfo, sanitizeVideoUrl, generateVideoId } from "@/libs/videoExtractor";
 
-const ALLOWED_BUTTON_KEYS = new Set([
-  'email', 'mobile', 'instagram', 'facebook', 'discord', 'tiktok', 'youtube',
-  'whatsapp', 'github', 'telegram', 'twitter', 'linkedin', 'snapchat',
-  'pinterest', 'reddit', 'twitch', 'spotify', 'soundcloud', 'medium', 'tumblr'
-]);
+const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+const str = (v, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 
-const ALLOWED_BG_TYPES = new Set(['color', 'image']);
-const ALLOWED_LINK_STYLES = new Set(['list', 'grid', 'compact']);
-
-function toSafeString(value, maxLength = 500) {
-  return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
-}
-
-function isValidUrl(val) {
-  if (!val || typeof val !== 'string') return false;
+function httpUrl(v) {
+  const s = str(v, 2048);
   try {
-    const parsed = new URL(val);
-    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    const u = new URL(s);
+    return u.protocol === 'http:' || u.protocol === 'https:' ? s : '';
   } catch {
-    return false;
+    return '';
   }
 }
 
-export async function savePageSettings(formData) {
-  await dbConnect();
+function cleanButtons(input) {
+  const out = {};
+  for (const [key, raw] of Object.entries(input || {})) {
+    if (!SOCIAL_MAP[key]) continue;
+    const value = key === 'email' ? (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str(raw, 254)) ? str(raw, 254) : '')
+      : key === 'mobile' ? str(raw, 30).replace(/[^\d+\s()-]/g, '')
+      : httpUrl(raw);
+    if (value) out[key] = value;
+  }
+  return out;
+}
+
+function cleanLinks(input) {
+  if (!Array.isArray(input)) return [];
+  return input.slice(0, 100).flatMap((l) => {
+    if (!l || typeof l !== 'object') return [];
+    const key = str(l.key, 100) || `link-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const hidden = !!l.hidden;
+    if (l.type === 'header') {
+      return [{ key, type: 'header', title: str(l.title, 80), hidden }];
+    }
+    // Half-typed URLs are kept so autosave never drops what the user typed;
+    // ProfileView only renders links whose URL is a real http(s) URL.
+    return [{
+      key,
+      type: 'link',
+      title: str(l.title, 100),
+      subtitle: str(l.subtitle, 200),
+      icon: httpUrl(l.icon),
+      url: httpUrl(l.url) || str(l.url, 2048),
+      featured: !!l.featured,
+      hidden,
+    }];
+  });
+}
+
+function cleanVideos(input) {
+  if (!Array.isArray(input)) return [];
+  return input.slice(0, 10).flatMap((v, i) => {
+    const info = v?.url && extractVideoInfo(v.url);
+    if (!info) return [];
+    return [{
+      id: str(v.id, 60) || generateVideoId(),
+      title: str(v.title, 120),
+      url: sanitizeVideoUrl(v.url),
+      platform: info.platform,
+      videoId: info.videoId,
+      // Vimeo's `info.thumbnail` is a JSON API URL, so only YouTube's is usable as-is.
+      thumbnail: (!v.thumbnail?.endsWith('.json') && httpUrl(v.thumbnail)) || (info.platform === 'youtube' ? info.thumbnail : ''),
+      order: i,
+    }];
+  });
+}
+
+function cleanOverrides(o = {}) {
+  const out = {};
+  if (HEX.test(o.accent || '')) out.accent = o.accent;
+  if (BUTTON_STYLES[o.button]) out.button = o.button;
+  if (o.radius in RADII) out.radius = o.radius;
+  if (FONT_CHOICES[o.font]) out.font = o.font;
+  if (GRADIENTS[o.gradient]) out.gradient = o.gradient;
+  return out;
+}
+
+// Each key maps to a sanitiser; keys not listed here are ignored.
+const FIELDS = {
+  displayName: (v) => str(v, 60),
+  location: (v) => str(v, 60),
+  bio: (v) => str(v, 300),
+  theme: (v) => (THEMES[v] ? v : undefined),
+  themeOverrides: cleanOverrides,
+  bgMode: (v) => (BG_MODES.includes(v) ? v : undefined),
+  bgColor: (v) => (HEX.test(v || '') ? v : undefined),
+  bgImage: (v) => httpUrl(v),
+  linkStyle: (v) => (['list', 'grid', 'compact'].includes(v) ? v : undefined),
+  videoPosition: (v) => (v === 'after' ? 'after' : 'before'),
+  buttons: cleanButtons,
+  links: cleanLinks,
+  videos: cleanVideos,
+};
+
+// Saves any subset of the editable profile. Used by the dashboard autosave.
+export async function savePage(patch) {
   const session = await getServerSession(authOptions);
-  if (session) {
-    const dataKeys = [
-      'displayName','location',
-      'bio', 'bgType', 'bgColor', 'bgImage', 'adaptBackground', 'linkStyle',
-    ];
+  const email = session?.user?.email;
+  if (!email || !patch || typeof patch !== 'object') return { ok: false };
 
-    const dataToUpdate = {};
-    for (const key of dataKeys) {
-      if (formData.has(key)) {
-        // Handle boolean conversion for adaptBackground
-        if (key === 'adaptBackground') {
-          dataToUpdate[key] = formData.get(key) === 'true';
-        } else if (key === 'bgType') {
-          const bgType = toSafeString(formData.get(key), 20);
-          if (ALLOWED_BG_TYPES.has(bgType)) {
-            dataToUpdate[key] = bgType;
-          }
-        } else if (key === 'bgColor') {
-          const bgColor = toSafeString(formData.get(key), 20);
-          if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(bgColor)) {
-            dataToUpdate[key] = bgColor;
-          }
-        } else if (key === 'linkStyle') {
-          const linkStyle = toSafeString(formData.get(key), 20);
-          if (ALLOWED_LINK_STYLES.has(linkStyle)) {
-            dataToUpdate[key] = linkStyle;
-          }
-        } else {
-          dataToUpdate[key] = toSafeString(formData.get(key));
-        }
-      }
-    }
-
-    await Page.updateOne(
-      {owner:session?.user?.email},
-      dataToUpdate,
-    );
-    
-    // Invalidate relevant caches
-    const userEmail = session?.user?.email;
-    cache.delete(cacheKey('sharecard:page', userEmail));
-    await invalidatePageCache(userEmail);
-
-    if (formData.has('avatar')) {
-      const avatarLink = toSafeString(formData.get('avatar'));
-      await User.updateOne(
-        {email: session.user?.email},
-        {image: avatarLink},
-      );
-      cache.delete(cacheKey('user', userEmail));
-      cache.delete(cacheKey('sharecard:user', userEmail));
-    }
-
-    return true;
-  }
-
-  return false;
-}
-
-async function invalidatePageCache(email) {
-  try {
-    const pageDoc = await Page.findOne({ owner: email }).select('uri').lean();
-    if (pageDoc?.uri) {
-      cache.delete(cacheKey('page-data', pageDoc.uri));
-      cache.delete(cacheKey('page', pageDoc.uri));
-    }
-  } catch (err) {
-    console.error("❌ Failed to invalidate page cache:", err);
-  }
-}
-
-export async function savePageButtons(formData) {
   await dbConnect();
-  const session = await getServerSession(authOptions);
-  if (session) {
-    const buttonsValues = {};
-    formData.forEach((value, key) => {
-      if (ALLOWED_BUTTON_KEYS.has(key)) {
-        const safeValue = toSafeString(value);
-        if (safeValue.length > 0) {
-          buttonsValues[key] = safeValue;
-        }
-      }
-    });
-    const dataToUpdate = {buttons:buttonsValues};
-    await Page.updateOne(
-      {owner:session?.user?.email},
-      dataToUpdate,
-    );
-    
-    // Invalidate cache after buttons update
-    const userEmail = session?.user?.email;
-    cache.delete(cacheKey('sharecard:page', userEmail));
-    await invalidatePageCache(userEmail);
-    return true;
+  const update = {};
+  for (const [key, clean] of Object.entries(FIELDS)) {
+    if (!(key in patch)) continue;
+    const value = clean(patch[key]);
+    if (value !== undefined) update[key] = value;
   }
-  return false;
-}
 
-export async function savePageLinks(links) {
-  await dbConnect();
-  const session = await getServerSession(authOptions);
-  if (session) {
-    const validatedLinks = [];
-    if (Array.isArray(links)) {
-      for (const link of links) {
-        if (!link || typeof link !== 'object') continue;
-        const url = toSafeString(link.url, 2048);
-        if (!isValidUrl(url)) continue; // skip links with invalid urls
-        
-        const icon = toSafeString(link.icon, 2048);
-        
-        validatedLinks.push({
-          key: toSafeString(link.key, 100) || `link-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-          title: toSafeString(link.title, 100),
-          subtitle: toSafeString(link.subtitle, 200),
-          icon: isValidUrl(icon) ? icon : '',
-          url,
-        });
-      }
-    }
+  const page = await Page.findOneAndUpdate({ owner: email }, { $set: update }, { new: true })
+    .select('uri links videos').lean();
+  if (!page) return { ok: false };
 
-    await Page.updateOne(
-      {owner:session?.user?.email},
-      {links: validatedLinks},
-    );
-    
-    // Invalidate cache after links update
-    const userEmail = session?.user?.email;
-    cache.delete(cacheKey('sharecard:page', userEmail));
-    await invalidatePageCache(userEmail);
-    return true;
-  } else {
-    return false;
+  if ('avatar' in patch) {
+    await User.updateOne({ email }, { image: httpUrl(patch.avatar) });
+    cache.delete(cacheKey('sharecard:user', email));
   }
+
+  cache.delete(cacheKey('page-data', page.uri));
+  cache.delete(cacheKey('sharecard:page', email));
+
+  // Return server-normalised collections so the editor can adopt video ids/thumbnails.
+  return { ok: true, videos: 'videos' in update ? update.videos : undefined };
 }

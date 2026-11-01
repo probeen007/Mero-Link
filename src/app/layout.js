@@ -1,64 +1,31 @@
 import './globals.css';
-import GlobalProgressBar from '@/components/GlobalProgressBar';
 import { Suspense } from 'react';
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
+import GlobalProgressBar from '@/components/GlobalProgressBar';
+import { brandFontVariables, themeFontVariables } from '@/libs/fonts';
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = {
-  metadataBase: new URL('https://merolink.me'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Mero Link - Unify Your Online Presence',
-    template: '%s | Mero Link',
+    default: `${SITE_NAME}: The link in bio that looks like you`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: 'Create personalized link trees for your social profiles and websites. Perfect for professionals, creators, and businesses.',
-  applicationName: 'Mero Link',
-  keywords: [
-    'Mero Link',
-    'link in bio',
-    'custom link tree',
-    'online presence',
-    'social media links',
-    'digital identity',
-  ],
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
   authors: [{ name: 'Prabin Bhattarai' }],
-  creator: 'Mero Link',
-  publisher: 'Mero Link',
-  alternates: {
-    canonical: '/',
-  },
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  manifest: '/manifest.json',
   openGraph: {
-    title: 'Mero Link - Unify Your Online Presence',
-    description: 'Create personalized link trees for your social profiles and websites. Perfect for professionals, creators, and businesses.',
-    url: 'https://merolink.me',
-    siteName: 'Mero Link',
+    siteName: SITE_NAME,
     locale: 'en_US',
     type: 'website',
-    images: [
-      {
-        url: 'https://i.ibb.co/HNVDd6R/merolinklogo.png',
-        width: 1200,
-        height: 630,
-        alt: 'Mero Link',
-      },
-    ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Mero Link - Unify Your Online Presence',
-    description: 'Create personalized link trees for your social profiles and websites.',
-    images: ['https://i.ibb.co/HNVDd6R/merolinklogo.png'],
-  },
+  twitter: { card: 'summary_large_image' },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-      'max-video-preview': -1,
-    },
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
   },
 };
 
@@ -66,13 +33,16 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#2563eb',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAFAF8' },
+    { media: '(prefers-color-scheme: dark)', color: '#111014' },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>
+    <html lang="en" className={`${brandFontVariables} ${themeFontVariables}`} suppressHydrationWarning>
+      <body>
         <Suspense fallback={null}>
           <GlobalProgressBar />
         </Suspense>

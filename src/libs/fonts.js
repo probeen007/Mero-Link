@@ -1,63 +1,46 @@
-// src/libs/fonts.js
-// Self-hosted display fonts for the 33 themes that declare a `fontVar` in
-// themes.js (default/light/aurora intentionally have none — they use the
-// inherited Lato/system stack). Uses next/font's `variable` output (not
-// `className`) so every theme's CSS custom property is available on a shared
-// ancestor, but the browser only ever fetches the woff2 for whichever single
-// font-family a given page actually renders text with.
+// Brand fonts (marketing + dashboard) and profile-theme fonts.
+// Every font is exposed as a CSS variable. Theme fonts use `preload: false`, so a
+// profile page only downloads the woff2 for the family it actually renders.
 import {
-  Orbitron,
-  Space_Grotesk,
-  Rajdhani,
-  Fira_Code,
-  Source_Code_Pro,
-  Playfair_Display,
+  Bricolage_Grotesque,
+  Geist,
+  Geist_Mono,
   Fredoka,
-  Dancing_Script,
+  Archivo_Black,
+  Space_Grotesk,
+  JetBrains_Mono,
   Righteous,
-  Nunito,
-  Inter,
-  Comfortaa,
-  Mukta,
   Press_Start_2P,
-  Merriweather,
-  Noto_Sans_JP,
-  Pirata_One,
-  Cinzel,
-  Uncial_Antiqua,
-  Great_Vibes,
-  Poppins,
+  Rajdhani,
+  DM_Serif_Display,
+  Young_Serif,
+  Nunito,
+  Outfit,
+  Zen_Maru_Gothic,
+  Mukta,
 } from 'next/font/google';
 
-const orbitron = Orbitron({ subsets: ['latin'], weight: '700', variable: '--font-orbitron', display: 'swap' });
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: '700', variable: '--font-space-grotesk', display: 'swap' });
-const rajdhani = Rajdhani({ subsets: ['latin'], weight: '700', variable: '--font-rajdhani', display: 'swap' });
-const firaCode = Fira_Code({ subsets: ['latin'], weight: '700', variable: '--font-fira-code', display: 'swap' });
-const sourceCodePro = Source_Code_Pro({ subsets: ['latin'], weight: '700', variable: '--font-source-code-pro', display: 'swap' });
-const playfairDisplay = Playfair_Display({ subsets: ['latin'], weight: '700', variable: '--font-playfair-display', display: 'swap' });
-const fredoka = Fredoka({ subsets: ['latin'], weight: '600', variable: '--font-fredoka', display: 'swap' });
-const dancingScript = Dancing_Script({ subsets: ['latin'], weight: '700', variable: '--font-dancing-script', display: 'swap' });
-const righteous = Righteous({ subsets: ['latin'], weight: '400', variable: '--font-righteous', display: 'swap' });
-const nunito = Nunito({ subsets: ['latin'], weight: '700', variable: '--font-nunito', display: 'swap' });
-const inter = Inter({ subsets: ['latin'], weight: '700', variable: '--font-inter', display: 'swap' });
-const comfortaa = Comfortaa({ subsets: ['latin'], weight: '700', variable: '--font-comfortaa', display: 'swap' });
-const mukta = Mukta({ subsets: ['latin'], weight: '700', variable: '--font-mukta', display: 'swap' });
-const pressStart2P = Press_Start_2P({ subsets: ['latin'], weight: '400', variable: '--font-press-start-2p', display: 'swap' });
-const merriweather = Merriweather({ subsets: ['latin'], weight: '700', variable: '--font-merriweather', display: 'swap' });
-const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], weight: '700', variable: '--font-noto-sans-jp', display: 'swap' });
-const pirataOne = Pirata_One({ subsets: ['latin'], weight: '400', variable: '--font-pirata-one', display: 'swap' });
-const cinzel = Cinzel({ subsets: ['latin'], weight: '700', variable: '--font-cinzel', display: 'swap' });
-const uncialAntiqua = Uncial_Antiqua({ subsets: ['latin'], weight: '400', variable: '--font-uncial-antiqua', display: 'swap' });
-const greatVibes = Great_Vibes({ subsets: ['latin'], weight: '400', variable: '--font-great-vibes', display: 'swap' });
-const poppins = Poppins({ subsets: ['latin'], weight: '700', variable: '--font-poppins', display: 'swap' });
+const bricolage = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-bricolage', display: 'swap' });
+const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' });
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', display: 'swap', preload: false });
 
-const themeFonts = [
-  orbitron, spaceGrotesk, rajdhani, firaCode, sourceCodePro, playfairDisplay,
-  fredoka, dancingScript, righteous, nunito, inter, comfortaa, mukta,
-  pressStart2P, merriweather, notoSansJP, pirataOne, cinzel, uncialAntiqua,
-  greatVibes, poppins,
-];
+const fredoka = Fredoka({ subsets: ['latin'], display: 'swap', preload: false, variable: '--font-fredoka' });
+const archivoBlack = Archivo_Black({ subsets: ['latin'], display: 'swap', preload: false, weight: '400', variable: '--font-archivo-black' });
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], display: 'swap', preload: false, variable: '--font-space-grotesk' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], display: 'swap', preload: false, variable: '--font-jetbrains-mono' });
+const righteous = Righteous({ subsets: ['latin'], display: 'swap', preload: false, weight: '400', variable: '--font-righteous' });
+const pressStart = Press_Start_2P({ subsets: ['latin'], display: 'swap', preload: false, weight: '400', variable: '--font-press-start' });
+const rajdhani = Rajdhani({ subsets: ['latin'], display: 'swap', preload: false, weight: ['500', '700'], variable: '--font-rajdhani' });
+const dmSerif = DM_Serif_Display({ subsets: ['latin'], display: 'swap', preload: false, weight: '400', variable: '--font-dm-serif' });
+const youngSerif = Young_Serif({ subsets: ['latin'], display: 'swap', preload: false, weight: '400', variable: '--font-young-serif' });
+const nunito = Nunito({ subsets: ['latin'], display: 'swap', preload: false, variable: '--font-nunito' });
+const outfit = Outfit({ subsets: ['latin'], display: 'swap', preload: false, variable: '--font-outfit' });
+const zenMaru = Zen_Maru_Gothic({ subsets: ['latin'], display: 'swap', preload: false, weight: ['500', '700'], variable: '--font-zen-maru' });
+const mukta = Mukta({ subsets: ['latin', 'devanagari'], weight: ['500', '700'], variable: '--font-mukta', display: 'swap', preload: false });
 
-// Apply on a shared ancestor (see (page)/[uri]/layout.js and (app)/template.js)
-// so every `--font-*` variable referenced by theme.fontVar is in scope.
-export const themeFontVariables = themeFonts.map((f) => f.variable).join(' ');
+export const brandFontVariables = [bricolage, geist, geistMono].map((f) => f.variable).join(' ');
+
+export const themeFontVariables = [
+  fredoka, archivoBlack, spaceGrotesk, jetbrainsMono, righteous, pressStart, rajdhani,
+  dmSerif, youngSerif, nunito, outfit, zenMaru, mukta,
+].map((f) => f.variable).join(' ');

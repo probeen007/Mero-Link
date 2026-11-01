@@ -1,26 +1,47 @@
-import React, { Suspense } from 'react';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import dbConnect from '@/libs/mongoClient';
+import { Page } from '@/models/Page';
+import { User } from '@/models/User';
+import { Event } from '@/models/Event';
+import { serializePage, serializeUser } from '@/libs/pageData';
+import { EditorProvider } from '@/components/dashboard/EditorProvider';
+import Shell from '@/components/dashboard/Shell';
+import ClaimUsername from '@/components/dashboard/ClaimUsername';
 
 export const metadata = {
-  title: 'Mero Link - Dashboard',
-  description: 'Unify your online presence with Mero Link! Create personalized link trees for your social profiles and websites. Perfect for professionals and businesses.',
-  keywords: ['Mero Link', 'dashboard', 'analytics', 'link tree', 'online presence'],
-  authors: [{ name: 'Prabin Bhattarai' }],
-  robots: {
-    index: false,
-    follow: false,
-  },
+  title: 'Dashboard',
+  robots: { index: false, follow: false },
 };
 
-export default function AppLayout({ children }) {
+export default async function AppLayout({ children }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) redirect('/login');
+
+  await dbConnect();
+  const [page, user] = await Promise.all([
+    Page.findOne({ owner: session.user.email }).lean(),
+    User.findOne({ email: session.user.email }).lean(),
+  ]);
+
+  if (!page) return <ClaimUsername name={session.user.name} />;
+
+  const clickRows = await Event.aggregate([
+    { $match: { page: page.uri, type: 'click' } },
+    { $group: { _id: '$uri', count: { $sum: 1 } } },
+  ]);
+  const clicks = Object.fromEntries(clickRows.map((r) => [r._id, r.count]));
+
   return (
-    <Suspense fallback={<div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2>🚀 Just a moment...</h2>
-      <p>We're preparing something amazing for you! 🌟</p>
-      <p>Please hang tight while we get things ready. ⏳</p>
-      <p>✨ Your experience is just loading... ✨</p>
-    </div>
-    }>
-      {children}
-    </Suspense>
+    <EditorProvider
+      page={serializePage(page)}
+      user={{ ...serializeUser(user), name: session.user.name || '', email: session.user.email }}
+      clicks={clicks}
+    >
+      <Toaster position="bottom-center" toastOptions={{ className: '!rounded-full !bg-ink !text-bg !text-sm !font-medium' }} />
+      <Shell>{children}</Shell>
+    </EditorProvider>
   );
 }

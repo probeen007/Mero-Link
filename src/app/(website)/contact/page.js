@@ -1,171 +1,48 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faHeadset, faShieldAlt, faBriefcase, faStar, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faInstagramSquare, faLinkedinIn, faSquareXTwitter } from "@fortawesome/free-brands-svg-icons";
-import Image from "next/image";
+import { PiArrowUpRightBold, PiLifebuoyBold, PiSealCheckBold, PiBriefcaseBold } from 'react-icons/pi';
+import { FaLinkedinIn } from 'react-icons/fa6';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbLd } from '@/libs/structuredData';
+import { CONTACT_EMAIL, VERIFY_EMAIL } from '@/libs/site';
 
 export const metadata = {
   title: 'Contact',
-  description: 'Contact Mero Link for support, verification, or business inquiries through email and social channels.',
-  alternates: {
-    canonical: '/contact',
-  },
-  openGraph: {
-    title: 'Contact Mero Link',
-    description: 'Reach out to the Mero Link team for support and inquiries.',
-    url: 'https://merolink.me/contact',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Contact Mero Link',
-    description: 'Reach out to the Mero Link team for support and inquiries.',
-  },
+  description: 'Get help with your Mero Link page, request a verified badge, or talk to us about partnerships.',
+  alternates: { canonical: '/contact' },
 };
 
+const CHANNELS = [
+  { icon: PiLifebuoyBold, title: 'Help with your page', body: 'Something broken or confusing? Tell us what happened.', href: `mailto:${CONTACT_EMAIL}?subject=Help%20with%20my%20page`, label: CONTACT_EMAIL, tone: 'bg-lime' },
+  { icon: PiSealCheckBold, title: 'Verified badge', body: 'Creators, brands and public figures can request a badge.', href: `mailto:${VERIFY_EMAIL}?subject=Verification%20request`, label: VERIFY_EMAIL, tone: 'bg-sky' },
+  { icon: PiBriefcaseBold, title: 'Partnerships', body: 'Agencies, events and brands working with many creators.', href: `mailto:${CONTACT_EMAIL}?subject=Partnership`, label: CONTACT_EMAIL, tone: 'bg-butter' },
+  { icon: FaLinkedinIn, title: 'LinkedIn', body: 'Follow along as we build.', href: 'https://www.linkedin.com/company/merolink/', label: 'linkedin.com/company/merolink', tone: 'bg-pink' },
+];
+
 export default function ContactPage() {
-  const supportTypes = [
-    {
-      title: 'General Support',
-      description: 'Questions about account claim, profile customization, and link layouts.',
-      icon: faHeadset,
-    },
-    {
-      title: 'Verification Inquiries',
-      description: 'Report profile abuse, trademark claims, or identity concerns.',
-      icon: faShieldAlt,
-    },
-    {
-      title: 'Business Partnerships',
-      description: 'Collaborations, integration requests, or promotional opportunities.',
-      icon: faBriefcase,
-    },
-  ];
-
-  const socialChannels = [
-    {
-      title: 'X (Twitter)',
-      icon: faSquareXTwitter,
-      href: 'https://x.com',
-      label: '@MeroLink',
-    },
-    {
-      title: 'LinkedIn',
-      icon: faLinkedinIn,
-      href: 'https://www.linkedin.com/company/merolink/',
-      label: 'Mero Link',
-    },
-  ];
-
   return (
-    <div className="bg-white py-12 sm:py-16 md:py-20 text-gray-800">
-      <div className="page-shell max-w-5xl">
-        
-        {/* Header Title Section */}
-        <section className="text-center space-y-6 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full text-blue-700 font-semibold text-xs sm:text-sm">
-            <FontAwesomeIcon icon={faEnvelope} className="text-blue-500" />
-            <span>Customer & Creator Care</span>
-          </div>
-          
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
-            Get in touch with us
-          </h1>
-          
-          <p className="text-gray-600 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Have questions about Mero Link? Need support with your page setup? Choose your contact method below.
-          </p>
-        </section>
-
-        {/* Contact Layout Columns */}
-        <section className="mt-12 sm:mt-16 grid gap-10 md:grid-cols-[1.2fr_1fr] items-start">
-          
-          {/* Left Column (Details and support channels) */}
-          <div className="space-y-8">
-            
-            {/* Primary Email Card */}
-            <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-100 rounded-3xl p-6 sm:p-8">
-              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <FontAwesomeIcon icon={faEnvelope} className="text-blue-600" />
-                Direct Email Support
-              </h2>
-              <p className="text-gray-600 text-sm sm:text-base mt-2">
-                For account verification, feature requests, or technical issues, send us an email directly.
-              </p>
-              <div className="mt-5">
-                <a 
-                  href="mailto:pro.victus07@gmail.com"
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-sm"
-                >
-                  pro.victus07@gmail.com
-                </a>
-              </div>
-            </div>
-
-            {/* Support Types Grids */}
-            <div className="space-y-4">
-              <h3 className="text-base font-bold text-gray-900 uppercase tracking-wider">Support Pipelines</h3>
-              <div className="grid gap-4">
-                {supportTypes.map((type) => (
-                  <div key={type.title} className="bg-white border border-gray-200 rounded-xl p-4 flex gap-3.5 items-start">
-                    <span className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                      <FontAwesomeIcon icon={type.icon} className="text-sm" />
-                    </span>
-                    <div>
-                      <h4 className="font-bold text-gray-900 text-sm sm:text-base">{type.title}</h4>
-                      <p className="text-gray-500 text-xs sm:text-sm mt-1 leading-relaxed">{type.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Right Column (Contact Info and Social Channels) */}
-          <div className="space-y-6">
-            
-            {/* Social card */}
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-gray-900">Follow us on Socials</h3>
-              <p className="text-gray-500 text-xs sm:text-sm mt-1.5 leading-relaxed">
-                We announce updates, community spotlights, and design guides on Twitter and LinkedIn.
-              </p>
-              
-              <div className="grid gap-3 mt-6">
-                {socialChannels.map((channel) => (
-                  <a 
-                    key={channel.title}
-                    href={channel.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 bg-gray-50 hover:bg-blue-50/50 border border-gray-250 rounded-xl transition-all group"
-                  >
-                    <span className="flex items-center gap-3 text-sm sm:text-base font-bold text-slate-800">
-                      <FontAwesomeIcon icon={channel.icon} className="text-blue-600 text-lg shrink-0" />
-                      {channel.title}
-                    </span>
-                    <span className="text-xs text-blue-600 font-semibold group-hover:underline">{channel.label}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Note card */}
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex gap-3.5 items-start">
-              <FontAwesomeIcon icon={faQuestionCircle} className="text-blue-500 mt-1 shrink-0 text-lg" />
-              <div>
-                <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">Response Time SLA</h4>
-                <p className="text-gray-500 text-xs mt-1.5 leading-relaxed">
-                  We usually respond to all creator and support inquiries within 24 to 48 business hours. Please include your registered account username for faster routing.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-        </section>
-
-      </div>
-    </div>
+    <>
+      <JsonLd data={breadcrumbLd('Contact', '/contact')} />
+      <section className="shell grid gap-12 pb-12 pt-14 sm:pt-20 lg:grid-cols-[1fr_1.4fr]">
+        <div>
+          <h1 className="font-display text-[clamp(2.75rem,7vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">Say hello</h1>
+          <p className="mt-6 max-w-sm text-lg text-muted">A real person reads every email, usually within a day.</p>
+        </div>
+        <ul className="grid gap-3">
+          {CHANNELS.map(({ icon: Icon, title, body, href, label, tone }) => (
+            <li key={title}>
+              <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
+                className="group flex items-center gap-5 rounded-[24px] border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-ink sm:p-6">
+                <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-on-sticker ${tone}`}><Icon className="h-6 w-6" aria-hidden /></span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-lg font-bold">{title}</span>
+                  <span className="block text-sm text-muted">{body}</span>
+                  <span className="mt-1 block truncate text-sm font-medium text-accent-text">{label}</span>
+                </span>
+                <PiArrowUpRightBold className="shrink-0 text-muted transition group-hover:text-ink" aria-hidden />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   );
 }

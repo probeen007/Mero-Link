@@ -11,13 +11,7 @@ const nextConfig = {
   typedRoutes: false,
 
   experimental: {
-    optimizePackageImports: [
-      '@fortawesome/react-fontawesome', 
-      '@fortawesome/free-solid-svg-icons',
-      '@fortawesome/free-brands-svg-icons',
-      '@fortawesome/free-regular-svg-icons',
-      'react-icons'
-    ],
+    optimizePackageImports: ['react-icons/pi', 'react-icons/si', 'react-icons/fa6'],
   },
 
   compiler: {

@@ -1,17 +1,7 @@
-// models/Page.js
 import { model, models, Schema } from "mongoose";
 
-// Define theme enum values separately for reuse
-const THEME_VALUES = [
-  "default", "aurora", "neon", "light", "starfield",
-  "gamer", "coder", "hacker", "elegant", "funky", 
-  "feminine", "retro", "nature", "corporate", "cosmic",
-  "nepal", "minecraft", "adventure", "anime", "cartoon",
-  "galaxy", "ocean", "forest", "egyptian", "sakura",
-  "viking", "cyberpunk", "medieval", "tropical", "artdeco",
-  "rainycity", "desertdune", "arcticglass", "volcanicforge", "emeraldlake", "sunsetcliff"
-];
-
+// `theme` is validated against THEMES in the save path (libs/themes.js), and
+// legacy keys from the old 36-theme set are mapped on read, so no enum here.
 const PageSchema = new Schema(
   {
     uri: { type: String, required: true, min: 1, unique: true, index: true },
@@ -19,11 +9,16 @@ const PageSchema = new Schema(
     displayName: { type: String, default: "" },
     location: { type: String, default: "" },
     bio: { type: String, default: "" },
+    theme: { type: String, default: "sticker" },
+    themeOverrides: { type: Object, default: {} },
+    // theme | color | gradient | image. Older pages use bgType/adaptBackground.
+    bgMode: { type: String },
     bgType: { type: String, default: "color" },
     bgColor: { type: String, default: "#000" },
     bgImage: { type: String, default: "" },
     adaptBackground: { type: Boolean, default: false },
     buttons: { type: Object, default: {} },
+    // [{ key, type: 'link'|'header', title, subtitle, icon, url, featured, hidden }]
     links: { type: Object, default: [] },
     videos: {
       type: [
@@ -39,42 +34,16 @@ const PageSchema = new Schema(
       ],
       default: []
     },
-    videoPosition: {
-      type: String,
-      enum: ['before', 'after'],
-      default: 'before'
-    },
-    linkStyle: {
-      type: String,
-      enum: ['list', 'grid', 'compact'],
-      default: 'list'
-    },
-    theme: {
-      type: String,
-      enum: THEME_VALUES,
-      default: "default",
-      validate: {
-        validator: function(v) {
-          return THEME_VALUES.includes(v);
-        },
-        message: props => `${props.value} is not a valid theme. Valid themes are: ${THEME_VALUES.join(', ')}`
-      }
-    },
+    videoPosition: { type: String, enum: ['before', 'after'], default: 'before' },
+    linkStyle: { type: String, enum: ['list', 'grid', 'compact'], default: 'list' },
   },
   { timestamps: true }
 );
 
-// Compound index for faster owner lookups
 PageSchema.index({ owner: 1, createdAt: -1 });
 
-// Export theme values for use in other files
-export { THEME_VALUES };
-
-// Clear any existing model to force re-compilation in development
 if (process.env.NODE_ENV === 'development' && models.Page) {
   delete models.Page;
 }
 
 export const Page = models?.Page || model("Page", PageSchema);
-
-
